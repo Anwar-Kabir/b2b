@@ -1,20 +1,7 @@
- import 'package:flutter/material.dart';
-
-class Order {
-  String orderId;
-  String customerName;
-  double amount;
-  String orderStatus;
-  DateTime date;
-
-  Order({
-    required this.orderId,
-    required this.customerName,
-    required this.amount,
-    required this.orderStatus,
-    required this.date,
-  });
-}
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:isotopeit_b2b/utils/color.dart';
+import 'package:isotopeit_b2b/view/order/order_deatils.dart';
 
 class OrderListScreen extends StatefulWidget {
   @override
@@ -22,172 +9,92 @@ class OrderListScreen extends StatefulWidget {
 }
 
 class _OrderListScreenState extends State<OrderListScreen> {
-  List<Order> orders = [];
-
   @override
   void initState() {
     super.initState();
-
-    // Adding sample orders for demo purposes
-    orders.add(Order(
-        orderId: 'ORD123',
-        customerName: 'John Doe',
-        amount: 250.00,
-        orderStatus: 'Shipped',
-        date: DateTime.now().subtract(Duration(days: 1))));
-    orders.add(Order(
-        orderId: 'ORD124',
-        customerName: 'Jane Smith',
-        amount: 150.00,
-        orderStatus: 'Processing',
-        date: DateTime.now().subtract(Duration(days: 2))));
-    orders.add(Order(
-        orderId: 'ORD125',
-        customerName: 'Alex Johnson',
-        amount: 300.00,
-        orderStatus: 'Delivered',
-        date: DateTime.now().subtract(Duration(days: 3))));
-  }
-
-  // Navigate to the order detail screen
-  void viewOrderDetails(Order order) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => OrderDetailScreen(order: order),
-      ),
-    );
-  }
-
-  // Method to return color based on order status
-  Color getOrderStatusColor(String status) {
-    switch (status) {
-      case 'Processing':
-        return Colors.orange;
-      case 'Shipped':
-        return Colors.blue;
-      case 'Delivered':
-        return Colors.green;
-      case 'Cancelled':
-        return Colors.red;
-      default:
-        return Colors.black;
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Order List'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView.builder(
-          itemCount: orders.length,
-          itemBuilder: (context, index) {
-            final order = orders[index];
-            return Card(
-              child: ListTile(
-                title: Text('Order ID: ${order.orderId}'),
-                subtitle: RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: '${order.customerName} - ',
-                        style: TextStyle(color: Colors.black87),
-                      ),
-                      TextSpan(
-                        text: '\$${order.amount} - ',
-                        style: TextStyle(color: Colors.black87),
-                      ),
-                      TextSpan(
-                        text: '${order.orderStatus}',
-                        style: TextStyle(
-                          color: getOrderStatusColor(
-                              order.orderStatus), // Applying color here
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                trailing: Icon(Icons.arrow_forward),
-                onTap: () =>
-                    viewOrderDetails(order), // Navigate to order details
-              ),
-            );
-          },
+        appBar: AppBar(
+          
+          title: const Text('Order List', style: TextStyle(color: Colors.white),),
+          backgroundColor: AppColor.primaryColor.withOpacity(0.7),
+           iconTheme: const IconThemeData(
+            color: Colors.white,  
+          ),
         ),
-      ),
-    );
-  }
-}
-
-class OrderDetailScreen extends StatelessWidget {
-  final Order order;
-
-  const OrderDetailScreen({Key? key, required this.order}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Order Details'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Order ID: ${order.orderId}',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Customer Name: ${order.customerName}',
-              style: TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Order Amount: \$${order.amount}',
-              style: TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Order Status: ${order.orderStatus}',
-              style: TextStyle(
-                fontSize: 18,
-                color: getOrderStatusColor(order.orderStatus),
+        body:
+         Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SizedBox(
+              height: 110,
+              child: GestureDetector(
+                onTap: (){
+                  Get.to(const OrderDeatils(), transition: Transition.rightToLeftWithFade);
+                },
+                child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: const BorderSide(
+                        // Add border color and width
+                        color: Colors.grey, // Change this to your desired color
+                        width: 2, // Set the border width
+                      ),
+                    ),
+                    elevation: 4,
+                    child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Order Details
+                            const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Order #123',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold, fontSize: 16),
+                                ),
+                                SizedBox(height: 8),
+                                Text('23 Jan, 2023'),
+                                SizedBox(height: 4),
+                                Text('2 Items, Total \$23'),
+                              ],
+                            ),
+                
+                            // Status Chips
+                            Column(
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                SizedBox(
+                                  height: 35,
+                                  child: Chip(
+                                    label: const Text('Approved'),
+                                    padding: const EdgeInsets.all(2),
+                                    labelPadding: const EdgeInsets.all(1),
+                                    backgroundColor: Colors.green.shade100,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                SizedBox(
+                                  height: 35,
+                                  child: Chip(
+                                    padding: const EdgeInsets.all(2),
+                                    labelPadding: const EdgeInsets.all(1),
+                                    label: const Text('Unpaid'),
+                                    backgroundColor: Colors.red.shade100,
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ))),
               ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Order Date: ${order.date.toLocal()}'.split(' ')[0],
-              style: TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 20),
-             
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Method to return color based on order status
-  Color getOrderStatusColor(String status) {
-    switch (status) {
-      case 'Processing':
-        return Colors.orange;
-      case 'Shipped':
-        return Colors.blue;
-      case 'Delivered':
-        return Colors.green;
-      case 'Cancelled':
-        return Colors.red;
-      default:
-        return Colors.black;
-    }
+            )));
   }
 }

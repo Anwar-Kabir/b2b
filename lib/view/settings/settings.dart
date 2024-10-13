@@ -3,11 +3,12 @@ import 'package:get/get.dart';
 import 'package:isotopeit_b2b/view/attributes/attribute.dart';
 import 'package:isotopeit_b2b/view/auction/auction.dart';
 import 'package:isotopeit_b2b/view/category/category.dart';
+import 'package:isotopeit_b2b/view/courier/courier.dart';
 import 'package:isotopeit_b2b/view/login/login.dart';
 import 'package:isotopeit_b2b/view/order/order.dart';
 import 'package:isotopeit_b2b/view/product/product.dart';
 import 'package:isotopeit_b2b/view/report/report.dart';
-import 'package:isotopeit_b2b/view/shopbanner/shop_banner.dart';
+import 'package:isotopeit_b2b/view/banner/banner.dart';
 import 'package:isotopeit_b2b/view/shopsettings/shop_settings.dart';
 import 'package:isotopeit_b2b/view/inventory.dart/inventory.dart';
 import 'package:isotopeit_b2b/view/wallet/wallet.dart';
@@ -46,134 +47,134 @@ class Settings extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 5.0),
-              Card(
-                child: ListTile(
-                  title: const Text("Attribute Management"),
-                  leading: const Icon(Icons.family_restroom),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {
-                    Get.to(SizeColorManager());
-                  },
-                ),
-              ),
-              const SizedBox(height: 5.0),
-              Card(
-                child: ListTile(
-                  title: const Text("Inventory Management"),
-                  leading: const Icon(Icons.inventory),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {
-                    Get.to(ProductManager(), transition: Transition.leftToRightWithFade);
-                  },
-                ),
-              ),
-              const SizedBox(height: 5.0),
-              Card(
-                child: ListTile(
-                  title: const Text("Product Management"),
-                  leading: const Icon(Icons.shop),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {
-                    Get.to(ProductListScreen(), transition: Transition.rightToLeftWithFade);
-                  },
-                ),
-              ),
-              const SizedBox(height: 5.0),
-              Card(
-                child: ListTile(
-                  title: const Text("Category and Tag Management"),
-                  leading: const Icon(Icons.category),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {
-                    Get.to(CategoryListPage());
-                  },
-                ),
-              ),
-              const SizedBox(height: 5.0),
-              Card(
-                child: ListTile(
-                  title: const Text("Order Management"),
-                  leading: const Icon(Icons.accessible),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {
-                    Get.to(OrderListScreen(), transition: Transition.rightToLeftWithFade);
-                  },
-                ),
-              ),
-               const SizedBox(height: 5.0),
-               Card(
-                child: ListTile(
-                  title: const Text("Sub-order and Courier Management"),
-                  leading: const Icon(Icons.send),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {},
-                ),
-              ),
-              const SizedBox(height: 5.0),
-              Card(
-                child: ListTile(
-                  title: const Text("Shop Banner Management"),
-                  leading: const Icon(Icons.image),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {
-                    Get.to(  BannerManager());
-                  },
-                ),
-              ),
-              const SizedBox(height: 5.0),
-              Card(
-                child: ListTile(
-                  title: const Text("Wallet Management"),
-                  leading: const Icon(Icons.currency_exchange),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {
-                    Get.to(WalletManager(), transition: Transition.rightToLeftWithFade);
-                  },
-                ),
-              ),
-              const SizedBox(height: 5.0),
-              Card(
-                child: ListTile(
-                  title: const Text("Auction Management"),
-                  leading: const Icon(Icons.report),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {
-                    Get.to(AuctionManager(), transition: Transition.rightToLeftWithFade);
-                  },
-                ),
-              ),
-              const SizedBox(height: 5.0),
-              Card(
-                child: ListTile(
-                  title: const Text("Shop Settings"),
-                  leading: const Icon(Icons.shop_rounded),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {
-                    Get.to(ShopSettingsPage(), transition: Transition.rightToLeftWithFade);
-                  },
-                ),
-              ),
-              const SizedBox(height: 5.0),
-              Card(
-                child: ListTile(
-                  title: const Text(" Reports"),
-                  leading: const Icon(Icons.note),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {
-                    Get.to(ReportManagerPage(), transition: Transition.rightToLeftWithFade);
-                  },
-                ),
-              ),
-              const SizedBox(height: 5.0),
-              Card(
-                child: ListTile(
-                  title: const Text("App Settings"),
-                  leading: const Icon(Icons.settings),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {},
-                ),
-              ),
-              const SizedBox(height: 5.0),
+              // Card(
+              //   child: ListTile(
+              //     title: const Text("Attribute Management"),
+              //     leading: const Icon(Icons.family_restroom),
+              //     trailing: const Icon(Icons.arrow_forward),
+              //     onTap: () {
+              //       Get.to(SizeColorManager());
+              //     },
+              //   ),
+              // ),
+              // Card(
+              //   child: ListTile(
+              //     title: const Text("Inventory Management"),
+              //     leading: const Icon(Icons.inventory),
+              //     trailing: const Icon(Icons.arrow_forward),
+              //     onTap: () {
+              //       Get.to(ProductManager(), transition: Transition.leftToRightWithFade);
+              //     },
+              //   ),
+              // ),
+              // Card(
+              //   child: ListTile(
+              //     title: const Text("Product Management"),
+              //     leading: const Icon(Icons.shop),
+              //     trailing: const Icon(Icons.arrow_forward),
+              //     onTap: () {
+              //       Get.to(ProductListScreen(), transition: Transition.rightToLeftWithFade);
+              //     },
+              //   ),
+              // ),
+              // Card(
+              //   child: ListTile(
+              //     title: const Text("Category and Tag Management"),
+              //     leading: const Icon(Icons.category),
+              //     trailing: const Icon(Icons.arrow_forward),
+              //     onTap: () {
+              //       Get.to(CategoryListPage());
+              //     },
+              //   ),
+              // ),
+              // Card(
+              //   child: ListTile(
+              //     title: const Text("Order Management"),
+              //     leading: const Icon(Icons.accessible),
+              //     trailing: const Icon(Icons.arrow_forward),
+              //     onTap: () {
+              //       Get.to(OrderListScreen(), transition: Transition.rightToLeftWithFade);
+              //     },
+              //   ),
+              // ),
+                
+              // Card(
+              //   child: ListTile(
+              //     title: const Text("Courier"),
+              //     leading: const Icon(Icons.accessible),
+              //     trailing: const Icon(Icons.arrow_forward),
+              //     onTap: () {
+              //       Get.to(const Courier(),
+              //           transition: Transition.rightToLeftWithFade);
+              //     },
+              //   ),
+              // ),
+              //  Card(
+              //   child: ListTile(
+              //     title: const Text("Sub-order and Courier Management"),
+              //     leading: const Icon(Icons.send),
+              //     trailing: const Icon(Icons.arrow_forward),
+              //     onTap: () {},
+              //   ),
+              // ),
+              // Card(
+              //   child: ListTile(
+              //     title: const Text("Shop Banner Management"),
+              //     leading: const Icon(Icons.image),
+              //     trailing: const Icon(Icons.arrow_forward),
+              //     onTap: () {
+              //       Get.to(  BannerManager());
+              //     },
+              //   ),
+              // ),
+              // Card(
+              //   child: ListTile(
+              //     title: const Text("Wallet Management"),
+              //     leading: const Icon(Icons.currency_exchange),
+              //     trailing: const Icon(Icons.arrow_forward),
+              //     onTap: () {
+              //       Get.to(WalletManager(), transition: Transition.rightToLeftWithFade);
+              //     },
+              //   ),
+              // ),
+              // Card(
+              //   child: ListTile(
+              //     title: const Text("Auction Management"),
+              //     leading: const Icon(Icons.report),
+              //     trailing: const Icon(Icons.arrow_forward),
+              //     onTap: () {
+              //       Get.to(AuctionManager(), transition: Transition.rightToLeftWithFade);
+              //     },
+              //   ),
+              // ),
+              // Card(
+              //   child: ListTile(
+              //     title: const Text("Shop Settings"),
+              //     leading: const Icon(Icons.shop_rounded),
+              //     trailing: const Icon(Icons.arrow_forward),
+              //     onTap: () {
+              //       Get.to(ShopSettingsPage(), transition: Transition.rightToLeftWithFade);
+              //     },
+              //   ),
+              // ),
+              // Card(
+              //   child: ListTile(
+              //     title: const Text(" Reports"),
+              //     leading: const Icon(Icons.note),
+              //     trailing: const Icon(Icons.arrow_forward),
+              //     onTap: () {
+              //       Get.to(ReportManagerPage(), transition: Transition.rightToLeftWithFade);
+              //     },
+              //   ),
+              // ),
+              // Card(
+              //   child: ListTile(
+              //     title: const Text("App Settings"),
+              //     leading: const Icon(Icons.settings),
+              //     trailing: const Icon(Icons.arrow_forward),
+              //     onTap: () {},
+              //   ),
+              // ),
 
               Card(
                 child: ListTile(

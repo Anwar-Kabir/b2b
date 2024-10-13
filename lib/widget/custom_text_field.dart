@@ -12,6 +12,7 @@ class CustomTextField extends StatelessWidget {
   final VoidCallback? onSuffixTap;
   final int? maxLength;
   final String ?hintText;
+  final int? maxLines ;
 
   const CustomTextField({
     super.key,
@@ -26,6 +27,7 @@ class CustomTextField extends StatelessWidget {
     this.onSuffixTap,
     this.maxLength,
     this.hintText,
+    this.maxLines
   });
 
   @override
@@ -37,7 +39,7 @@ class CustomTextField extends StatelessWidget {
       onChanged: onChanged,
       validator: validator,
       maxLength: maxLength,
-      
+      maxLines: maxLines,
       decoration: InputDecoration(
        //labelText: labelText,
        hintText: hintText,

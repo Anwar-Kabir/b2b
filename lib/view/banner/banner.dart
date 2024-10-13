@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+
+import 'package:isotopeit_b2b/utils/color.dart';
+import 'package:isotopeit_b2b/view/banner/add_banner.dart';
+import 'package:isotopeit_b2b/view/banner/banner_details.dart';
 
 class BannerItem {
   String title;
@@ -141,54 +146,103 @@ class _BannerManagerState extends State<BannerManager> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Banner Manager'),
+       appBar: AppBar(
+        title: const Text(
+          "Banners",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: AppColor.primaryColor.withOpacity(0.7),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+        actions: [
+          IconButton(onPressed: (){
+
+             Get.to(AddBanner(), transition: Transition.rightToLeftWithFade);
+          }, icon: const Icon(Icons.add, color: Colors.white,),   ),
+          
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ListView.builder(
-          itemCount: banners.length,
-          itemBuilder: (context, index) {
-            final banner = banners[index];
-            return Card(
-              child: ListTile(
-                leading: CircleAvatar(
-                  radius: 25,
-                  backgroundImage: FileImage(File(banner.imageUrl)),
-                  backgroundColor: Colors.grey[300],
-                ),
-                title: Text(banner.title),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.blue.withOpacity(0.2),
-                      child: IconButton(
-                        icon: Icon(Icons.edit, color: Colors.blue),
-                        onPressed: () =>
-                            showBannerModal(banner: banner, index: index),
+        child: 
+
+        GestureDetector(
+          onTap: (){
+           Get.to(BannerDetails(),transition: Transition.rightToLeftWithFade);
+          },
+          child: SizedBox(
+            height: 115,
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Row(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start, // Aligns items to the top
+                  children: <Widget>[
+                    // Image on the left (leading)
+                    Container(
+                      width: 80,  
+                      height: 80,  
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(10.0), // Rounded image corners
+                        image: const DecorationImage(
+                          image: AssetImage('assets/abc.jpg'), // Local asset image
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                    SizedBox(width: 8),
-                    CircleAvatar(
-                      backgroundColor: Colors.red.withOpacity(0.2),
-                      child: IconButton(
-                        icon: Icon(Icons.delete, color: Colors.red),
-                        onPressed: () => deleteBanner(index),
+            
+                    const SizedBox(width: 12),
+            
+                    // Space between image and text
+                    const SizedBox(width: 12),
+            
+                    // Product details
+                    const Expanded(
+                      // Makes sure text occupies the remaining space
+                      child: const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          // Product name
+                          Text(
+                            "Suscipit aut sunt qu",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+            
+                          SizedBox(
+                              height: 6),  
+            
+                          
+                          Text(
+                            'Columns: 4, Serial Number: 100' ,
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w500),
+                          ),
+                          
+                          Text('Link label: , Link: '),
+                        ],
                       ),
                     ),
+            
+                   
                   ],
                 ),
               ),
-            );
-          },
+            ),
+          ),
         ),
+        
+         
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => showBannerModal(),
-        child: Icon(Icons.add),
-        tooltip: 'Add Banner',
-      ),
+       
     );
   }
 }

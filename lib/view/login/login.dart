@@ -31,7 +31,7 @@ class LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Login"),),
+     // appBar: AppBar(title: const Text("Login"),),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Form(
@@ -41,7 +41,7 @@ class LoginState extends State<Login> {
             children: <Widget>[
               
               
-              const SizedBox(height: 30),
+              const SizedBox(height: 150),
 
               Image.asset(
                 AppImages.splashLogo,

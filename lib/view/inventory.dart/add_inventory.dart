@@ -1,13 +1,8 @@
 import 'dart:io';
-
- 
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:isotopeit_b2b/utils/image.dart';
+import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/widget/label_with_asterisk.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
-
 
 class AddInventoryPage extends StatefulWidget {
   @override
@@ -29,7 +24,7 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
     TextEditingController()
   ];
 
- // Tags handling
+  // Tags handling
   List<String> _availableTags = [
     "Stock Limited",
     "Top Trending",
@@ -37,10 +32,9 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
     "New Arrival"
   ];
   List<String> _selectedTags = [];
-  
 
   //product
-   String? _selectedProduct;
+  String? _selectedProduct;
 
   List<String> _productList = [
     "Product 1",
@@ -57,22 +51,42 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
   DateTime? selectedEndDateTime;
   DateTime? selectedAvailableDateTime;
 
-  final ImagePicker _picker = ImagePicker();
-
-  XFile? _imageFile;
-
   final _formKey = GlobalKey<FormState>();
   // GlobalKey for form validation
   final TextEditingController _zipController = TextEditingController();
 
-  Future<void> _pickImage(ImageSource source) async {
-    final XFile? pickedFile = await _picker.pickImage(source: source);
+   
 
-    if (pickedFile != null) {
-      setState(() {
-        _imageFile = pickedFile;
-      });
+  final ImagePicker _picker = ImagePicker();
+  List<XFile> _imageFiles = []; // Holds up to 5 images
+
+  // Image picking logic for gallery (allow multiple) and camera (single)
+  Future<void> _pickImage(ImageSource source, {bool multiple = false}) async {
+    if (multiple) {
+      final List<XFile>? pickedFiles = await _picker.pickMultiImage();
+      if (pickedFiles != null) {
+        setState(() {
+          // Add new images if the limit of 5 is not exceeded
+          _imageFiles.addAll(pickedFiles.take(5 - _imageFiles.length));
+        });
+      }
+    } else {
+      final XFile? pickedFile = await _picker.pickImage(source: source);
+      if (pickedFile != null) {
+        setState(() {
+          if (_imageFiles.length < 5) {
+            _imageFiles.add(pickedFile);
+          }
+        });
+      }
     }
+  }
+
+  // Function to remove an image
+  void _removeImage(int index) {
+    setState(() {
+      _imageFiles.removeAt(index);
+    });
   }
 
   @override
@@ -81,7 +95,7 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
     _EnddateTimeController.dispose();
     _availabledateTimeController
         .dispose(); // Dispose controller when widget is destroyed
-     _keyFeatureControllers.forEach((controller) => controller.dispose());    
+    _keyFeatureControllers.forEach((controller) => controller.dispose());
     super.dispose();
   }
 
@@ -89,19 +103,13 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Inventory"),
-        actions: [
-          ElevatedButton.icon(
-            onPressed: () {
-              // Add Save Functionality
-            },
-            icon: Icon(Icons.save),
-            label: Text("Save"),
-          ),
-          SizedBox(
-            width: 5,
-          )
-        ],
+        title: const Text("Add Inventory", style: TextStyle(color: Colors.white),
+        ),
+         backgroundColor: AppColor.primaryColor.withOpacity(0.7),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+         
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -123,47 +131,15 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                             height: 5,
                           ),
 
-                          Center(
-                            child: Stack(
-                              alignment: Alignment.bottomRight,
-                              children: [
-                                CircleAvatar(
-                                  radius: 65,
-                                  backgroundColor: Colors.green[100],
-                                  child: CircleAvatar(
-                                    radius: 60,
-                                    backgroundImage: _imageFile != null
-                                        ? FileImage(File(_imageFile!.path))
-                                        : const AssetImage(AppImages.splashLogo)
-                                            as ImageProvider,
-                                  ),
-                                ),
-                                Positioned(
-                                  bottom: 4,
-                                  right: 4,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      _showImageSourceActionSheet(context);
-                                    },
-                                    child: Container(
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.white,
-                                      ),
-                                      padding: const EdgeInsets.all(6),
-                                      child: const Icon(
-                                        Icons.camera_alt,
-                                        size: 20,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                          const LabelWithAsterisk(
+                            labelText: "Product Images (Max 5)",
+                            isRequired: true,
                           ),
+                          const SizedBox(height: 20),
 
-                          SizedBox(
+                          _buildImagePicker(),
+
+                          const SizedBox(
                             height: 10,
                           ),
                           const LabelWithAsterisk(
@@ -171,11 +147,6 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                             isRequired: true,
                           ),
                           _buildTextField("Enter Product Name"),
-
-
-                          
-
-
 
                           const LabelWithAsterisk(
                             labelText: "SKU",
@@ -193,19 +164,18 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                           ),
                           //_buildTextField("Enter Key Features"),
 
-                           ..._buildKeyFeatureFields(),
+                          ..._buildKeyFeatureFields(),
 
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Align(
                             alignment: Alignment.centerRight,
                             child: ElevatedButton.icon(
                               onPressed: _addKeyFeature,
-                              icon: Icon(Icons.add),
-                              label: Text("Add Key Feature"),
+                              icon: const Icon(Icons.add),
+                              label: const Text("Add Key Feature"),
                             ),
                           ),
-                          SizedBox(height: 10),
-
+                          const SizedBox(height: 10),
 
                           const LabelWithAsterisk(
                             labelText: "Price",
@@ -271,14 +241,11 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                           ),
                           //_buildTextField("Enter Tags"),
 
-                          
-                        // Dropdown for selecting tags
+                          // Dropdown for selecting tags
                           _buildTagDropdown(),
 
                           // Display selected tags as chips
                           _buildTagChips(),
-
-
 
                           const LabelWithAsterisk(
                             labelText: "Enter Commission in (%)",
@@ -307,25 +274,121 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                       ),
                     ),
 
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                   ],
                 ),
-                SizedBox(height: 20),
               ],
             ),
           ),
         ),
       ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton.icon(
+          onPressed: () {
+            // Add Save functionality
+          },
+          icon: const Icon(Icons.save),
+          label: const Text("Save"),
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(double.infinity, 50), // Make button full-width
+            backgroundColor:  AppColor.primaryColor, // Change this to your desired color
+            // For text color:
+            foregroundColor: Colors.white, // Text and icon color
+          ),
+        ),
+      ),
+    );
+  }
+   
+  
+
+  // Image picker widget showing selected images and option to add more
+  Widget _buildImagePicker() {
+    return Column(
+      children: [
+        if (_imageFiles.isNotEmpty)
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: _imageFiles.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+            ),
+            itemBuilder: (context, index) {
+              return Stack(
+                children: [
+                  Image.file(
+                    File(_imageFiles[index].path),
+                    fit: BoxFit.cover,
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: GestureDetector(
+                      onTap: () => _removeImage(index),
+                      child: Container(
+                        color: Colors.black54,
+                        child: const Icon(Icons.close, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        const SizedBox(
+          height: 10,
+        ),
+        if (_imageFiles.length < 5)
+          ElevatedButton.icon(
+            onPressed: () {
+              _showImageSourceActionSheet(context);
+            },
+            icon: const Icon(Icons.add_a_photo),
+            label: const Text("Add Images (Max 5)"),
+          ),
+      ],
     );
   }
 
-  
+  // Show action sheet to choose between camera and gallery
+  void _showImageSourceActionSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Gallery (Multiple)'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  _pickImage(ImageSource.gallery, multiple: true);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('Camera (Single)'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  _pickImage(ImageSource.camera);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
-     
   // Function to build dropdown for selecting tags
   Widget _buildTagDropdown() {
     return DropdownButtonFormField<String>(
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         border: OutlineInputBorder(),
         hintText: "Select a tag",
       ),
@@ -355,7 +418,7 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
           return Chip(
             label: Text(tag),
             backgroundColor: Colors.green.withOpacity(0.2),
-            deleteIcon: Icon(Icons.close),
+            deleteIcon: const Icon(Icons.close),
             onDeleted: () {
               setState(() {
                 _selectedTags.remove(tag);
@@ -366,7 +429,6 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
       ),
     );
   }
-
 
   // Function to build dynamic key feature fields
   List<Widget> _buildKeyFeatureFields() {
@@ -383,14 +445,17 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                 controller: controller,
                 decoration: InputDecoration(
                   hintText: "Enter Key Feature ${index + 1}",
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                 ),
               ),
             ),
-            SizedBox(width: 8),
-            IconButton(
-              icon: Icon(Icons.delete, color: Colors.red),
-              onPressed: () => _removeKeyFeature(index),
+            const SizedBox(width: 8),
+            CircleAvatar(
+              backgroundColor: Colors.red.withOpacity(0.2),
+              child: IconButton(
+                icon: const Icon(Icons.delete, color: Colors.red),
+                onPressed: () => _removeKeyFeature(index),
+              ),
             ),
           ],
         ),
@@ -423,7 +488,7 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
         decoration: InputDecoration(
           labelText: label,
           hintText: hint,
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
         ),
         maxLines: maxLines,
       ),
@@ -437,7 +502,7 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
       child: DropdownButtonFormField(
         decoration: InputDecoration(
           hintText: hintText,
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
         ),
         items: options.map((String value) {
           return DropdownMenuItem<String>(
@@ -479,8 +544,8 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
         controller: controller, // Set the appropriate controller here
         decoration: InputDecoration(
           hintText: hintText,
-          suffixIcon: Icon(Icons.calendar_today),
-          border: OutlineInputBorder(),
+          suffixIcon: const Icon(Icons.calendar_today),
+          border: const OutlineInputBorder(),
         ),
         readOnly: true, // Makes the field non-editable
         onTap: () async {
@@ -539,35 +604,6 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
     return '$hour:$minute $period';
   }
 
-  void _showImageSourceActionSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return SafeArea(
-          child: Wrap(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('Gallery'),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  _pickImage(ImageSource.gallery);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.photo_camera),
-                title: const Text('Camera'),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  _pickImage(ImageSource.camera);
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 }
 
 // Function to build file picker fields
@@ -578,7 +614,7 @@ Widget _buildFilePicker(String label, String buttonText) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         ElevatedButton(
           onPressed: () {
             // File picker logic here
