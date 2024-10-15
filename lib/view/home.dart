@@ -43,6 +43,8 @@ class BottomNavState extends State<BottomNav> {
     'Inventory',
     'Settings',
   ];
+  
+ 
 
   // Function to handle tab selection
   void _onItemTapped(int index) {
@@ -109,7 +111,7 @@ class BottomNavState extends State<BottomNav> {
               leading: const Icon(Icons.account_circle),
               title: const Text('Attribute Management'),
               onTap: () {
-                Get.to(SizeColorManager());
+                Get.to(SizeColorManager(), transition: Transition.rightToLeftWithFade );
               },
             ),
             ListTile(
@@ -117,14 +119,14 @@ class BottomNavState extends State<BottomNav> {
               title: const Text('Inventory Management'),
               onTap: () {
                 Get.to(ProductManager(),
-                    transition: Transition.leftToRightWithFade);
+                     transition: Transition.rightToLeftWithFade);
               },
             ),
             ListTile(
               leading: const Icon(Icons.shop),
               title: const Text('Product Management'),
               onTap: () {
-                Get.to(ProductListScreen(),
+                Get.to(const ProductListCard(),
                     transition: Transition.rightToLeftWithFade);
               },
             ),
@@ -132,7 +134,7 @@ class BottomNavState extends State<BottomNav> {
               leading: const Icon(Icons.category),
               title: const Text('Category and Tag'),
               onTap: () {
-                Get.to(CategoryListPage());
+                Get.to(CategoryListPage(), transition: Transition.rightToLeftWithFade);
               },
             ),
             ListTile(
@@ -163,7 +165,7 @@ class BottomNavState extends State<BottomNav> {
               leading: const Icon(Icons.image),
               title: const Text('Shop Banner'),
               onTap: () {
-                Get.to(BannerManager());
+                Get.to(BannerManager(), transition: Transition.rightToLeftWithFade);
               },
             ),
             ListTile(
@@ -178,7 +180,7 @@ class BottomNavState extends State<BottomNav> {
               leading: const Icon(Icons.report),
               title: const Text('Auction Management'),
               onTap: () {
-                Get.to(AuctionManager(),
+                Get.to(AuctionPage(),
                     transition: Transition.rightToLeftWithFade);
               },
             ),

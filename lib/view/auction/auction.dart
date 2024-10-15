@@ -1,178 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/routes/transitions_type.dart';
+import 'package:isotopeit_b2b/utils/color.dart';
+import 'package:isotopeit_b2b/view/auction/add_auction.dart';
+import 'package:isotopeit_b2b/view/auction/auction_details.dart';
 
-class Auction {
-  final String id;
-  final String productName;
-  final double startingPrice;
-  final DateTime startTime;
-  final DateTime endTime;
-  List<Bid> bids;
-
-  Auction({
-    required this.id,
-    required this.productName,
-    required this.startingPrice,
-    required this.startTime,
-    required this.endTime,
-    this.bids = const [],
-  });
-
-  bool get isOngoing => DateTime.now().isBefore(endTime);
-}
-
-class Bid {
-  final String bidderName;
-  final double bidAmount;
-  final DateTime bidTime;
-
-  Bid({
-    required this.bidderName,
-    required this.bidAmount,
-    required this.bidTime,
-  });
-}
-
-
-class AuctionManager extends StatefulWidget {
-  @override
-  _AuctionManagerState createState() => _AuctionManagerState();
-}
-
-class _AuctionManagerState extends State<AuctionManager> {
-  List<Auction> auctions = [];
-
-  final TextEditingController productNameController = TextEditingController();
-  final TextEditingController startingPriceController = TextEditingController();
-  final TextEditingController bidderNameController = TextEditingController();
-  final TextEditingController bidAmountController = TextEditingController();
-
-  void createAuction() {
-    String productName = productNameController.text;
-    double startingPrice = double.tryParse(startingPriceController.text) ?? 0;
-    DateTime startTime = DateTime.now();
-    DateTime endTime = startTime.add(Duration(hours: 1)); // 1 hour auction
-
-    if (productName.isNotEmpty && startingPrice > 0) {
-      setState(() {
-        auctions.add(Auction(
-          id: DateTime.now().toString(),
-          productName: productName,
-          startingPrice: startingPrice,
-          startTime: startTime,
-          endTime: endTime,
-        ));
-      });
-      productNameController.clear();
-      startingPriceController.clear();
-    }
-  }
-
-  void placeBid(Auction auction) {
-    String bidderName = bidderNameController.text;
-    double bidAmount = double.tryParse(bidAmountController.text) ?? 0;
-
-    if (bidderName.isNotEmpty && bidAmount > auction.startingPrice) {
-      setState(() {
-        auction.bids.add(Bid(
-          bidderName: bidderName,
-          bidAmount: bidAmount,
-          bidTime: DateTime.now(),
-        ));
-      });
-      bidderNameController.clear();
-      bidAmountController.clear();
-    }
-  }
-
-  void showBidDialog(Auction auction) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Place Bid for ${auction.productName}'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: bidderNameController,
-                decoration: InputDecoration(labelText: 'Your Name'),
-              ),
-              TextField(
-                controller: bidAmountController,
-                decoration: InputDecoration(labelText: 'Bid Amount'),
-                keyboardType: TextInputType.number,
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                placeBid(auction);
-                Navigator.of(context).pop();
-              },
-              child: Text('Submit Bid'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
+class AuctionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Auction Manager'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Auction',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: AppColor.primaryColor.withOpacity(0.7),
+          iconTheme: const IconThemeData(
+            color: Colors.white,
+          ),
+          actions: [
+            TextButton.icon(
+              onPressed: () {
+                Get.to(AddAuction(),
+                    transition: Transition.rightToLeftWithFade);
+              },
+              label: const Text(
+                "Add Auction",
+                style: TextStyle(color: Colors.white),
+              ),
+              icon: const Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+            ),
+          ],
+          bottom: const TabBar(
+            labelColor: Colors.white, // Color for selected tab
+            unselectedLabelColor: Colors.grey, // Color for unselected tabs
+            indicatorColor: AppColor.primaryColor, // Color of the indicator below the tab
+            tabs: [
+              const Tab(text: "Upcoming", ),
+              Tab(text: "Live"),
+              Tab(text: "Closed"),
+            ],
+          ),
+        ),
+        body: TabBarView(
           children: [
-            Text('Create New Auction:', style: TextStyle(fontSize: 18)),
-            TextField(
-              controller: productNameController,
-              decoration: InputDecoration(labelText: 'Product Name'),
-            ),
-            TextField(
-              controller: startingPriceController,
-              decoration: InputDecoration(labelText: 'Starting Price'),
-              keyboardType: TextInputType.number,
-            ),
-            SizedBox(height: 20),
-            Align(
-              alignment: Alignment.center,
-              child: ElevatedButton(
-                onPressed: createAuction,
-                child: Text('Create Auction'),
-              ),
-            ),
-            SizedBox(height: 20),
-            Text('Ongoing Auctions:', style: TextStyle(fontSize: 18)),
-            Expanded(
-              child: ListView.builder(
-                itemCount: auctions.length,
-                itemBuilder: (context, index) {
-                  final auction = auctions[index];
-                  return Card(
-                    child: ListTile(
-                      title: Text(auction.productName),
-                      subtitle: Text(
-                        'Starting Price: \$${auction.startingPrice.toStringAsFixed(2)}\n'
-                        'End Time: ${auction.endTime}\n'
-                        'Status: ${auction.isOngoing ? "Ongoing" : "Ended"}',
-                      ),
-                      trailing: auction.isOngoing
-                          ? IconButton(
-                              icon: Icon(Icons.shop),
-                              onPressed: () => showBidDialog(auction),
-                            )
-                          : null,
-                    ),
-                  );
-                },
-              ),
-            ),
+            AuctionList(auctionData: upcomingAuctions),
+            AuctionList(auctionData: liveAuctions),
+            AuctionList(auctionData: closedAuctions),
           ],
         ),
       ),
@@ -180,4 +60,112 @@ class _AuctionManagerState extends State<AuctionManager> {
   }
 }
 
+class AuctionList extends StatelessWidget {
+  final List<Map<String, dynamic>> auctionData;
 
+  AuctionList({required this.auctionData});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: auctionData.length,
+      itemBuilder: (context, index) {
+        final auction = auctionData[index];
+        return GestureDetector(
+          onTap: (){
+            Get.to(const AuctionDetails(), transition: Transition.rightToLeftWithFade);
+          },
+          child: Card(
+            elevation: 4,
+            margin: const EdgeInsets.all(8),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Auction No: ${auction['auctionNo']}",
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                  Text("SKU: ${auction['sku']}"),
+                  Text("Product Name: ${auction['productName']}"),
+                  Text("Base Price: \$${auction['basePrice']}"),
+                  Text("Quantity: ${auction['quantity']}"),
+                  Text("Auction Date: ${auction['auctionDate']}"),
+                  
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+// Sample Data for Testing
+final List<Map<String, dynamic>> upcomingAuctions = [
+  {
+    'auctionNo': 'AUC00000001',
+    'sku': 'Facilis nisi culpa q',
+    'productName': 'Stripe Floor Mat',
+    'basePrice': 511.00,
+    'quantity': 413,
+    'auctionDate': '2024-10-17 20:33:00'
+  },
+  {
+    'auctionNo': 'AUC00000002',
+    'sku': 'Quis voluptates dolo',
+    'productName': 'NG Opal Plate 10.75 Inch',
+    'basePrice': 518.00,
+    'quantity': 118,
+    'auctionDate': '2024-10-17 10:34:00'
+  },
+  {
+    'auctionNo': 'AUC00000003',
+    'sku': 'werwqerqwe',
+    'productName': 'Watermelon',
+    'basePrice': 10000.00,
+    'quantity': 100,
+    'auctionDate': '2024-10-15 11:32:00'
+  },
+];
+
+final List<Map<String, dynamic>> liveAuctions = [
+  // Live auction data
+    {
+    'auctionNo': 'AUC00000001 live',
+    'sku': 'Facilis nisi culpa q',
+    'productName': 'Stripe Floor Mat',
+    'basePrice': 511.00,
+    'quantity': 413,
+    'auctionDate': '2024-10-17 20:33:00'
+  },
+  {
+    'auctionNo': 'AUC00000002',
+    'sku': 'Quis voluptates dolo',
+    'productName': 'NG Opal Plate 10.75 Inch',
+    'basePrice': 518.00,
+    'quantity': 118,
+    'auctionDate': '2024-10-17 10:34:00'
+  },
+];
+
+final List<Map<String, dynamic>> closedAuctions = [
+  // Closed auction data
+    {
+    'auctionNo': 'AUC00000001 closed',
+    'sku': 'Facilis nisi culpa q',
+    'productName': 'Stripe Floor Mat',
+    'basePrice': 511.00,
+    'quantity': 413,
+    'auctionDate': '2024-10-17 20:33:00'
+  },
+  {
+    'auctionNo': 'AUC00000002',
+    'sku': 'Quis voluptates dolo',
+    'productName': 'NG Opal Plate 10.75 Inch',
+    'basePrice': 518.00,
+    'quantity': 118,
+    'auctionDate': '2024-10-17 10:34:00'
+  },
+];

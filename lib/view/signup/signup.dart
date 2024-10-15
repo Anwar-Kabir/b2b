@@ -331,7 +331,7 @@ class _SignupState extends State<Signup> {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Get.to(const Login());
+                                Get.to(const Login(), transition: Transition.rightToLeftWithFade);
                               }),
                       ],
                     ),

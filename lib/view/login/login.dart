@@ -153,7 +153,7 @@ class LoginState extends State<Login> {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Get.to(const ForgetPassword());
+                              Get.to(const ForgetPassword(), transition: Transition.rightToLeftWithFade);
                             }),
                     ],
                   ),
@@ -177,7 +177,7 @@ class LoginState extends State<Login> {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Get.to(Signup());
+                              Get.to(Signup(), transition: Transition.rightToLeftWithFade);
                             }),
                     ],
                   ),

@@ -1,8 +1,4 @@
- 
-       
-
-
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/view/inventory.dart/add_inventory.dart';
@@ -37,7 +33,7 @@ class _ProductManagerState extends State<ProductManager> {
         actions: [
           IconButton(
               onPressed: () {
-                Get.to(AddInventoryPage());
+                Get.to(AddInventoryPage(), transition: Transition.rightToLeftWithFade);
               },
               icon: const Icon(Icons.add, color: Colors.white)),
         ],
@@ -172,7 +168,7 @@ class ProductCard extends StatelessWidget {
 
       GestureDetector(
         onTap: (){
-          Get.to(ProductDetailsScreen());
+          Get.to(InvenProductDetails(), transition: Transition.rightToLeftWithFade);
         },
         child: Card(
             shape: RoundedRectangleBorder(

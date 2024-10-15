@@ -1,17 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:isotopeit_b2b/view/attributes/attribute.dart';
-import 'package:isotopeit_b2b/view/auction/auction.dart';
-import 'package:isotopeit_b2b/view/category/category.dart';
-import 'package:isotopeit_b2b/view/courier/courier.dart';
+ 
 import 'package:isotopeit_b2b/view/login/login.dart';
-import 'package:isotopeit_b2b/view/order/order.dart';
-import 'package:isotopeit_b2b/view/product/product.dart';
-import 'package:isotopeit_b2b/view/report/report.dart';
-import 'package:isotopeit_b2b/view/banner/banner.dart';
-import 'package:isotopeit_b2b/view/shopsettings/shop_settings.dart';
-import 'package:isotopeit_b2b/view/inventory.dart/inventory.dart';
-import 'package:isotopeit_b2b/view/wallet/wallet.dart';
+ 
 
 class Settings extends StatelessWidget {
   const Settings({super.key});

@@ -1,176 +1,98 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:isotopeit_b2b/utils/color.dart';
+import 'package:isotopeit_b2b/view/inventory.dart/inven_product_details.dart';
+import 'package:isotopeit_b2b/view/product/product_list_view.dart';
 
-class Product {
-  String name;
-  double price;
-  String imageUrl;
-  String stockStatus;
+class ProductListCard extends StatelessWidget {
+ 
 
-  Product({
-    required this.name,
-    required this.price,
-    required this.imageUrl,
-    required this.stockStatus,
-  });
-}
-
-class ProductListScreen extends StatefulWidget {
-  @override
-  _ProductListScreenState createState() => _ProductListScreenState();
-}
-
-class _ProductListScreenState extends State<ProductListScreen> {
-  List<Product> products = [];
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Adding sample products for demo
-    products.add(Product(
-        name: 'Product 1',
-        price: 100.0,
-        imageUrl: 'https://via.placeholder.com/150',
-        stockStatus: 'In Stock'));
-    products.add(Product(
-        name: 'Product 2',
-        price: 150.0,
-        imageUrl: 'https://via.placeholder.com/150',
-        stockStatus: 'Out of Stock'));
-    products.add(Product(
-        name: 'Product 3',
-        price: 200.0,
-        imageUrl: 'https://via.placeholder.com/150',
-        stockStatus: 'Active'));
-  }
-
-  // Method to return color based on stock status
-  Color getStockColor(String status) {
-    switch (status) {
-      case 'Active':
-        return Colors.green;
-      case 'Inactive':
-        return Colors.grey;
-      case 'In Stock':
-        return Colors.blue;
-      case 'Out of Stock':
-        return Colors.red;
-      default:
-        return Colors.black;
-    }
-  }
-
-  // Navigate to product details page
-  void viewProductDetails(Product product) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ProductDetailScreen(product: product),
-      ),
-    );
-  }
+  const ProductListCard({super.key,  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
-        title: Text('Product List'),
+        title: const Text(
+          'Product List',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: AppColor.primaryColor.withOpacity(0.7),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+         
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView.builder(
-          itemCount: products.length,
-          itemBuilder: (context, index) {
-            final product = products[index];
-            return Card(
-              child: ListTile(
-                leading: Image.network(product.imageUrl),
-                title: Text('${product.name}'),
-                subtitle: Text(
-                  '\$${product.price} - ${product.stockStatus}',
-                  style: TextStyle(color: getStockColor(product.stockStatus)),
+          padding: const EdgeInsets.all(8.0),
+          child: GestureDetector(
+            onTap: () {
+              Get.to(ProductListDetails(),
+                  transition: Transition.rightToLeftWithFade);
+            },
+            child: SizedBox(
+              height: 110,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
-                onTap: () =>
-                    viewProductDetails(product), // Navigate to detail view
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Row(
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start, // Aligns items to the top
+                    children: <Widget>[
+                      // Image on the left (leading)
+                      Container(
+                        width: 80, // Set the width of the image
+                        height: 80, // Set the height of the image
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(10.0), // Rounded image corners
+                          image: const DecorationImage(
+                            image:
+                                AssetImage('assets/abc.jpg'), // Local asset image
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    
+                      const SizedBox(width: 12), // Space between image and text
+                    
+                      // Product details
+                      const Expanded(
+                        // Makes sure text occupies the remaining space
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            // Product name
+                            Text(
+                              "Korola (Bitter Gourd)",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                    
+                            SizedBox(
+                                height: 6), // Space between product name and price
+                    
+                            // Price details
+                            Text(
+                              'Price: \$85.0',
+                              style: TextStyle(color: AppColor.primaryColor),
+                            ),
+                            Text('Net Price: \$92.65'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            );
-          },
-        ),
-      ),
+            ),
+          )),
     );
   }
-}
-
-class ProductDetailScreen extends StatelessWidget {
-  final Product product;
-
-  const ProductDetailScreen({Key? key, required this.product})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(product.name),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Image.network(
-                product.imageUrl,
-                height: 200,
-                width: 200,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              'Product Name: ${product.name}',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Price: \$${product.price}',
-              style: TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Stock Status: ${product.stockStatus}',
-              style: TextStyle(
-                fontSize: 18,
-                color: getStockColor(product.stockStatus),
-              ),
-            ),
-            const SizedBox(height: 20),
-             
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Method to return color based on stock status (same as in ProductListScreen)
-  Color getStockColor(String status) {
-    switch (status) {
-      case 'Active':
-        return Colors.green;
-      case 'Inactive':
-        return Colors.grey;
-      case 'In Stock':
-        return Colors.blue;
-      case 'Out of Stock':
-        return Colors.red;
-      default:
-        return Colors.black;
-    }
-  }
-}
-
-void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: ProductListScreen(),
-  ));
 }

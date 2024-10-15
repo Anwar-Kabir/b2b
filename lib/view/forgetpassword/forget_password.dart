@@ -106,7 +106,7 @@ class ForgetPasswordState extends State<ForgetPassword> {
                 child: ElevatedButton(
                   onPressed: () {
                     //_loginController.login();
-                    Get.to(const ChangePassword());
+                    Get.to(const ChangePassword(), transition: Transition.rightToLeftWithFade);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF7F56D9),
