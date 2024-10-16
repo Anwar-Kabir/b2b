@@ -100,7 +100,7 @@
 //                 crossAxisAlignment: CrossAxisAlignment.end,
 //                 children: [
 //                   // Other sections
-                   
+
 //                   _buildDetailRow('Vehicle Charge:', '2,000.00'),
 //                   _buildDetailRow('Sub Total:', '3,400.00'),
 //                   _buildDetailRow('Load Unload Charge:', '200.00'),
@@ -299,10 +299,6 @@
 //   }
 // }
 
-
-
-
-
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
@@ -459,10 +455,10 @@ class CourierDetails extends StatelessWidget {
             const SizedBox(width: 12),
 
             // Product details
-            Expanded(
+            const Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <Widget>[
+                children: <Widget>[
                   Text(
                     "Korola Bitter Gourd",
                     style: TextStyle(

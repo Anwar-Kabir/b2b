@@ -4,8 +4,10 @@ import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/view/order/order_deatils.dart';
 
 class OrderListScreen extends StatefulWidget {
+  const OrderListScreen({super.key});
+
   @override
-  _OrderListScreenState createState() => _OrderListScreenState();
+  State<OrderListScreen> createState() => _OrderListScreenState();
 }
 
 class _OrderListScreenState extends State<OrderListScreen> {
@@ -18,21 +20,23 @@ class _OrderListScreenState extends State<OrderListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          
-          title: const Text('Order List', style: TextStyle(color: Colors.white),),
+          title: const Text(
+            'Order List',
+            style: TextStyle(color: Colors.white),
+          ),
           backgroundColor: AppColor.primaryColor.withOpacity(0.7),
-           iconTheme: const IconThemeData(
-            color: Colors.white,  
+          iconTheme: const IconThemeData(
+            color: Colors.white,
           ),
         ),
-        body:
-         Padding(
+        body: Padding(
             padding: const EdgeInsets.all(16.0),
             child: SizedBox(
               height: 110,
               child: GestureDetector(
-                onTap: (){
-                  Get.to(const OrderDeatils(), transition: Transition.rightToLeftWithFade);
+                onTap: () {
+                  Get.to(const OrderDeatils(),
+                      transition: Transition.rightToLeftWithFade);
                 },
                 child: Card(
                     shape: RoundedRectangleBorder(
@@ -57,7 +61,8 @@ class _OrderListScreenState extends State<OrderListScreen> {
                                 Text(
                                   'Order #123',
                                   style: TextStyle(
-                                      fontWeight: FontWeight.bold, fontSize: 16),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
                                 ),
                                 SizedBox(height: 8),
                                 Text('23 Jan, 2023'),
@@ -65,7 +70,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
                                 Text('2 Items, Total \$23'),
                               ],
                             ),
-                
+
                             // Status Chips
                             Column(
                               mainAxisSize: MainAxisSize.max,

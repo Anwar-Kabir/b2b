@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/view/login/login.dart';
 
-
 class SignupController extends GetxController {
   // Variables
   var obscurePassword = true.obs;
@@ -17,8 +16,8 @@ class SignupController extends GetxController {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController conformpasswordController = TextEditingController();
-
+  final TextEditingController conformpasswordController =
+      TextEditingController();
 
   @override
   void dispose() {
@@ -74,7 +73,7 @@ class SignupController extends GetxController {
     return null;
   }
 
-   // Confirm password validation function
+  // Confirm password validation function
   String? validateConfirmPassword(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please confirm your password';
@@ -84,7 +83,6 @@ class SignupController extends GetxController {
     }
     return null;
   }
-
 
   // Toggle password visibility
   void togglePasswordVisibility() {
@@ -113,8 +111,6 @@ class SignupController extends GetxController {
   // Handle the sign-up logic
   Future<void> handleSignup() async {
     if (formKey.currentState!.validate() && isAgreed.value) {
-     
-
       Get.snackbar("Success", "Sign up successful!",
           backgroundColor: Colors.green, colorText: Colors.white);
 

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 
 class BannerDetails extends StatelessWidget {
+  const BannerDetails({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Banner  Details',
           style: TextStyle(color: Colors.white),
         ),
@@ -15,7 +17,7 @@ class BannerDetails extends StatelessWidget {
           color: Colors.white,
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -33,32 +35,23 @@ class BannerDetails extends StatelessWidget {
                   width: 200,
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
 
-               
-               
-              
-               
-
-             
-
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Additional Details
-              Text(
+              const Text(
                 'Banner Details',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildDetailRow('Details', 'Suscipit aut sunt qu'),
               _buildDetailRow('Columns', '4'),
               _buildDetailRow('Serial Number', '100'),
               _buildDetailRow('Link label', ' '),
               _buildDetailRow('Link', ' '),
               _buildDetailRow('Created at', ' '),
-              SizedBox(height: 20),
-
-               
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -71,15 +64,15 @@ class BannerDetails extends StatelessWidget {
             Expanded(
               child: OutlinedButton(
                 onPressed: () {},
-                child: Text('Edit'),
+                child: const Text('Edit'),
               ),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Expanded(
               child: ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                child: Text(
+                child: const Text(
                   'Delete',
                   style: TextStyle(color: Colors.white),
                 ),
@@ -115,11 +108,12 @@ class BannerDetails extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(title, style: TextStyle(fontSize: 16, color: Colors.grey[700])),
-          SizedBox(
+          const SizedBox(
             width: 15,
           ),
           Text(value,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              style:
+                  const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         ],
       ),
     );

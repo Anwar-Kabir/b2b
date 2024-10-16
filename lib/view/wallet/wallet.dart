@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
-import 'package:isotopeit_b2b/view/signup/signup_controller.dart';
 import 'package:isotopeit_b2b/view/wallet/wallet_request_details.dart';
 import 'package:isotopeit_b2b/view/wallet/wallet_request_money.dart';
 
 class Wallet extends StatefulWidget {
+  const Wallet({super.key});
+
   @override
   State<Wallet> createState() => _WalletState();
 }
 
 class _WalletState extends State<Wallet> {
-  
- 
-
   // Example data
   final List<Map<String, dynamic>> requests = [
     {
@@ -52,7 +49,8 @@ class _WalletState extends State<Wallet> {
         actions: [
           TextButton.icon(
             onPressed: () {
-              Get.to(const BalanceRequest(), transition: Transition.rightToLeftWithFade);
+              Get.to(const BalanceRequest(),
+                  transition: Transition.rightToLeftWithFade);
             },
             label: const Text(
               "Request Withdraw",
@@ -65,15 +63,14 @@ class _WalletState extends State<Wallet> {
           ),
         ],
       ),
-      
-
       body: ListView.builder(
         itemCount: requests.length,
         itemBuilder: (context, index) {
           final request = requests[index];
           return GestureDetector(
-            onTap: (){
-              Get.to(const RequestDetails(), transition: Transition.rightToLeftWithFade);
+            onTap: () {
+              Get.to(const RequestDetails(),
+                  transition: Transition.rightToLeftWithFade);
             },
             child: Card(
               margin: const EdgeInsets.all(8.0),
@@ -81,25 +78,26 @@ class _WalletState extends State<Wallet> {
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'Requested By: ${request['requestedBy']}',
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 5),
                         Text('Requested At: ${request['requestedAt']}'),
                         const SizedBox(height: 5),
-                        Text('Amount: \$${request['amount'].toStringAsFixed(2)}'),
+                        Text(
+                            'Amount: \$${request['amount'].toStringAsFixed(2)}'),
                         const SizedBox(height: 10),
-                       
                       ],
                     ),
-                     StatusBadge(status: request['status']),
+                    StatusBadge(status: request['status']),
                   ],
                 ),
               ),
@@ -114,7 +112,7 @@ class _WalletState extends State<Wallet> {
 class StatusBadge extends StatelessWidget {
   final String status;
 
-  StatusBadge({required this.status});
+  const StatusBadge({super.key, required this.status});
 
   @override
   Widget build(BuildContext context) {

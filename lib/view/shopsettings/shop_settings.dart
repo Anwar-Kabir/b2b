@@ -442,17 +442,18 @@
 // }
 
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/utils/image.dart';
+import 'package:isotopeit_b2b/view/signup/signup_controller.dart';
 import 'package:isotopeit_b2b/widget/custom_text_field.dart';
 import 'package:isotopeit_b2b/widget/label_with_asterisk.dart';
-import 'package:isotopeit_b2b/view/signup/signup_controller.dart';
 
 class ShopSettingsPage extends StatefulWidget {
-  ShopSettingsPage({super.key});
+  const ShopSettingsPage({super.key});
 
   @override
   State<ShopSettingsPage> createState() => _ShopSettingsPageState();
@@ -760,32 +761,35 @@ class _ShopSettingsPageState extends State<ShopSettingsPage> {
       children: [
         Card(
           elevation: 2,
-          margin: EdgeInsets.symmetric(vertical: 16),
+          margin: const EdgeInsets.symmetric(vertical: 16),
           child: Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Division: Dhaka', style: TextStyle(fontSize: 16)),
+                    const Text('Division: Dhaka',
+                        style: TextStyle(fontSize: 16)),
                     Row(
                       children: [
                         CircleAvatar(
                           backgroundColor: Colors.green.withOpacity(0.2),
                           child: IconButton(
-                            icon: Icon(Icons.edit, color: Colors.green),
+                            icon: const Icon(Icons.edit, color: Colors.green),
                             onPressed: () {
                               // Implement your edit functionality here
                             },
                           ),
                         ),
-                        const SizedBox(width: 10,),
+                        const SizedBox(
+                          width: 10,
+                        ),
                         CircleAvatar(
                           backgroundColor: Colors.red.withOpacity(0.2),
                           child: IconButton(
-                            icon: Icon(Icons.delete, color: Colors.red),
+                            icon: const Icon(Icons.delete, color: Colors.red),
                             onPressed: () {
                               // Implement your delete functionality here
                             },
@@ -795,12 +799,14 @@ class _ShopSettingsPageState extends State<ShopSettingsPage> {
                     ),
                   ],
                 ),
-                Text('District: Gazipur', style: TextStyle(fontSize: 16)),
-                Text('Upazila: Gazipur Sadar', style: TextStyle(fontSize: 16)),
-                Text('Address Line: Monihar market, Dokan 14',
+                const Text('District: Gazipur', style: TextStyle(fontSize: 16)),
+                const Text('Upazila: Gazipur Sadar',
                     style: TextStyle(fontSize: 16)),
-                Text('Zip Code: 1702', style: TextStyle(fontSize: 16)),
-                Text('Phone: 01999023636', style: TextStyle(fontSize: 16)),
+                const Text('Address Line: Monihar market, Dokan 14',
+                    style: TextStyle(fontSize: 16)),
+                const Text('Zip Code: 1702', style: TextStyle(fontSize: 16)),
+                const Text('Phone: 01999023636',
+                    style: TextStyle(fontSize: 16)),
               ],
             ),
           ),

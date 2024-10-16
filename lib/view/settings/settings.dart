@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
- 
 import 'package:isotopeit_b2b/view/login/login.dart';
- 
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
@@ -88,7 +86,7 @@ class Settings extends StatelessWidget {
               //     },
               //   ),
               // ),
-                
+
               // Card(
               //   child: ListTile(
               //     title: const Text("Courier"),

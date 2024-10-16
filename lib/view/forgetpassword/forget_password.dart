@@ -5,14 +5,13 @@ import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/utils/image.dart';
 import 'package:isotopeit_b2b/view/forgetpassword/change_password.dart';
 import 'package:isotopeit_b2b/view/login/login_controller.dart';
-import 'package:isotopeit_b2b/view/signup/signup.dart';
 import 'package:isotopeit_b2b/widget/custom_text_field.dart';
 
 class ForgetPassword extends StatefulWidget {
   const ForgetPassword({super.key});
 
   @override
-  ForgetPasswordState createState() => ForgetPasswordState();
+  State<ForgetPassword> createState() => ForgetPasswordState();
 }
 
 class ForgetPasswordState extends State<ForgetPassword> {
@@ -28,16 +27,16 @@ class ForgetPasswordState extends State<ForgetPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       appBar: AppBar(
-          title: const Text(
-            'Forget Password',
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: AppColor.primaryColor.withOpacity(0.7),
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),),
+        title: const Text(
+          'Forget Password',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: AppColor.primaryColor.withOpacity(0.7),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Form(
@@ -47,16 +46,13 @@ class ForgetPasswordState extends State<ForgetPassword> {
             children: <Widget>[
               const SizedBox(height: 70),
 
-          
-
               Image.asset(
                 AppImages.splashLogo,
                 height: 80,
                 width: MediaQuery.of(context).size.width - 50,
               ),
 
-              
-                  const SizedBox(height: 70),
+              const SizedBox(height: 70),
 
               const Row(
                 children: [
@@ -74,7 +70,7 @@ class ForgetPasswordState extends State<ForgetPassword> {
               // Custom Text Field for Email
               CustomTextField(
                 prefixIcon: Icons.email,
-                 hintText: 'anwar@gmail.com',
+                hintText: 'anwar@gmail.com',
                 controller: _loginController.emailController,
                 keyboardType: TextInputType.emailAddress,
                 validator: _loginController.validateEmail,
@@ -114,7 +110,8 @@ class ForgetPasswordState extends State<ForgetPassword> {
                 child: ElevatedButton(
                   onPressed: () {
                     //_loginController.login();
-                    Get.to(const ChangePassword(), transition: Transition.rightToLeftWithFade);
+                    Get.to(const ChangePassword(),
+                        transition: Transition.rightToLeftWithFade);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF7F56D9),

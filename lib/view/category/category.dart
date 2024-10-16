@@ -1,20 +1,14 @@
- 
-
-
-
 import 'package:flutter/material.dart';
 
 class Category {
   String name;
   int serialNumber;
   int totalSubCategories;
-   
 
   Category({
     required this.name,
     required this.serialNumber,
     required this.totalSubCategories,
-     
   });
 }
 
@@ -22,11 +16,10 @@ class CategoryForm extends StatefulWidget {
   final Category? category; // To differentiate between adding and editing
   final Function(Category) onSave;
 
-  const CategoryForm({Key? key, this.category, required this.onSave})
-      : super(key: key);
+  const CategoryForm({super.key, this.category, required this.onSave});
 
   @override
-  _CategoryFormState createState() => _CategoryFormState();
+  State<CategoryForm> createState() => _CategoryFormState();
 }
 
 class _CategoryFormState extends State<CategoryForm> {
@@ -43,7 +36,6 @@ class _CategoryFormState extends State<CategoryForm> {
     _name = widget.category?.name ?? '';
     _serialNumber = widget.category?.serialNumber ?? 0;
     _totalSubCategories = widget.category?.totalSubCategories ?? 0;
-     
   }
 
   @override
@@ -58,7 +50,7 @@ class _CategoryFormState extends State<CategoryForm> {
             // Category Name
             TextFormField(
               initialValue: _name,
-              decoration: InputDecoration(labelText: 'Category Name'),
+              decoration: const InputDecoration(labelText: 'Category Name'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter a category name';
@@ -70,7 +62,7 @@ class _CategoryFormState extends State<CategoryForm> {
             // Serial Number
             TextFormField(
               initialValue: _serialNumber.toString(),
-              decoration: InputDecoration(labelText: 'Serial Number'),
+              decoration: const InputDecoration(labelText: 'Serial Number'),
               keyboardType: TextInputType.number,
               validator: (value) {
                 if (value == null || int.tryParse(value) == null) {
@@ -83,7 +75,8 @@ class _CategoryFormState extends State<CategoryForm> {
             // Total Sub Categories
             TextFormField(
               initialValue: _totalSubCategories.toString(),
-              decoration: InputDecoration(labelText: 'Total Sub Categories'),
+              decoration:
+                  const InputDecoration(labelText: 'Total Sub Categories'),
               keyboardType: TextInputType.number,
               validator: (value) {
                 if (value == null || int.tryParse(value) == null) {
@@ -94,8 +87,8 @@ class _CategoryFormState extends State<CategoryForm> {
               onSaved: (value) => _totalSubCategories = int.parse(value!),
             ),
             // Optional Category Image
-             
-            SizedBox(height: 20),
+
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
@@ -104,7 +97,6 @@ class _CategoryFormState extends State<CategoryForm> {
                     name: _name,
                     serialNumber: _serialNumber,
                     totalSubCategories: _totalSubCategories,
-                    
                   );
                   widget.onSave(newCategory);
                 }
@@ -120,6 +112,8 @@ class _CategoryFormState extends State<CategoryForm> {
 }
 
 class CategoryListPage extends StatefulWidget {
+  const CategoryListPage({super.key});
+
   @override
   _CategoryListPageState createState() => _CategoryListPageState();
 }
@@ -170,10 +164,10 @@ class _CategoryListPageState extends State<CategoryListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Categories'),
+        title: const Text('Categories'),
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () => _addOrEditCategory(null),
           ),
         ],
@@ -184,14 +178,13 @@ class _CategoryListPageState extends State<CategoryListPage> {
           final category = categories[index];
           return Card(
             elevation: 3,
-            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             child: ListTile(
               leading: CircleAvatar(
-                backgroundColor: Colors.grey[200],
-                
-                child:  Text((index + 1).toString())
-                     // Show index if no image
-              ),
+                  backgroundColor: Colors.grey[200],
+                  child: Text((index + 1).toString())
+                  // Show index if no image
+                  ),
               title: Text(category.name),
               subtitle: Text(
                 'Serial: ${category.serialNumber}, Sub Categories: ${category.totalSubCategories}',
@@ -199,23 +192,22 @@ class _CategoryListPageState extends State<CategoryListPage> {
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                 
                   CircleAvatar(
                     backgroundColor:
                         Colors.blue.withOpacity(0.2), // Light blue background
                     child: IconButton(
-                      icon: Icon(Icons.edit, color: Colors.blue),
+                      icon: const Icon(Icons.edit, color: Colors.blue),
                       onPressed: () => _addOrEditCategory(category),
                     ),
                   ),
-                  SizedBox(width: 8), // Add some space between buttons
+                  const SizedBox(width: 8), // Add some space between buttons
 
                   // Delete button with circular background
                   CircleAvatar(
                     backgroundColor:
                         Colors.red.withOpacity(0.2), // Light red background
                     child: IconButton(
-                      icon: Icon(Icons.delete, color: Colors.red),
+                      icon: const Icon(Icons.delete, color: Colors.red),
                       onPressed: () => _deleteCategory(category),
                     ),
                   ),

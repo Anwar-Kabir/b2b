@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 
 class ProductListDetails extends StatelessWidget {
+  const ProductListDetails({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Product  Details',
           style: TextStyle(color: Colors.white),
         ),
@@ -15,7 +17,7 @@ class ProductListDetails extends StatelessWidget {
           color: Colors.white,
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -33,7 +35,7 @@ class ProductListDetails extends StatelessWidget {
                   width: 200,
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
 
               // Image selection options (horizontal scrollable)
               SizedBox(
@@ -48,42 +50,38 @@ class ProductListDetails extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Product Title, Rating, and Price
-              Text(
+              const Text(
                 'Fresh Broccoli',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
-               SizedBox(height: 10),
-              
-              
+              const SizedBox(height: 10),
 
               // Wishlist and Buy Now Buttons
 
-               
-
               // Additional Details
-              Text(
+              const Text(
                 'Additional Details',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 10),
-             // _buildDetailRow('Availability', 'In Stock'),
+              const SizedBox(height: 10),
+              // _buildDetailRow('Availability', 'In Stock'),
               _buildDetailRow('Brand', 'Green Farms'),
               _buildDetailRow('Category', 'Vegetables'),
               _buildDetailRow('Size/Weight', '500 g'),
               _buildDetailRow('SKU', 'SKU12346'),
               _buildDetailRow('Ingredients', 'Broccoli'),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Description Section
-              Text(
+              const Text(
                 'Description',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 10),
-              Text(
+              const SizedBox(height: 10),
+              const Text(
                 'Fresh Broccoli is a nutritious vegetable known for its high content of vitamins, minerals, and fiber...',
                 style: TextStyle(fontSize: 16),
               ),
@@ -91,7 +89,6 @@ class ProductListDetails extends StatelessWidget {
           ),
         ),
       ),
-     
     );
   }
 
@@ -119,11 +116,12 @@ class ProductListDetails extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(title, style: TextStyle(fontSize: 16, color: Colors.grey[700])),
-          SizedBox(
+          const SizedBox(
             width: 15,
           ),
           Text(value,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              style:
+                  const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         ],
       ),
     );

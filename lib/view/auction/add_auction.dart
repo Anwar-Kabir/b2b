@@ -1,12 +1,15 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/widget/label_with_asterisk.dart';
 
 class AddAuction extends StatefulWidget {
+  const AddAuction({super.key});
+
   @override
-  _AddAuctionState createState() => _AddAuctionState();
+  State<AddAuction> createState() => _AddAuctionState();
 }
 
 class _AddAuctionState extends State<AddAuction> {
@@ -20,23 +23,23 @@ class _AddAuctionState extends State<AddAuction> {
       TextEditingController();
 
   // Controllers for key features
-  List<TextEditingController> _keyFeatureControllers = [
+  final List<TextEditingController> _keyFeatureControllers = [
     TextEditingController()
   ];
 
   // Tags handling
-  List<String> _availableTags = [
+  final List<String> _availableTags = [
     "Stock Limited",
     "Top Trending",
     "Best Seller",
     "New Arrival"
   ];
-  List<String> _selectedTags = [];
+  final List<String> _selectedTags = [];
 
   //product
   String? _selectedProduct;
 
-  List<String> _productList = [
+  final List<String> _productList = [
     "Product 1",
     "Product 2",
     "Product 3",
@@ -56,18 +59,16 @@ class _AddAuctionState extends State<AddAuction> {
   final TextEditingController _zipController = TextEditingController();
 
   final ImagePicker _picker = ImagePicker();
-  List<XFile> _imageFiles = []; // Holds up to 5 images
+  final List<XFile> _imageFiles = []; // Holds up to 5 images
 
   // Image picking logic for gallery (allow multiple) and camera (single)
   Future<void> _pickImage(ImageSource source, {bool multiple = false}) async {
     if (multiple) {
-      final List<XFile>? pickedFiles = await _picker.pickMultiImage();
-      if (pickedFiles != null) {
-        setState(() {
-          // Add new images if the limit of 5 is not exceeded
-          _imageFiles.addAll(pickedFiles.take(5 - _imageFiles.length));
-        });
-      }
+      final List<XFile> pickedFiles = await _picker.pickMultiImage();
+      setState(() {
+        // Add new images if the limit of 5 is not exceeded
+        _imageFiles.addAll(pickedFiles.take(5 - _imageFiles.length));
+      });
     } else {
       final XFile? pickedFile = await _picker.pickImage(source: source);
       if (pickedFile != null) {
@@ -93,7 +94,9 @@ class _AddAuctionState extends State<AddAuction> {
     _EnddateTimeController.dispose();
     _availabledateTimeController
         .dispose(); // Dispose controller when widget is destroyed
-    _keyFeatureControllers.forEach((controller) => controller.dispose());
+    for (var controller in _keyFeatureControllers) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -157,7 +160,7 @@ class _AddAuctionState extends State<AddAuction> {
                             isRequired: true,
                           ),
                           _buildDropdown("Status", ["Active", "Inactive"]),
-                         // _buildCheckbox("BSTI Certification"),
+                          // _buildCheckbox("BSTI Certification"),
                           const LabelWithAsterisk(
                             labelText: "Key features",
                           ),
@@ -176,19 +179,18 @@ class _AddAuctionState extends State<AddAuction> {
                           ),
                           const SizedBox(height: 10),
 
-                         
                           const SizedBox(height: 10),
                           const LabelWithAsterisk(
                             labelText: "Base Price",
                             isRequired: true,
                           ),
                           _buildTextField("Enter Price"),
-                           const LabelWithAsterisk(
+                          const LabelWithAsterisk(
                             labelText: "Stock Quantity",
                             isRequired: true,
                           ),
                           _buildTextField("Enter Stock Quantity"),
-                           
+
                           const LabelWithAsterisk(
                             labelText: "Meta Description",
                             isRequired: true,
@@ -196,7 +198,10 @@ class _AddAuctionState extends State<AddAuction> {
                           _buildTextField("Enter Meta Description",
                               maxLines: 3),
 
-                          const Text("Additional Info", style: TextStyle(fontWeight: FontWeight.bold),),    
+                          const Text(
+                            "Additional Info",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
 
                           const LabelWithAsterisk(
                             labelText: "Enter Tags",
@@ -209,16 +214,17 @@ class _AddAuctionState extends State<AddAuction> {
                           // Display selected tags as chips
                           _buildTagChips(),
 
+                          const Text(
+                            "Auction Info",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
 
-                           const Text("Auction Info", style: TextStyle(fontWeight: FontWeight.bold),), 
-
-                            const LabelWithAsterisk(
+                          const LabelWithAsterisk(
                             labelText: "Auction Date",
                           ),
                           // _buildDatePicker("Offer End Date"),
 
-                          _buildDatePicker(
-                              "Date", _startDateTimeController,
+                          _buildDatePicker("Date", _startDateTimeController,
                               (DateTime? selectedDate) {
                             setState(() {
                               selectedStartDateTime = selectedDate;
@@ -228,20 +234,12 @@ class _AddAuctionState extends State<AddAuction> {
                           const LabelWithAsterisk(
                             labelText: "Registration Last Date",
                           ),
-                          _buildDatePicker(
-                              "Date", _EnddateTimeController,
+                          _buildDatePicker("Date", _EnddateTimeController,
                               (DateTime? selectedDate) {
                             setState(() {
                               selectedEndDateTime = selectedDate;
                             });
                           }),
-
-
-
- 
-
-                           
-                          
                         ],
                       ),
                     ),

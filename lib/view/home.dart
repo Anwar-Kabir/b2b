@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/view/attributes/attribute.dart';
 import 'package:isotopeit_b2b/view/auction/auction.dart';
+import 'package:isotopeit_b2b/view/banner/banner.dart';
 import 'package:isotopeit_b2b/view/category/category.dart';
 import 'package:isotopeit_b2b/view/courier/courier.dart';
 import 'package:isotopeit_b2b/view/inventory.dart/inventory.dart';
@@ -11,7 +11,6 @@ import 'package:isotopeit_b2b/view/order/order.dart';
 import 'package:isotopeit_b2b/view/product/product.dart';
 import 'package:isotopeit_b2b/view/report/report.dart';
 import 'package:isotopeit_b2b/view/settings/settings.dart';
-import 'package:isotopeit_b2b/view/banner/banner.dart';
 import 'package:isotopeit_b2b/view/shopsettings/shop_settings.dart';
 import 'package:isotopeit_b2b/view/wallet/wallet.dart';
 
@@ -26,17 +25,16 @@ class BottomNavState extends State<BottomNav> {
   int _selectedIndex = 0;
 
   // Screens for each tab
-  static   List<Widget> _pages = <Widget>[
-      Center(child:   Text('Home Page')),
-      OrderListScreen(),
-     Wallet(),
+  static final List<Widget> _pages = <Widget>[
+    const Center(child: Text('Home Page')),
+    const OrderListScreen(),
+    const Wallet(),
     //Center(child: Text('Inventory Page')),
-    ProductManager(),
+    const ProductManager(),
     // Center(child: Text('Profile Page')),
-      Settings(),
+    const Settings(),
   ];
 
-  
   // Titles for each tab
   static const List<String?> _titles = <String?>[
     'Home',
@@ -45,9 +43,6 @@ class BottomNavState extends State<BottomNav> {
     null, // No title for Inventory
     'Settings',
   ];
-
-  
- 
 
   // Function to handle tab selection
   void _onItemTapped(int index) {
@@ -59,7 +54,7 @@ class BottomNavState extends State<BottomNav> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: _titles[_selectedIndex] != null
+      appBar: _titles[_selectedIndex] != null
           ? AppBar(
               title: Text(
                 _titles[_selectedIndex]!,
@@ -116,15 +111,16 @@ class BottomNavState extends State<BottomNav> {
               leading: const Icon(Icons.account_circle),
               title: const Text('Attribute Management'),
               onTap: () {
-                Get.to(SizeColorManager(), transition: Transition.rightToLeftWithFade );
+                Get.to(const SizeColorManager(),
+                    transition: Transition.rightToLeftWithFade);
               },
             ),
             ListTile(
               leading: const Icon(Icons.settings),
               title: const Text('Inventory Management'),
               onTap: () {
-                Get.to(ProductManager(),
-                     transition: Transition.rightToLeftWithFade);
+                Get.to(const ProductManager(),
+                    transition: Transition.rightToLeftWithFade);
               },
             ),
             ListTile(
@@ -139,14 +135,15 @@ class BottomNavState extends State<BottomNav> {
               leading: const Icon(Icons.category),
               title: const Text('Category and Tag'),
               onTap: () {
-                Get.to(CategoryListPage(), transition: Transition.rightToLeftWithFade);
+                Get.to(const CategoryListPage(),
+                    transition: Transition.rightToLeftWithFade);
               },
             ),
             ListTile(
               leading: const Icon(Icons.accessible),
               title: const Text('Order Management'),
               onTap: () {
-                Get.to(OrderListScreen(),
+                Get.to(const OrderListScreen(),
                     transition: Transition.rightToLeftWithFade);
               },
             ),
@@ -170,14 +167,15 @@ class BottomNavState extends State<BottomNav> {
               leading: const Icon(Icons.image),
               title: const Text('Shop Banner'),
               onTap: () {
-                Get.to(BannerManager(), transition: Transition.rightToLeftWithFade);
+                Get.to(const BannerManager(),
+                    transition: Transition.rightToLeftWithFade);
               },
             ),
             ListTile(
               leading: const Icon(Icons.currency_exchange),
               title: const Text('Wallet Management'),
               onTap: () {
-                Get.to(Wallet(),
+                Get.to(const Wallet(),
                     transition: Transition.rightToLeftWithFade);
               },
             ),
@@ -185,7 +183,7 @@ class BottomNavState extends State<BottomNav> {
               leading: const Icon(Icons.report),
               title: const Text('Auction Management'),
               onTap: () {
-                Get.to(AuctionPage(),
+                Get.to(const AuctionPage(),
                     transition: Transition.rightToLeftWithFade);
               },
             ),
@@ -193,7 +191,7 @@ class BottomNavState extends State<BottomNav> {
               leading: const Icon(Icons.shop_rounded),
               title: const Text('Shop Settings'),
               onTap: () {
-                Get.to(ShopSettingsPage(),
+                Get.to(const ShopSettingsPage(),
                     transition: Transition.rightToLeftWithFade);
               },
             ),
@@ -201,7 +199,7 @@ class BottomNavState extends State<BottomNav> {
               leading: const Icon(Icons.note),
               title: const Text('Reports'),
               onTap: () {
-                Get.to(ReportManagerPage(),
+                Get.to(const ReportManagerPage(),
                     transition: Transition.rightToLeftWithFade);
               },
             ),
@@ -249,7 +247,3 @@ class BottomNavState extends State<BottomNav> {
     );
   }
 }
-
-
-
- 

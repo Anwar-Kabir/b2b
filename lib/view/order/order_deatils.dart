@@ -1,4 +1,3 @@
-import 'package:dotted_border/dotted_border.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
@@ -7,12 +6,14 @@ class OrderDeatils extends StatelessWidget {
   const OrderDeatils({super.key});
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Order Deatils", style: TextStyle(color: Colors.white),
+        title: const Text(
+          "Order Deatils",
+          style: TextStyle(color: Colors.white),
         ),
-         backgroundColor: AppColor.primaryColor.withOpacity(0.7),
+        backgroundColor: AppColor.primaryColor.withOpacity(0.7),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
@@ -86,7 +87,7 @@ class OrderDeatils extends StatelessWidget {
                       // Product details
                       const Expanded(
                         // Makes sure text occupies the remaining space
-                        child: const Column(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             // Product name
@@ -182,15 +183,15 @@ class OrderDeatils extends StatelessWidget {
           // ),
           const SizedBox(height: 8),
 
-          Text("Quantity: 8pcs"),
+          const Text("Quantity: 8pcs"),
 
           const SizedBox(height: 8),
 
-          Text("Unite Price: 12 tk"),
+          const Text("Unite Price: 12 tk"),
 
           const SizedBox(height: 8),
 
-          Text("Total Amount: 92 tk"),
+          const Text("Total Amount: 92 tk"),
 
           const SizedBox(height: 16),
 

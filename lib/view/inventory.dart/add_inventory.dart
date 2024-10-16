@@ -1,12 +1,15 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/widget/label_with_asterisk.dart';
 
 class AddInventoryPage extends StatefulWidget {
+  const AddInventoryPage({super.key});
+
   @override
-  _AddInventoryPageState createState() => _AddInventoryPageState();
+  State<AddInventoryPage> createState() => _AddInventoryPageState();
 }
 
 class _AddInventoryPageState extends State<AddInventoryPage> {
@@ -20,23 +23,23 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
       TextEditingController();
 
   // Controllers for key features
-  List<TextEditingController> _keyFeatureControllers = [
+  final List<TextEditingController> _keyFeatureControllers = [
     TextEditingController()
   ];
 
   // Tags handling
-  List<String> _availableTags = [
+  final List<String> _availableTags = [
     "Stock Limited",
     "Top Trending",
     "Best Seller",
     "New Arrival"
   ];
-  List<String> _selectedTags = [];
+  final List<String> _selectedTags = [];
 
   //product
   String? _selectedProduct;
 
-  List<String> _productList = [
+  final List<String> _productList = [
     "Product 1",
     "Product 2",
     "Product 3",
@@ -55,21 +58,17 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
   // GlobalKey for form validation
   final TextEditingController _zipController = TextEditingController();
 
-   
-
   final ImagePicker _picker = ImagePicker();
-  List<XFile> _imageFiles = []; // Holds up to 5 images
+  final List<XFile> _imageFiles = []; // Holds up to 5 images
 
   // Image picking logic for gallery (allow multiple) and camera (single)
   Future<void> _pickImage(ImageSource source, {bool multiple = false}) async {
     if (multiple) {
-      final List<XFile>? pickedFiles = await _picker.pickMultiImage();
-      if (pickedFiles != null) {
-        setState(() {
-          // Add new images if the limit of 5 is not exceeded
-          _imageFiles.addAll(pickedFiles.take(5 - _imageFiles.length));
-        });
-      }
+      final List<XFile> pickedFiles = await _picker.pickMultiImage();
+      setState(() {
+        // Add new images if the limit of 5 is not exceeded
+        _imageFiles.addAll(pickedFiles.take(5 - _imageFiles.length));
+      });
     } else {
       final XFile? pickedFile = await _picker.pickImage(source: source);
       if (pickedFile != null) {
@@ -95,7 +94,9 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
     _EnddateTimeController.dispose();
     _availabledateTimeController
         .dispose(); // Dispose controller when widget is destroyed
-    _keyFeatureControllers.forEach((controller) => controller.dispose());
+    for (var controller in _keyFeatureControllers) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -103,13 +104,14 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add Inventory", style: TextStyle(color: Colors.white),
+        title: const Text(
+          "Add Inventory",
+          style: TextStyle(color: Colors.white),
         ),
-         backgroundColor: AppColor.primaryColor.withOpacity(0.7),
+        backgroundColor: AppColor.primaryColor.withOpacity(0.7),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
-         
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -291,8 +293,10 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
           icon: const Icon(Icons.save),
           label: const Text("Save"),
           style: ElevatedButton.styleFrom(
-            minimumSize: const Size(double.infinity, 50), // Make button full-width
-            backgroundColor:  AppColor.primaryColor, // Change this to your desired color
+            minimumSize:
+                const Size(double.infinity, 50), // Make button full-width
+            backgroundColor:
+                AppColor.primaryColor, // Change this to your desired color
             // For text color:
             foregroundColor: Colors.white, // Text and icon color
           ),
@@ -300,8 +304,6 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
       ),
     );
   }
-   
-  
 
   // Image picker widget showing selected images and option to add more
   Widget _buildImagePicker() {
@@ -603,7 +605,6 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
         .padLeft(2, '0'); // Ensure minute is always two digits
     return '$hour:$minute $period';
   }
-
 }
 
 // Function to build file picker fields

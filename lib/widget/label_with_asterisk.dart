@@ -5,10 +5,10 @@ class LabelWithAsterisk extends StatelessWidget {
   final bool isRequired;
 
   const LabelWithAsterisk({
-    Key? key,
+    super.key,
     required this.labelText,
     this.isRequired = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +16,13 @@ class LabelWithAsterisk extends StatelessWidget {
       children: [
         Text(
           labelText,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
         ),
         if (isRequired)
-          Text(
+          const Text(
             "*",
             style: TextStyle(color: Colors.red),
           ),

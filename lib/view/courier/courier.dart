@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/view/courier/courier_details.dart';
 
@@ -9,7 +8,7 @@ class Courier extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return   Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: const Text(
           'Courier List',
@@ -28,7 +27,8 @@ class Courier extends StatelessWidget {
                 height: 110,
                 child: GestureDetector(
                   onTap: () {
-                    Get.to(const CourierDetails(), transition: Transition.rightToLeftWithFade);
+                    Get.to(const CourierDetails(),
+                        transition: Transition.rightToLeftWithFade);
                   },
                   child: Card(
                       shape: RoundedRectangleBorder(
@@ -69,15 +69,23 @@ class Courier extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.max,
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  SizedBox(height: 12,),
+                                  const SizedBox(
+                                    height: 12,
+                                  ),
                                   Chip(
-                                    label: const Text('Shipped', style: TextStyle(color: Colors.green, fontSize: 16, fontWeight: FontWeight.bold),),
+                                    label: const Text(
+                                      'Shipped',
+                                      style: TextStyle(
+                                          color: Colors.green,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                     padding: const EdgeInsets.all(12),
                                     labelPadding: const EdgeInsets.all(1),
-                                    backgroundColor: Colors.green.withOpacity(0.2),
+                                    backgroundColor:
+                                        Colors.green.withOpacity(0.2),
                                   ),
                                   const SizedBox(height: 8),
-                                  
                                 ],
                               )
                             ],
@@ -87,7 +95,5 @@ class Courier extends StatelessWidget {
         ],
       ),
     );
-
-    
   }
 }

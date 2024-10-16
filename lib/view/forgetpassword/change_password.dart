@@ -1,17 +1,14 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/utils/image.dart';
 import 'package:isotopeit_b2b/view/login/login_controller.dart';
-import 'package:isotopeit_b2b/view/signup/signup.dart';
 import 'package:isotopeit_b2b/widget/custom_text_field.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
 
   @override
-  ChangePasswordState createState() => ChangePasswordState();
+  State<ChangePassword> createState() => ChangePasswordState();
 }
 
 class ChangePasswordState extends State<ChangePassword> {
@@ -27,16 +24,16 @@ class ChangePasswordState extends State<ChangePassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       
       appBar: AppBar(
-          title: const Text(
-            'Change Password',
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: AppColor.primaryColor.withOpacity(0.7),
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),),
+        title: const Text(
+          'Change Password',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: AppColor.primaryColor.withOpacity(0.7),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Form(
@@ -44,9 +41,7 @@ class ChangePasswordState extends State<ChangePassword> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-               
-
-               const SizedBox(height: 70),
+              const SizedBox(height: 70),
 
               Image.asset(
                 AppImages.splashLogo,
@@ -82,7 +77,6 @@ class ChangePasswordState extends State<ChangePassword> {
               ),
               const SizedBox(height: 20),
 
-
               const Row(
                 children: [
                   Text(
@@ -108,8 +102,6 @@ class ChangePasswordState extends State<ChangePassword> {
                 },
               ),
               const SizedBox(height: 20),
-
-               
 
               const Spacer(),
 

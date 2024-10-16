@@ -1,14 +1,10 @@
 import 'dart:io';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/utils/image.dart';
-import 'package:isotopeit_b2b/utils/string.dart';
-import 'package:isotopeit_b2b/view/login/login.dart';
 import 'package:isotopeit_b2b/view/signup/signup_controller.dart';
 import 'package:isotopeit_b2b/widget/custom_text_field.dart';
 
