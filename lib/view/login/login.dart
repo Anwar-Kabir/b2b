@@ -95,6 +95,7 @@ class LoginState extends State<Login> {
               CustomTextField(
                 prefixIcon: Icons.lock,
                 hintText: '**Ban71',
+                maxLines: 1,
                 controller: _loginController.passwordController,
                 isObscure: _loginController.obscurePassword,
                 onChanged: (_) {

@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/utils/image.dart';
 import 'package:isotopeit_b2b/view/login/login_controller.dart';
 import 'package:isotopeit_b2b/view/signup/signup.dart';
@@ -26,9 +27,16 @@ class ChangePasswordState extends State<ChangePassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       
       appBar: AppBar(
-        title: const Text("Change Password"),
-      ),
+          title: const Text(
+            'Change Password',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: AppColor.primaryColor.withOpacity(0.7),
+          iconTheme: const IconThemeData(
+            color: Colors.white,
+          ),),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Form(
@@ -63,11 +71,11 @@ class ChangePasswordState extends State<ChangePassword> {
 
               // Custom Text Field for Email
               CustomTextField(
-                prefixIcon: Icons.email,
+                prefixIcon: Icons.password,
                 hintText: '#33anwar',
                 controller: _loginController.emailController,
                 keyboardType: TextInputType.emailAddress,
-                validator: _loginController.validateEmail,
+                //validator: _loginController.validateEmail,
                 onChanged: (_) {
                   //_loginController.formKey.currentState?.validate();
                 },
@@ -90,11 +98,11 @@ class ChangePasswordState extends State<ChangePassword> {
 
               // Custom Text Field for Email
               CustomTextField(
-                prefixIcon: Icons.email,
+                prefixIcon: Icons.password,
                 hintText: '#33anwar',
                 controller: _loginController.emailController,
                 keyboardType: TextInputType.emailAddress,
-                validator: _loginController.validateEmail,
+                //validator: _loginController.validateEmail,
                 onChanged: (_) {
                   //_loginController.formKey.currentState?.validate();
                 },

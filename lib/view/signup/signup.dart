@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/utils/image.dart';
 import 'package:isotopeit_b2b/utils/string.dart';
 import 'package:isotopeit_b2b/view/login/login.dart';
@@ -42,7 +43,16 @@ class _SignupState extends State<Signup> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Sign Up"),),
+       
+      appBar: AppBar(
+          title: const Text(
+            'Sign Up',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: AppColor.primaryColor.withOpacity(0.7),
+          iconTheme: const IconThemeData(
+            color: Colors.white,
+          ),),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: SingleChildScrollView(
@@ -192,6 +202,7 @@ class _SignupState extends State<Signup> {
                
                 Obx(() => CustomTextField(
                       prefixIcon: Icons.lock,
+                      maxLines: 1,
                        hintText: '#33anwar',
                       controller: _controller.passwordController,
                       isObscure: _controller.obscurePassword.value,
@@ -227,6 +238,7 @@ class _SignupState extends State<Signup> {
                 Obx(() => CustomTextField(
                       prefixIcon: Icons.lock,
                        hintText: '#33anwar',
+                       maxLines: 1,
                       controller: _controller.conformpasswordController,
                       isObscure: _controller.obscurePassword.value,
                       suffixIcon: _controller.obscurePassword.value

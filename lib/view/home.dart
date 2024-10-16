@@ -26,23 +26,26 @@ class BottomNavState extends State<BottomNav> {
   int _selectedIndex = 0;
 
   // Screens for each tab
-  static const List<Widget> _pages = <Widget>[
-    Center(child: Text('Home Page')),
-    Center(child: Text('Auction Page')),
-    Center(child: Text('Wallet Page')),
-    Center(child: Text('Inventory Page')),
+  static   List<Widget> _pages = <Widget>[
+      Center(child:   Text('Home Page')),
+      OrderListScreen(),
+     Wallet(),
+    //Center(child: Text('Inventory Page')),
+    ProductManager(),
     // Center(child: Text('Profile Page')),
-    Settings(),
+      Settings(),
   ];
 
+  
   // Titles for each tab
-  static const List<String> _titles = <String>[
+  static const List<String?> _titles = <String?>[
     'Home',
-    'Order',
-    'Wallet',
-    'Inventory',
+    null, // No title for Order
+    null, // No title for Wallet
+    null, // No title for Inventory
     'Settings',
   ];
+
   
  
 
@@ -56,16 +59,18 @@ class BottomNavState extends State<BottomNav> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          _titles[_selectedIndex],
-          style: const TextStyle(color: Colors.white),
-        ),
-        backgroundColor: AppColor.primaryColor.withOpacity(0.7),
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-      ),
+       appBar: _titles[_selectedIndex] != null
+          ? AppBar(
+              title: Text(
+                _titles[_selectedIndex]!,
+                style: const TextStyle(color: Colors.white),
+              ),
+              backgroundColor: AppColor.primaryColor.withOpacity(0.7),
+              iconTheme: const IconThemeData(
+                color: Colors.white,
+              ),
+            )
+          : null,
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -172,7 +177,7 @@ class BottomNavState extends State<BottomNav> {
               leading: const Icon(Icons.currency_exchange),
               title: const Text('Wallet Management'),
               onTap: () {
-                Get.to(WalletManager(),
+                Get.to(Wallet(),
                     transition: Transition.rightToLeftWithFade);
               },
             ),
@@ -244,3 +249,7 @@ class BottomNavState extends State<BottomNav> {
     );
   }
 }
+
+
+
+ 
