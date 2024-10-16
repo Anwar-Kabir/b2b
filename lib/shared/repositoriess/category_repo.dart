@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import '../models/attribute.dart';
+import '../models/category_group.dart';
 import '../services/api_services.dart';
 
 class CategoryGroupRepo {
   final _apiService = ApiService();
 
-  Future<AttributeList?> fetchCategoryGroup({
+  Future<CategoryGroup?> fetchCategoryGroup({
     required String token,
   }) async {
     final response = await _apiService.requestCategoryGroup(
@@ -15,8 +15,8 @@ class CategoryGroupRepo {
     if (response != null) {
       final bodyStr = response.body;
       final json = jsonDecode(bodyStr) as Map<String, dynamic>;
-      final attributeList = AttributeList.fromJson(json);
-      return attributeList;
+      final categoryGroup = CategoryGroup.fromJson(json);
+      return categoryGroup;
     }
     return null;
   }

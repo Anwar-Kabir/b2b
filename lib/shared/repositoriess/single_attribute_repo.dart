@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import '../models/attribute.dart';
+import '../models/single_attribute.dart';
 import '../services/api_services.dart';
 
 class SingleAttributeRepo {
   final _apiService = ApiService();
 
-  Future<AttributeList?> fetchSingleAttribute({
+  Future<SingleAttribute?> fetchSingleAttribute({
     required int id,
     required String token,
   }) async {
@@ -17,8 +17,8 @@ class SingleAttributeRepo {
     if (response != null) {
       final bodyStr = response.body;
       final json = jsonDecode(bodyStr) as Map<String, dynamic>;
-      final attributeList = AttributeList.fromJson(json);
-      return attributeList;
+      final attribute = SingleAttribute.fromJson(json);
+      return attribute;
     }
     return null;
   }
