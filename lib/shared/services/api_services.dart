@@ -106,7 +106,63 @@ class ApiService {
     return null;
   }
 
+  //Update Attribute - put
+  Future<http.Response?> responseUpdateAttribute({
+    required int id,
+    required String name,
+    required double order,
+    required List<double> categories,
+    required String token,
+  }) async {
+    final body = {
+      "id": id,
+      "name": name,
+      "order": order,
+      "categories": categories,
+    };
+    try {
+      final Uri url = Uri.parse("$baseUrl/api/attribute/$id");
+      final response = await http.put(
+        url,
+        headers: _getHeaders(token),
+        body: body,
+      );
+      return _checkStatusCode(response);
+    } catch (e, s) {
+      log("ApiService: Couldn't request users!", error: e, stackTrace: s);
+    }
+    return null;
+  }
 
+  //Update Attribute Value - put
+  Future<http.Response?> responseUpdateAttributeValues({
+    required int id,
+    required int attributeId,
+    required String value,
+    required double order,
+    required String color,
+    required String token,
+  }) async {
+    final body = {
+      "id": id,
+      "attribute_id": attributeId,
+      "value": value,
+      "order": order,
+      "color": color,
+    };
+    try {
+      final Uri url = Uri.parse("$baseUrl/api/attribute/$attributeId");
+      final response = await http.put(
+        url,
+        headers: _getHeaders(token),
+        body: body,
+      );
+      return _checkStatusCode(response);
+    } catch (e, s) {
+      log("ApiService: Couldn't request users!", error: e, stackTrace: s);
+    }
+    return null;
+  }
 
   /// +++++++++++ ||| ++++++++++++
   /// Get basic headers.
