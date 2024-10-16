@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/view/signup/signup_controller.dart';
 import 'package:isotopeit_b2b/widget/custom_text_field.dart';
@@ -14,9 +13,8 @@ class BalanceRequest extends StatefulWidget {
 }
 
 class _BalanceRequestState extends State<BalanceRequest> {
+  final SignupController _controller = Get.put(SignupController());
 
-   final SignupController _controller = Get.put(SignupController());
-   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,14 +53,13 @@ class _BalanceRequestState extends State<BalanceRequest> {
               ),
             ),
             const SizedBox(height: 20),
-      
-           
-            const SizedBox(height: 10),
-      
-             
-            
 
-            const LabelWithAsterisk(labelText: "Request Money", isRequired: true,),
+            const SizedBox(height: 10),
+
+            const LabelWithAsterisk(
+              labelText: "Request Money",
+              isRequired: true,
+            ),
             CustomTextField(
               prefixIcon: Icons.monetization_on,
               hintText: '500',
@@ -70,16 +67,14 @@ class _BalanceRequestState extends State<BalanceRequest> {
               keyboardType: TextInputType.emailAddress,
               //validator: _controller.validateName,
               onChanged: (value) {
-               // _controller.onFieldChanged();
+                // _controller.onFieldChanged();
               },
             ),
             const SizedBox(height: 20),
-      
+
             // Request Button
-            
 
-            Spacer(),
-
+            const Spacer(),
 
             Padding(
               padding: const EdgeInsets.all(8.0),

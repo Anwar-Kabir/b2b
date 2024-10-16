@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/view/attributes/add_attribute_value.dart';
@@ -7,8 +6,10 @@ import 'package:isotopeit_b2b/view/attributes/attribute_deatils.dart';
 import 'package:isotopeit_b2b/view/attributes/attribute_value.dart';
 
 class SizeColorManager extends StatefulWidget {
+  const SizeColorManager({super.key});
+
   @override
-  _SizeColorManagerState createState() => _SizeColorManagerState();
+  State<SizeColorManager> createState() => _SizeColorManagerState();
 }
 
 class _SizeColorManagerState extends State<SizeColorManager> {
@@ -32,7 +33,7 @@ class _SizeColorManagerState extends State<SizeColorManager> {
           actions: [
             TextButton.icon(
               onPressed: () {
-                Get.to(AddAttributeValueForm(),
+                Get.to(const AddAttributeValueForm(),
                     transition: Transition.rightToLeftWithFade);
               },
               label: const Text(
@@ -46,7 +47,7 @@ class _SizeColorManagerState extends State<SizeColorManager> {
             ),
             TextButton.icon(
               onPressed: () {
-                Get.to(AttributeValueForm(),
+                Get.to(const AttributeValueForm(),
                     transition: Transition.rightToLeftWithFade);
               },
               label: const Text(
@@ -66,7 +67,8 @@ class _SizeColorManagerState extends State<SizeColorManager> {
                 height: 95,
                 child: GestureDetector(
                   onTap: () {
-                    Get.to(const AttributeDeatils(), transition: Transition.rightToLeftWithFade);
+                    Get.to(const AttributeDeatils(),
+                        transition: Transition.rightToLeftWithFade);
                   },
                   child: Card(
                       shape: RoundedRectangleBorder(

@@ -1,22 +1,26 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/view/banner/add_banner.dart';
 import 'package:isotopeit_b2b/view/banner/banner_details.dart';
 
 class BannerItem {
+  BannerItem({
+    required this.title,
+    required this.imageUrl,
+  });
   String title;
   String imageUrl;
-
-  BannerItem({required this.title, required this.imageUrl});
 }
 
 class BannerManager extends StatefulWidget {
+  const BannerManager({super.key});
+
   @override
-  _BannerManagerState createState() => _BannerManagerState();
+  State<BannerManager> createState() => _BannerManagerState();
 }
 
 class _BannerManagerState extends State<BannerManager> {
@@ -80,11 +84,11 @@ class _BannerManagerState extends State<BannerManager> {
                 children: [
                   ElevatedButton(
                     onPressed: () => pickImage(ImageSource.camera),
-                    child: Text('Pick from Camera'),
+                    child: const Text('Pick from Camera'),
                   ),
                   ElevatedButton(
                     onPressed: () => pickImage(ImageSource.gallery),
-                    child: Text('Pick from Gallery'),
+                    child: const Text('Pick from Gallery'),
                   ),
                 ],
               ),
@@ -92,7 +96,7 @@ class _BannerManagerState extends State<BannerManager> {
               // Title Field
               TextField(
                 controller: titleController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Banner Title',
                   border: OutlineInputBorder(),
                 ),
@@ -120,7 +124,8 @@ class _BannerManagerState extends State<BannerManager> {
                     Navigator.pop(context);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Please enter valid details')),
+                      const SnackBar(
+                          content: Text('Please enter valid details')),
                     );
                   }
                 },
@@ -128,7 +133,6 @@ class _BannerManagerState extends State<BannerManager> {
               ),
               const SizedBox(height: 10),
               // Delete Button
-              
             ],
           ),
         );
@@ -146,7 +150,7 @@ class _BannerManagerState extends State<BannerManager> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: AppBar(
+      appBar: AppBar(
         title: const Text(
           "Banners",
           style: TextStyle(color: Colors.white),
@@ -156,20 +160,24 @@ class _BannerManagerState extends State<BannerManager> {
           color: Colors.white,
         ),
         actions: [
-          IconButton(onPressed: (){
-
-             Get.to(AddBanner(), transition: Transition.rightToLeftWithFade);
-          }, icon: const Icon(Icons.add, color: Colors.white,),   ),
-          
+          IconButton(
+            onPressed: () {
+              Get.to(const AddBanner(),
+                  transition: Transition.rightToLeftWithFade);
+            },
+            icon: const Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+          ),
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: 
-
-        GestureDetector(
-          onTap: (){
-           Get.to(BannerDetails(),transition: Transition.rightToLeftWithFade);
+        child: GestureDetector(
+          onTap: () {
+            Get.to(const BannerDetails(),
+                transition: Transition.rightToLeftWithFade);
           },
           child: SizedBox(
             height: 115,
@@ -185,27 +193,28 @@ class _BannerManagerState extends State<BannerManager> {
                   children: <Widget>[
                     // Image on the left (leading)
                     Container(
-                      width: 80,  
-                      height: 80,  
+                      width: 80,
+                      height: 80,
                       decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(10.0), // Rounded image corners
+                        borderRadius: BorderRadius.circular(
+                            10.0), // Rounded image corners
                         image: const DecorationImage(
-                          image: AssetImage('assets/abc.jpg'), // Local asset image
+                          image:
+                              AssetImage('assets/abc.jpg'), // Local asset image
                           fit: BoxFit.cover,
                         ),
                       ),
                     ),
-            
+
                     const SizedBox(width: 12),
-            
+
                     // Space between image and text
                     const SizedBox(width: 12),
-            
+
                     // Product details
                     const Expanded(
                       // Makes sure text occupies the remaining space
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           // Product name
@@ -216,33 +225,26 @@ class _BannerManagerState extends State<BannerManager> {
                               fontSize: 18,
                             ),
                           ),
-            
-                          SizedBox(
-                              height: 6),  
-            
-                          
+
+                          SizedBox(height: 6),
+
                           Text(
-                            'Columns: 4, Serial Number: 100' ,
+                            'Columns: 4, Serial Number: 100',
                             style: TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.w500),
                           ),
-                          
+
                           Text('Link label: , Link: '),
                         ],
                       ),
                     ),
-            
-                   
                   ],
                 ),
               ),
             ),
           ),
         ),
-        
-         
       ),
-       
     );
   }
 }

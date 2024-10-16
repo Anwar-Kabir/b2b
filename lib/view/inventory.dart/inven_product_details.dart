@@ -2,18 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 
 class InvenProductDetails extends StatelessWidget {
+  const InvenProductDetails({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Inventory  Details', style: TextStyle(color: Colors.white),
+        title: const Text(
+          'Inventory  Details',
+          style: TextStyle(color: Colors.white),
         ),
-         backgroundColor: AppColor.primaryColor.withOpacity(0.7),
+        backgroundColor: AppColor.primaryColor.withOpacity(0.7),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -31,7 +35,7 @@ class InvenProductDetails extends StatelessWidget {
                   width: 200,
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
 
               // Image selection options (horizontal scrollable)
               SizedBox(
@@ -46,14 +50,14 @@ class InvenProductDetails extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Product Title, Rating, and Price
-              Text(
+              const Text(
                 'Fresh Broccoli',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
-              Row(
+              const Row(
                 children: [
                   Icon(Icons.star, color: Colors.amber, size: 18),
                   Icon(Icons.star, color: Colors.amber, size: 18),
@@ -64,73 +68,73 @@ class InvenProductDetails extends StatelessWidget {
                   Text('(5.0)', style: TextStyle(color: Colors.grey)),
                 ],
               ),
-              SizedBox(height: 10),
-              Text(
+              const SizedBox(height: 10),
+              const Text(
                 '\$12.22',
                 style: TextStyle(
                     fontSize: 22,
                     color: Colors.green,
                     fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Wishlist and Buy Now Buttons
-             
-              SizedBox(height: 20),
+
+              const SizedBox(height: 20),
 
               // Additional Details
-              Text(
+              const Text(
                 'Additional Details',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildDetailRow('Availability', 'In Stock'),
               _buildDetailRow('Brand', 'Green Farms'),
               _buildDetailRow('Category', 'Vegetables'),
               _buildDetailRow('Size/Weight', '500 g'),
               _buildDetailRow('SKU', 'SKU12346'),
               _buildDetailRow('Ingredients', 'Broccoli'),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Description Section
-              Text(
+              const Text(
                 'Description',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 10),
-              Text(
+              const SizedBox(height: 10),
+              const Text(
                 'Fresh Broccoli is a nutritious vegetable known for its high content of vitamins, minerals, and fiber...',
                 style: TextStyle(fontSize: 16),
               ),
             ],
           ),
         ),
-        
       ),
-     bottomNavigationBar:  Padding(
-       padding: const EdgeInsets.all(8.0),
-       child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () {},
-                        child: Text('Edit'),
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                        child: Text('Delete', style: TextStyle(color: Colors.white),),
-                      ),
-                    ),
-                  ],
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: OutlinedButton(
+                onPressed: () {},
+                child: const Text('Edit'),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                child: const Text(
+                  'Delete',
+                  style: TextStyle(color: Colors.white),
                 ),
-     ),
-              
-      
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -158,9 +162,12 @@ class InvenProductDetails extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(title, style: TextStyle(fontSize: 16, color: Colors.grey[700])),
-          SizedBox(width: 15,),
+          const SizedBox(
+            width: 15,
+          ),
           Text(value,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              style:
+                  const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         ],
       ),
     );

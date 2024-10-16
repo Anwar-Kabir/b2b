@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
-import 'package:isotopeit_b2b/view/inventory.dart/inven_product_details.dart';
 import 'package:isotopeit_b2b/view/product/product_list_view.dart';
 
 class ProductListCard extends StatelessWidget {
- 
-
-  const ProductListCard({super.key,  });
+  const ProductListCard({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         title: const Text(
           'Product List',
@@ -22,13 +18,12 @@ class ProductListCard extends StatelessWidget {
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
-         
       ),
       body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: GestureDetector(
             onTap: () {
-              Get.to(ProductListDetails(),
+              Get.to(const ProductListDetails(),
                   transition: Transition.rightToLeftWithFade);
             },
             child: SizedBox(
@@ -48,18 +43,18 @@ class ProductListCard extends StatelessWidget {
                         width: 80, // Set the width of the image
                         height: 80, // Set the height of the image
                         decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(10.0), // Rounded image corners
+                          borderRadius: BorderRadius.circular(
+                              10.0), // Rounded image corners
                           image: const DecorationImage(
-                            image:
-                                AssetImage('assets/abc.jpg'), // Local asset image
+                            image: AssetImage(
+                                'assets/abc.jpg'), // Local asset image
                             fit: BoxFit.cover,
                           ),
                         ),
                       ),
-                    
+
                       const SizedBox(width: 12), // Space between image and text
-                    
+
                       // Product details
                       const Expanded(
                         // Makes sure text occupies the remaining space
@@ -74,10 +69,11 @@ class ProductListCard extends StatelessWidget {
                                 fontSize: 18,
                               ),
                             ),
-                    
+
                             SizedBox(
-                                height: 6), // Space between product name and price
-                    
+                                height:
+                                    6), // Space between product name and price
+
                             // Price details
                             Text(
                               'Price: \$85.0',

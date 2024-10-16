@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/view/signup/signup_controller.dart';
-import 'package:isotopeit_b2b/widget/app_text_form_field.dart';
 import 'package:isotopeit_b2b/widget/custom_text_field.dart';
 import 'package:isotopeit_b2b/widget/label_with_asterisk.dart';
 
 class AddAttributeValueForm extends StatefulWidget {
+  const AddAttributeValueForm({super.key});
+
   @override
-  _AddAttributeValueFormState createState() => _AddAttributeValueFormState();
+  State<AddAttributeValueForm> createState() => _AddAttributeValueFormState();
 }
 
 class _AddAttributeValueFormState extends State<AddAttributeValueForm> {
+  final SignupController _controller = Get.put(SignupController());
 
-   final SignupController _controller = Get.put(SignupController());
-   
   final TextEditingController attributeValueController =
       TextEditingController();
   final TextEditingController listOrderController = TextEditingController();
@@ -74,7 +73,7 @@ class _AddAttributeValueFormState extends State<AddAttributeValueForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             LabelWithAsterisk(
+            const LabelWithAsterisk(
               labelText: "Attribute",
               isRequired: true,
             ),
@@ -103,10 +102,8 @@ class _AddAttributeValueFormState extends State<AddAttributeValueForm> {
             const SizedBox(height: 16.0),
 
             // Attribute Value TextField
-            
 
-
-           LabelWithAsterisk(
+            const LabelWithAsterisk(
               labelText: "Attribute value",
               isRequired: true,
             ),
@@ -119,13 +116,14 @@ class _AddAttributeValueFormState extends State<AddAttributeValueForm> {
               validator: _controller.validateEmail,
             ),
 
-
             const SizedBox(height: 16.0),
 
-            LabelWithAsterisk(labelText: "List Order", isRequired: true,),
+            const LabelWithAsterisk(
+              labelText: "List Order",
+              isRequired: true,
+            ),
 
-            
-           CustomTextField(
+            CustomTextField(
               prefixIcon: Icons.email,
               hintText: '4',
               controller: _controller.emailController,
@@ -133,7 +131,7 @@ class _AddAttributeValueFormState extends State<AddAttributeValueForm> {
               validator: _controller.validateEmail,
             ),
             // List Order TextField
-             
+
             const SizedBox(height: 16.0),
 
             // Color Picker
@@ -155,21 +153,16 @@ class _AddAttributeValueFormState extends State<AddAttributeValueForm> {
             ),
             const SizedBox(height: 16.0),
 
-             
             const Spacer(),
             ElevatedButton.icon(
-              onPressed: () {
-                 
-              },
+              onPressed: () {},
               icon: const Icon(Icons.add),
               label: const Text("Add Attribute value"),
               style: ElevatedButton.styleFrom(
-                minimumSize:
-                    const Size(double.infinity, 50), 
-                backgroundColor:
-                    AppColor.primaryColor, 
+                minimumSize: const Size(double.infinity, 50),
+                backgroundColor: AppColor.primaryColor,
                 // For text color:
-                foregroundColor: Colors.white,  
+                foregroundColor: Colors.white,
               ),
             ),
           ],

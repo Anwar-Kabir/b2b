@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/view/signup/signup_controller.dart';
-import 'package:isotopeit_b2b/widget/app_text_form_field.dart';
 import 'package:isotopeit_b2b/widget/custom_text_field.dart';
 import 'package:isotopeit_b2b/widget/label_with_asterisk.dart';
 
 class AttributeValueForm extends StatefulWidget {
+  const AttributeValueForm({super.key});
+
   @override
-  _AttributeValueFormState createState() => _AttributeValueFormState();
+  State<AttributeValueForm> createState() => _AttributeValueFormState();
 }
 
 class _AttributeValueFormState extends State<AttributeValueForm> {
@@ -24,8 +23,6 @@ class _AttributeValueFormState extends State<AttributeValueForm> {
 
   // Dummy data for the dropdown
   final List<String> attributes = ['TV', 'Phone', 'Computer'];
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +42,7 @@ class _AttributeValueFormState extends State<AttributeValueForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            LabelWithAsterisk(
+            const LabelWithAsterisk(
               labelText: "Categories",
               isRequired: true,
             ),
@@ -75,7 +72,7 @@ class _AttributeValueFormState extends State<AttributeValueForm> {
 
             // Attribute Value TextField
 
-            LabelWithAsterisk(
+            const LabelWithAsterisk(
               labelText: "Attribute name",
               isRequired: true,
             ),
@@ -90,7 +87,7 @@ class _AttributeValueFormState extends State<AttributeValueForm> {
 
             const SizedBox(height: 16.0),
 
-            LabelWithAsterisk(
+            const LabelWithAsterisk(
               labelText: "List order ",
               isRequired: true,
             ),
@@ -106,7 +103,6 @@ class _AttributeValueFormState extends State<AttributeValueForm> {
 
             const SizedBox(height: 16.0),
 
-            
             const SizedBox(height: 16.0),
 
             const Spacer(),

@@ -12,7 +12,7 @@ import 'package:isotopeit_b2b/view/signup/signup_controller.dart';
 import 'package:isotopeit_b2b/widget/custom_text_field.dart';
 
 class Signup extends StatefulWidget {
-  Signup({super.key});
+  const Signup({super.key});
 
   @override
   State<Signup> createState() => _SignupState();
@@ -26,8 +26,8 @@ class _SignupState extends State<Signup> {
 
   XFile? _imageFile;
 
-  final _formKey = GlobalKey<FormState>(); 
- // GlobalKey for form validation
+  final _formKey = GlobalKey<FormState>();
+  // GlobalKey for form validation
   final TextEditingController _zipController = TextEditingController();
 
   Future<void> _pickImage(ImageSource source) async {
@@ -43,16 +43,16 @@ class _SignupState extends State<Signup> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       
       appBar: AppBar(
-          title: const Text(
-            'Sign Up',
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: AppColor.primaryColor.withOpacity(0.7),
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),),
+        title: const Text(
+          'Sign Up',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: AppColor.primaryColor.withOpacity(0.7),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: SingleChildScrollView(
@@ -61,8 +61,6 @@ class _SignupState extends State<Signup> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                 
-                 
                 const SizedBox(height: 40),
 
                 Center(
@@ -104,12 +102,13 @@ class _SignupState extends State<Signup> {
                     ],
                   ),
                 ),
-          
+
                 const Row(
                   children: [
                     Text(
                       "Name",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     Text(
                       "*",
@@ -117,11 +116,11 @@ class _SignupState extends State<Signup> {
                     ),
                   ],
                 ),
-          
+
                 //Name TextField
                 CustomTextField(
                   prefixIcon: Icons.person,
-                   hintText: 'Anwar Kabir',
+                  hintText: 'Anwar Kabir',
                   controller: _controller.nameController,
                   keyboardType: TextInputType.emailAddress,
                   validator: _controller.validateName,
@@ -130,12 +129,13 @@ class _SignupState extends State<Signup> {
                   },
                 ),
                 const SizedBox(height: 20),
-          
+
                 const Row(
                   children: [
                     Text(
                       "Phone",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     Text(
                       "*",
@@ -143,11 +143,11 @@ class _SignupState extends State<Signup> {
                     ),
                   ],
                 ),
-          
+
                 //Phone TextField
                 CustomTextField(
                   prefixIcon: Icons.phone,
-                   hintText: '01000000000',
+                  hintText: '01000000000',
                   controller: _controller.phoneController,
                   keyboardType: TextInputType.phone,
                   validator: _controller.validatePhoneNumber,
@@ -156,13 +156,14 @@ class _SignupState extends State<Signup> {
                     _controller.onFieldChanged();
                   },
                 ),
-               // const SizedBox(height: 20),
-          
+                // const SizedBox(height: 20),
+
                 const Row(
                   children: [
                     Text(
                       AppStrings.loginEmail,
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     Text(
                       "*",
@@ -170,11 +171,11 @@ class _SignupState extends State<Signup> {
                     ),
                   ],
                 ),
-          
+
                 //Email TextField
                 CustomTextField(
                   prefixIcon: Icons.email,
-                   hintText: 'anwar@gmail.com',
+                  hintText: 'anwar@gmail.com',
                   controller: _controller.emailController,
                   keyboardType: TextInputType.emailAddress,
                   validator: _controller.validateEmail,
@@ -183,15 +184,14 @@ class _SignupState extends State<Signup> {
                   },
                 ),
                 const SizedBox(height: 20),
-          
 
-
-              //password
+                //password
                 const Row(
                   children: [
                     Text(
                       AppStrings.loginPassword,
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     Text(
                       "*",
@@ -199,11 +199,11 @@ class _SignupState extends State<Signup> {
                     ),
                   ],
                 ),
-               
+
                 Obx(() => CustomTextField(
                       prefixIcon: Icons.lock,
                       maxLines: 1,
-                       hintText: '#33anwar',
+                      hintText: '#33anwar',
                       controller: _controller.passwordController,
                       isObscure: _controller.obscurePassword.value,
                       suffixIcon: _controller.obscurePassword.value
@@ -218,14 +218,14 @@ class _SignupState extends State<Signup> {
                       },
                     )),
                 const SizedBox(height: 20),
-               
 
-               //conform password
+                //conform password
                 const Row(
                   children: [
                     Text(
                       "Conform Password",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     Text(
                       "*",
@@ -233,12 +233,12 @@ class _SignupState extends State<Signup> {
                     ),
                   ],
                 ),
-          
+
                 // Password TextField with toggle visibility
                 Obx(() => CustomTextField(
                       prefixIcon: Icons.lock,
-                       hintText: '#33anwar',
-                       maxLines: 1,
+                      hintText: '#33anwar',
+                      maxLines: 1,
                       controller: _controller.conformpasswordController,
                       isObscure: _controller.obscurePassword.value,
                       suffixIcon: _controller.obscurePassword.value
@@ -253,7 +253,7 @@ class _SignupState extends State<Signup> {
                       },
                     )),
                 const SizedBox(height: 20),
-          
+
                 // Terms and Conditions checkbox
                 Obx(() => Row(
                       children: [
@@ -298,7 +298,7 @@ class _SignupState extends State<Signup> {
                       ],
                     )),
                 const SizedBox(height: 20),
-          
+
                 // Sign up button
                 Obx(() => SizedBox(
                       width: double.infinity,
@@ -327,7 +327,7 @@ class _SignupState extends State<Signup> {
                       ),
                     )),
                 const SizedBox(height: 20),
-          
+
                 // Already have an account? Login
                 Center(
                   child: Text.rich(
@@ -343,7 +343,8 @@ class _SignupState extends State<Signup> {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Get.to(const Login(), transition: Transition.rightToLeftWithFade);
+                                Get.to(const Login(),
+                                    transition: Transition.rightToLeftWithFade);
                               }),
                       ],
                     ),
@@ -388,6 +389,4 @@ class _SignupState extends State<Signup> {
       },
     );
   }
-
-  
 }

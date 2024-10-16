@@ -7,7 +7,6 @@ import 'package:isotopeit_b2b/view/splash/splash_controller.dart';
 
 import '../../utils/color.dart';
 
-
 class Splash extends StatefulWidget {
   const Splash({super.key});
 

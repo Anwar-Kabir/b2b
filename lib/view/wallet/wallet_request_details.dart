@@ -30,20 +30,17 @@ class RequestDetails extends StatelessWidget {
             buildDetailRow('Rejected By', 'Pykari.com'),
             buildDetailRow('Rejected At', '2024-10-01 15:31:00'),
             buildDetailRow('Rejected Reason', 'eddddddddd'),
-      
-            Spacer(),
-      
+
+            const Spacer(),
+
             // Action buttons: Accept, Reject, Delete
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                 
-                
-               ElevatedButton(
+                ElevatedButton(
                   onPressed: () {
                     // Handle accept action
                   },
-                  child: Text('Accept', style: TextStyle(color: Colors.white),),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     shape: RoundedRectangleBorder(
@@ -51,14 +48,15 @@ class RequestDetails extends StatelessWidget {
                           BorderRadius.circular(10), // Makes the button square
                     ),
                   ),
+                  child: const Text(
+                    'Accept',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-
                 ElevatedButton(
                   onPressed: () {
                     // Handle reject action
                   },
-                  child: Text('Edit', style: TextStyle(color: Colors.white),
-                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
                     shape: RoundedRectangleBorder(
@@ -66,14 +64,15 @@ class RequestDetails extends StatelessWidget {
                           BorderRadius.circular(10), // Makes the button square
                     ),
                   ),
+                  child: const Text(
+                    'Edit',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-
                 ElevatedButton(
                   onPressed: () {
                     // Handle delete action
                   },
-                  child: Text('Delete', style: TextStyle(color: Colors.white),
-                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     shape: RoundedRectangleBorder(
@@ -81,8 +80,11 @@ class RequestDetails extends StatelessWidget {
                           BorderRadius.circular(10), // Makes the button square
                     ),
                   ),
+                  child: const Text(
+                    'Delete',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-
               ],
             ),
           ],
@@ -100,18 +102,19 @@ class RequestDetails extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           isStatus
               ? Container(
-                  padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 4.0, horizontal: 8.0),
                   decoration: BoxDecoration(
                     color: Colors.pink,
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
                     value,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 )

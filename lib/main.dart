@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/view/home.dart';
-import 'package:isotopeit_b2b/view/splash/splash.dart';
 
 void main() {
   runApp(const MyApp());

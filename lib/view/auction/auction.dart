@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/view/auction/add_auction.dart';
 import 'package:isotopeit_b2b/view/auction/auction_details.dart';
 
 class AuctionPage extends StatelessWidget {
+  const AuctionPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -24,7 +24,7 @@ class AuctionPage extends StatelessWidget {
           actions: [
             TextButton.icon(
               onPressed: () {
-                Get.to(AddAuction(),
+                Get.to(const AddAuction(),
                     transition: Transition.rightToLeftWithFade);
               },
               label: const Text(
@@ -40,9 +40,12 @@ class AuctionPage extends StatelessWidget {
           bottom: const TabBar(
             labelColor: Colors.white, // Color for selected tab
             unselectedLabelColor: Colors.grey, // Color for unselected tabs
-            indicatorColor: AppColor.primaryColor, // Color of the indicator below the tab
+            indicatorColor:
+                AppColor.primaryColor, // Color of the indicator below the tab
             tabs: [
-              const Tab(text: "Upcoming", ),
+              Tab(
+                text: "Upcoming",
+              ),
               Tab(text: "Live"),
               Tab(text: "Closed"),
             ],
@@ -63,7 +66,7 @@ class AuctionPage extends StatelessWidget {
 class AuctionList extends StatelessWidget {
   final List<Map<String, dynamic>> auctionData;
 
-  AuctionList({required this.auctionData});
+  const AuctionList({super.key, required this.auctionData});
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +75,9 @@ class AuctionList extends StatelessWidget {
       itemBuilder: (context, index) {
         final auction = auctionData[index];
         return GestureDetector(
-          onTap: (){
-            Get.to(const AuctionDetails(), transition: Transition.rightToLeftWithFade);
+          onTap: () {
+            Get.to(const AuctionDetails(),
+                transition: Transition.rightToLeftWithFade);
           },
           child: Card(
             elevation: 4,
@@ -91,7 +95,6 @@ class AuctionList extends StatelessWidget {
                   Text("Base Price: \$${auction['basePrice']}"),
                   Text("Quantity: ${auction['quantity']}"),
                   Text("Auction Date: ${auction['auctionDate']}"),
-                  
                 ],
               ),
             ),
@@ -132,7 +135,7 @@ final List<Map<String, dynamic>> upcomingAuctions = [
 
 final List<Map<String, dynamic>> liveAuctions = [
   // Live auction data
-    {
+  {
     'auctionNo': 'AUC00000001 live',
     'sku': 'Facilis nisi culpa q',
     'productName': 'Stripe Floor Mat',
@@ -152,7 +155,7 @@ final List<Map<String, dynamic>> liveAuctions = [
 
 final List<Map<String, dynamic>> closedAuctions = [
   // Closed auction data
-    {
+  {
     'auctionNo': 'AUC00000001 closed',
     'sku': 'Facilis nisi culpa q',
     'productName': 'Stripe Floor Mat',

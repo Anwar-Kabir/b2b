@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class Product {
   final String id;
   final String name;
@@ -44,9 +43,6 @@ class Order {
   });
 }
 
-
-
-
 class SalesReportManager {
   List<Sale> sales;
   List<Product> products;
@@ -76,17 +72,14 @@ class SalesReportManager {
   // Generate sales summary
   void generateSalesReport() {
     double totalSales = getTotalSales();
-    print("Total Sales: \$${totalSales}");
+    print("Total Sales: \$$totalSales");
 
     for (Product product in products) {
       double productSales = getSalesByProduct(product.id);
-      print("Sales for ${product.name}: \$${productSales}");
+      print("Sales for ${product.name}: \$$productSales");
     }
   }
 }
-
-
-
 
 class StockReportManager {
   List<Product> products;
@@ -104,9 +97,6 @@ class StockReportManager {
     print("Low Stock: $lowStock");
   }
 }
-
-
-
 
 class OrderReportManager {
   List<Order> orders;
@@ -130,10 +120,9 @@ class OrderReportManager {
   }
 }
 
-
-
-
 class ReportManagerPage extends StatefulWidget {
+  const ReportManagerPage({super.key});
+
   @override
   _ReportManagerPageState createState() => _ReportManagerPageState();
 }
@@ -141,8 +130,14 @@ class ReportManagerPage extends StatefulWidget {
 class _ReportManagerPageState extends State<ReportManagerPage> {
   // Dummy Data
   List<Sale> sales = [
-    Sale(productId: '1', amount: 150.0, date: DateTime.now().subtract(Duration(days: 2))),
-    Sale(productId: '2', amount: 50.0, date: DateTime.now().subtract(Duration(days: 5))),
+    Sale(
+        productId: '1',
+        amount: 150.0,
+        date: DateTime.now().subtract(const Duration(days: 2))),
+    Sale(
+        productId: '2',
+        amount: 50.0,
+        date: DateTime.now().subtract(const Duration(days: 5))),
   ];
 
   List<Product> products = [
@@ -151,46 +146,58 @@ class _ReportManagerPageState extends State<ReportManagerPage> {
   ];
 
   List<Order> orders = [
-    Order(id: '1', status: 'completed', totalAmount: 100.0, date: DateTime.now().subtract(Duration(days: 1))),
+    Order(
+        id: '1',
+        status: 'completed',
+        totalAmount: 100.0,
+        date: DateTime.now().subtract(const Duration(days: 1))),
     Order(id: '2', status: 'pending', totalAmount: 50.0, date: DateTime.now()),
-    Order(id: '3', status: 'canceled', totalAmount: 70.0, date: DateTime.now().subtract(Duration(days: 3))),
+    Order(
+        id: '3',
+        status: 'canceled',
+        totalAmount: 70.0,
+        date: DateTime.now().subtract(const Duration(days: 3))),
   ];
 
   @override
   Widget build(BuildContext context) {
-    SalesReportManager salesManager = SalesReportManager(sales: sales, products: products);
+    SalesReportManager salesManager =
+        SalesReportManager(sales: sales, products: products);
     StockReportManager stockManager = StockReportManager(products: products);
     OrderReportManager orderManager = OrderReportManager(orders: orders);
 
     return Scaffold(
-      appBar: AppBar(title: Text('Report Manager')),
+      appBar: AppBar(title: const Text('Report Manager')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Sales Reports', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const Text('Sales Reports',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ElevatedButton(
               onPressed: () {
                 salesManager.generateSalesReport();
               },
-              child: Text('Generate Sales Report'),
+              child: const Text('Generate Sales Report'),
             ),
-            SizedBox(height: 20),
-            Text('Stock Summary', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 20),
+            const Text('Stock Summary',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ElevatedButton(
               onPressed: () {
                 stockManager.generateStockSummary();
               },
-              child: Text('Generate Stock Summary'),
+              child: const Text('Generate Stock Summary'),
             ),
-            SizedBox(height: 20),
-            Text('Order Reports', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 20),
+            const Text('Order Reports',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ElevatedButton(
               onPressed: () {
                 orderManager.generateOrderReport();
               },
-              child: Text('Generate Order Report'),
+              child: const Text('Generate Order Report'),
             ),
           ],
         ),
