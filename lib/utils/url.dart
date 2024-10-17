@@ -5,9 +5,9 @@ class AppURL {
   static const String login = "${baseURL}api/suppliers-login"; //post
 
   //attribute
+  static const String attributeShow = "${baseURL}api/attribute/1"; //get
   static const String attributeList = "${baseURL}api/attribute"; //get
   static const String attributeCreate = "${baseURL}api/attribute"; //post
-  static const String attributeShow = "${baseURL}api/attribute/1"; //get
   static const String attributeUpdate = "${baseURL}api/attribute/7"; //put
   static const String attributeValueCreate = "${baseURL}api/attribute-values"; //post
   static const String attributeValueUpdate ="${baseURL}api/attribute-values/22/"; //put

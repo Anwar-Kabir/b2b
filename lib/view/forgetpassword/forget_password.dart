@@ -89,7 +89,7 @@ class ForgetPasswordState extends State<ForgetPassword> {
                       TextSpan(
                           text: 'We Will Send verification to your Email',
                           style: const TextStyle(
-                            color: Color(0xFF7F56D9),
+                            color: AppColor.primaryColor,
                             fontWeight: FontWeight.bold,
                           ),
                           recognizer: TapGestureRecognizer()
@@ -114,7 +114,7 @@ class ForgetPasswordState extends State<ForgetPassword> {
                         transition: Transition.rightToLeftWithFade);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF7F56D9),
+                    backgroundColor: AppColor.primaryColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),

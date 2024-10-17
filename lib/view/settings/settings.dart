@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/view/login/login.dart';
+import 'package:isotopeit_b2b/view/login/login_controller.dart';
+import 'package:isotopeit_b2b/view/personal_info/personal_info.dart';
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Get.lazyPut<LoginController>(() => LoginController());
     return Scaffold(
         body: SingleChildScrollView(
             child: Column(
@@ -23,7 +26,9 @@ class Settings extends StatelessWidget {
                   title: const Text("Personal Info"),
                   leading: const Icon(Icons.info),
                   trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {},
+                  onTap: () {
+                    Get.to(const PersonalInfo(), transition: Transition.rightToLeftWithFade);
+                  },
                 ),
               ),
               const SizedBox(height: 5.0),

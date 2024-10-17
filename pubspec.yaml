@@ -21,6 +21,7 @@ dependencies:
   # dropdown_search: ^6.0.1
   dotted_border: ^2.1.0
   dotted_line: ^3.2.2
+  shared_preferences: ^2.3.2
 
 dev_dependencies:
   flutter_test:

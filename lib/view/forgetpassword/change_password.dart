@@ -114,7 +114,7 @@ class ChangePasswordState extends State<ChangePassword> {
                     _loginController.login();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF7F56D9),
+                    backgroundColor: AppColor.primaryColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),

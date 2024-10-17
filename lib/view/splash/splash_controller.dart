@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:isotopeit_b2b/view/home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:isotopeit_b2b/view/login/login.dart';
 
 class SplashController extends GetxController {
@@ -9,7 +11,7 @@ class SplashController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    goLogin();
+    splashToLoginOrHome();
   }
 
   void splashToLoginOrHome() async {
@@ -26,10 +28,24 @@ class SplashController extends GetxController {
     await Future.delayed(const Duration(milliseconds: 500), () {
       indicatorOpacity.value = 1.0;
     });
+
+    // Check for token and navigate accordingly
+    await checkToken();
   }
 
-  Future<void> goLogin() async {
+  Future<void> checkToken() async {
     await Future.delayed(const Duration(seconds: 2));
-    Get.offAll(() => const Login());
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+
+    if (token != null && token.isNotEmpty) {
+      // If token exists, navigate to Home
+      Get.offAll(() => const BottomNav(),
+          transition: Transition.rightToLeftWithFade);
+    } else {
+      // If no token, navigate to Login
+      Get.offAll(() => const Login(),
+          transition: Transition.rightToLeftWithFade);
+    }
   }
 }

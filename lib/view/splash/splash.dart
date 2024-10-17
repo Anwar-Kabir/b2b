@@ -69,7 +69,7 @@ class _SplashState extends State<Splash> {
               () => AnimatedOpacity(
                 opacity: splashController.indicatorOpacity.value,
                 duration: const Duration(seconds: 1),
-                child: const CircularProgressIndicator(),
+                child: const CircularProgressIndicator(color: AppColor.primaryColor,),
               ),
             ),
           ],

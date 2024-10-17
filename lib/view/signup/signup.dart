@@ -265,7 +265,7 @@ class _SignupState extends State<Signup> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          activeColor: const Color(0xFF7F56D9),
+                          activeColor: AppColor.primaryColor,
                         ),
                         const Expanded(
                           child: Text.rich(
@@ -276,7 +276,7 @@ class _SignupState extends State<Signup> {
                                 TextSpan(
                                   text: 'Terms of Service ',
                                   style: TextStyle(
-                                    color: Color(0xFF7F56D9),
+                                    color: AppColor.primaryColor,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -287,7 +287,7 @@ class _SignupState extends State<Signup> {
                                 TextSpan(
                                   text: 'Privacy Policy',
                                   style: TextStyle(
-                                    color: Color(0xFF7F56D9),
+                                    color: AppColor.primaryColor,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -311,7 +311,7 @@ class _SignupState extends State<Signup> {
                             : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: _controller.isButtonEnabled.value
-                              ? const Color(0xFF7F56D9)
+                              ? AppColor.primaryColor
                               : Colors.grey,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -338,7 +338,7 @@ class _SignupState extends State<Signup> {
                         TextSpan(
                             text: 'Login',
                             style: const TextStyle(
-                              color: Color(0xFF7F56D9),
+                              color: AppColor.primaryColor,
                               fontWeight: FontWeight.bold,
                             ),
                             recognizer: TapGestureRecognizer()

@@ -500,6 +500,9 @@ class _ShopSettingsPageState extends State<ShopSettingsPage> {
             color: Colors.white,
           ),
           bottom: const TabBar(
+             labelColor: Colors.white, // Color for selected tab
+            unselectedLabelColor: Colors.grey, // Color for unselected tabs
+            indicatorColor: AppColor.primaryColor, 
             tabs: [
               Tab(text: 'General'),
               Tab(text: 'Image'),
