@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
-import 'package:isotopeit_b2b/view/inventory.dart/add_inventory.dart';
-import 'package:isotopeit_b2b/view/inventory.dart/inven_product_details.dart';
+
+import 'package:isotopeit_b2b/view/inventory/add_inventory.dart';
+import 'package:isotopeit_b2b/view/inventory/inven_product_details.dart';
 
 class ProductManager extends StatefulWidget {
   const ProductManager({super.key});
