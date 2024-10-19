@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:isotopeit_b2b/utils/url.dart';
 import 'dart:convert';
 
 import 'package:isotopeit_b2b/view/category&tag/model_category.dart';
@@ -34,7 +35,7 @@ class CategoryController extends GetxController {
     try {
       isLoading(true);
       final response = await http.get(
-        Uri.parse('https://e-commerce.isotopeit.com/api/category/'),
+        Uri.parse(AppURL.categoryList),
         headers: {
           'Authorization': 'Bearer $token',  
           'Content-Type': 'application/json',

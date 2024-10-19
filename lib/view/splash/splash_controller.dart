@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/view/home.dart';
+import 'package:isotopeit_b2b/view/order/order_details/order_deatils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:isotopeit_b2b/view/login/login.dart';
 
@@ -30,7 +31,8 @@ class SplashController extends GetxController {
     });
 
     // Check for token and navigate accordingly
-    await checkToken();
+     await checkToken();
+    //Get.to(OrderDeatils());
   }
 
   Future<void> checkToken() async {

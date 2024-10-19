@@ -13,6 +13,8 @@ class PersonalInfo extends StatelessWidget {
     // Load user info if not already loaded
     if (loginController.userInfo.isEmpty) {
       loginController.loadUserInfo();
+      print("==================>>>");
+      print(loginController.userInfo['email']);
     }
 
     return Scaffold(
@@ -29,6 +31,7 @@ class PersonalInfo extends StatelessWidget {
       body: Obx(() {
         // Check if user info is available
         if (loginController.userInfo.isEmpty) {
+          
           return const Center(child: Text('No user data available'));
         }
 

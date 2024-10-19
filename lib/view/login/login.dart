@@ -1,3 +1,8 @@
+
+
+
+
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,8 +21,6 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
-  
-
   final LoginController _loginController = Get.put(LoginController());
 
   @override
@@ -28,17 +31,13 @@ class LoginState extends State<Login> {
           return SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                minHeight: constraints
-                    .maxHeight, // Ensure the form takes at least full height
+                minHeight: constraints.maxHeight,
               ),
               child: IntrinsicHeight(
-                // Wraps to the content height but expands if needed
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 20.0,
-                    vertical: MediaQuery.of(context)
-                        .viewInsets
-                        .bottom, // Adjust for keyboard
+                    vertical: MediaQuery.of(context).viewInsets.bottom,
                   ),
                   child: Form(
                     key: _loginController.formKey,
@@ -61,49 +60,58 @@ class LoginState extends State<Login> {
                           validator: _loginController.validateEmail,
                         ),
                         const SizedBox(height: 20),
-                        // Password field
-                        CustomTextField(
-                          prefixIcon: Icons.lock,
-                          hintText: '**Ban71',
-                          maxLines: 1,
-                          controller: _loginController.passwordController,
-                          isObscure: _loginController.obscurePassword,
-                          suffixIcon: _loginController.obscurePassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          onSuffixTap:
-                              _loginController.togglePasswordVisibility,
-                          validator: _loginController.validatePassword,
-                        ),
+
+                        // Password field with Obx for reactive updates
+                        Obx(() {
+                          return CustomTextField(
+                            prefixIcon: Icons.lock,
+                            hintText: '**Ban71',
+                            maxLines: 1,
+                            controller: _loginController.passwordController,
+                            isObscure: _loginController.obscurePassword.value,
+                            suffixIcon: _loginController.obscurePassword.value
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            onSuffixTap:
+                                _loginController.togglePasswordVisibility,
+                            validator: _loginController.validatePassword,
+                          );
+                        }),
+
                         const SizedBox(height: 30),
-                        // Login button with Circular Avatar
-                        SizedBox(
-                          width: double.infinity,
-                          height: 50,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              _loginController.login();
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColor.primaryColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+
+                        // Login button with loading spinner using Obx
+                        Obx(() {
+                          return SizedBox(
+                            width: double.infinity,
+                            height: 50,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                _loginController.login();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColor.primaryColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
-                            ),
-                            child: _loginController.isLoading
-                                ? const CircularProgressIndicator(
-                                    color: Colors.white,
-                                  )
-                                : const Text(
-                                    'Login',
-                                    style: TextStyle(
+                              child: _loginController.isLoading.value
+                                  ? const CircularProgressIndicator(
                                       color: Colors.white,
-                                      fontSize: 18,
+                                    )
+                                  : const Text(
+                                      'Login',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                      ),
                                     ),
-                                  ),
-                          ),
-                        ),
+                            ),
+                          );
+                        }),
+
                         const SizedBox(height: 20),
+
                         Center(
                           child: Text.rich(
                             TextSpan(
@@ -111,25 +119,25 @@ class LoginState extends State<Login> {
                               style: const TextStyle(color: Colors.grey),
                               children: [
                                 TextSpan(
-                                    text: 'Click here',
-                                    style: const TextStyle(
-                                      color: AppColor.primaryColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        Get.to(
-                                          const ForgetPassword(),
-                                          transition:
-                                              Transition.rightToLeftWithFade,
-                                        );
-                                      }),
+                                  text: 'Click here',
+                                  style: const TextStyle(
+                                    color: AppColor.primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Get.to(
+                                        const ForgetPassword(),
+                                        transition:
+                                            Transition.rightToLeftWithFade,
+                                      );
+                                    },
+                                ),
                               ],
                             ),
                           ),
                         ),
                         const SizedBox(height: 20),
-                        // Don't have an account
                         Center(
                           child: Text.rich(
                             TextSpan(
@@ -137,19 +145,20 @@ class LoginState extends State<Login> {
                               style: const TextStyle(color: Colors.grey),
                               children: [
                                 TextSpan(
-                                    text: 'Sign Up',
-                                    style: const TextStyle(
-                                      color: AppColor.primaryColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        Get.to(
-                                          Signup(),
-                                          transition:
-                                              Transition.rightToLeftWithFade,
-                                        );
-                                      }),
+                                  text: 'Sign Up',
+                                  style: const TextStyle(
+                                    color: AppColor.primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Get.to(
+                                        Signup(),
+                                        transition:
+                                            Transition.rightToLeftWithFade,
+                                      );
+                                    },
+                                ),
                               ],
                             ),
                           ),
@@ -163,15 +172,14 @@ class LoginState extends State<Login> {
                               style: const TextStyle(color: Colors.grey),
                               children: [
                                 TextSpan(
-                                    text: ' v.0.1',
-                                    style: const TextStyle(
-                                      color: Color(0xFF7F56D9),
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        // Additional action
-                                      }),
+                                  text: ' v.0.1',
+                                  style: const TextStyle(
+                                    color: Color(0xFF7F56D9),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {},
+                                ),
                               ],
                             ),
                           ),

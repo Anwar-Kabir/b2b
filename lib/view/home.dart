@@ -6,9 +6,10 @@ import 'package:isotopeit_b2b/view/auction/auction.dart';
 import 'package:isotopeit_b2b/view/banner/banner.dart';
 import 'package:isotopeit_b2b/view/category&tag/category_and_tag.dart';
 import 'package:isotopeit_b2b/view/courier/courier.dart';
- 
+
 import 'package:isotopeit_b2b/view/inventory/inventory.dart';
-import 'package:isotopeit_b2b/view/order/order.dart';
+import 'package:isotopeit_b2b/view/login/login_controller.dart';
+import 'package:isotopeit_b2b/view/order/orderlist/order_list.dart';
 import 'package:isotopeit_b2b/view/product/productlist/product_list.dart';
 import 'package:isotopeit_b2b/view/report/report.dart';
 import 'package:isotopeit_b2b/view/settings/settings.dart';
@@ -23,25 +24,25 @@ class BottomNav extends StatefulWidget {
 }
 
 class BottomNavState extends State<BottomNav> {
+  final LoginController loginController = Get.put(LoginController());
+
   int _selectedIndex = 0;
 
   // Screens for each tab
   static final List<Widget> _pages = <Widget>[
     const Center(child: Text('Home Page')),
-    const OrderListScreen(),
+    OrderListScreen(),
     const Wallet(),
-    //Center(child: Text('Inventory Page')),
     const ProductManager(),
-    // Center(child: Text('Profile Page')),
     const Settings(),
   ];
 
   // Titles for each tab
   static const List<String?> _titles = <String?>[
     'Home',
-    null, // No title for Order
-    null, // No title for Wallet
-    null, // No title for Inventory
+    null,
+    null,
+    null,
     'Settings',
   ];
 
@@ -53,7 +54,16 @@ class BottomNavState extends State<BottomNav> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    // Load user info when the widget initializes
+    loginController.loadUserInfo();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    //Load user info if not already loaded
+
     return Scaffold(
       appBar: _titles[_selectedIndex] != null
           ? AppBar(
@@ -68,152 +78,162 @@ class BottomNavState extends State<BottomNav> {
             )
           : null,
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: AppColor.primaryColor,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 35,
-                    backgroundImage: NetworkImage(
-                      'https://www.w3schools.com/w3images/avatar2.png',
-                    ),
+        child: Obx(() {
+          // Using Obx to reactively update the UI when userInfo changes
+          if (loginController.userInfo.isEmpty) {
+            // If userInfo is empty, show a loading or default state
+            return Center(child: CircularProgressIndicator());
+          } else {
+            return ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                DrawerHeader(
+                  decoration: const BoxDecoration(
+                    color: AppColor.primaryColor,
                   ),
-                  SizedBox(height: 10),
-                  Text(
-                    'John Doe',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const CircleAvatar(
+                        radius: 35,
+                        backgroundImage: NetworkImage(
+                          'https://www.w3schools.com/w3images/avatar2.png',
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      //_buildTableRow('Name', loginController.userInfo['name']),
+                      //_buildTableRow('Email', loginController.userInfo['email']),
+                      Text(
+                        '${loginController.userInfo['name'] ?? 'Unknown Name'}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                        ),
+                      ),
+                      Text(
+                        '${loginController.userInfo['email'] ?? 'Unknown Email'}',
+                        style: const TextStyle(
+                          color: Colors.white70,
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    'john.doe@example.com',
-                    style: TextStyle(
-                      color: Colors.white70,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text('Home'),
-              onTap: () {
-                //Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreen()));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.account_circle),
-              title: const Text('Attribute'),
-              onTap: () {
-                Get.to(const SizeColorManager(),
-                    transition: Transition.rightToLeftWithFade);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Inventory'),
-              onTap: () {
-                Get.to(const ProductManager(),
-                    transition: Transition.rightToLeftWithFade);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.shop),
-              title: const Text('Product'),
-              onTap: () {
-                Get.to(  ProductListCard(),
-                    transition: Transition.rightToLeftWithFade);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.category),
-              title: const Text('Category and Tag'),
-              onTap: () {
-                Get.to(  CategoryTagPage(),
-                    transition: Transition.rightToLeftWithFade);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.accessible),
-              title: const Text('Order'),
-              onTap: () {
-                Get.to(const OrderListScreen(),
-                    transition: Transition.rightToLeftWithFade);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.accessible),
-              title: const Text('Courier'),
-              onTap: () {
-                Get.to(const Courier(),
-                    transition: Transition.rightToLeftWithFade);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.send),
-              title: const Text('Sub-order and Courier'),
-              onTap: () {
-                Navigator.of(context).pop(); // Close drawer
-                // Add logout functionality here
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.image),
-              title: const Text('Shop Banner'),
-              onTap: () {
-                Get.to(const BannerManager(),
-                    transition: Transition.rightToLeftWithFade);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.currency_exchange),
-              title: const Text('Wallet'),
-              onTap: () {
-                Get.to(const Wallet(),
-                    transition: Transition.rightToLeftWithFade);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.report),
-              title: const Text('Auction'),
-              onTap: () {
-                Get.to(const AuctionPage(),
-                    transition: Transition.rightToLeftWithFade);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.shop_rounded),
-              title: const Text('Shop Settings'),
-              onTap: () {
-                Get.to(const ShopSettingsPage(),
-                    transition: Transition.rightToLeftWithFade);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.note),
-              title: const Text('Reports'),
-              onTap: () {
-                Get.to(const ReportManagerPage(),
-                    transition: Transition.rightToLeftWithFade);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('App Settings'),
-              onTap: () {
-                Navigator.of(context).pop(); // Close drawer
-                // Add logout functionality here
-              },
-            ),
-          ],
-        ),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.home),
+                  title: const Text('Home'),
+                  onTap: () {
+                    //Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreen()));
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.account_circle),
+                  title: const Text('Attribute'),
+                  onTap: () {
+                    Get.to(const SizeColorManager(),
+                        transition: Transition.rightToLeftWithFade);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.settings),
+                  title: const Text('Inventory'),
+                  onTap: () {
+                    Get.to(const ProductManager(),
+                        transition: Transition.rightToLeftWithFade);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.shop),
+                  title: const Text('Product'),
+                  onTap: () {
+                    Get.to(ProductListCard(),
+                        transition: Transition.rightToLeftWithFade);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.category),
+                  title: const Text('Category and Tag'),
+                  onTap: () {
+                    Get.to(CategoryTagPage(),
+                        transition: Transition.rightToLeftWithFade);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.accessible),
+                  title: const Text('Order'),
+                  onTap: () {
+                    Get.to(OrderListScreen(),
+                        transition: Transition.rightToLeftWithFade);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.accessible),
+                  title: const Text('Courier'),
+                  onTap: () {
+                    Get.to(const Courier(),
+                        transition: Transition.rightToLeftWithFade);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.send),
+                  title: const Text('Sub-order and Courier'),
+                  onTap: () {
+                    Navigator.of(context).pop(); // Close drawer
+                    // Add logout functionality here
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.image),
+                  title: const Text('Shop Banner'),
+                  onTap: () {
+                    Get.to(const BannerManager(),
+                        transition: Transition.rightToLeftWithFade);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.currency_exchange),
+                  title: const Text('Wallet'),
+                  onTap: () {
+                    Get.to(const Wallet(),
+                        transition: Transition.rightToLeftWithFade);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.report),
+                  title: const Text('Auction'),
+                  onTap: () {
+                    Get.to(const AuctionPage(),
+                        transition: Transition.rightToLeftWithFade);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.shop_rounded),
+                  title: const Text('Shop Settings'),
+                  onTap: () {
+                    Get.to(const ShopSettingsPage(),
+                        transition: Transition.rightToLeftWithFade);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.note),
+                  title: const Text('Reports'),
+                  onTap: () {
+                    Get.to(const ReportManagerPage(),
+                        transition: Transition.rightToLeftWithFade);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.settings),
+                  title: const Text('App Settings'),
+                  onTap: () {
+                    Navigator.of(context).pop(); // Close drawer
+                    // Add logout functionality here
+                  },
+                ),
+              ],
+            );
+          }
+        }),
       ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(

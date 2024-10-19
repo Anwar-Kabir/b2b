@@ -1,3 +1,4 @@
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,8 +8,8 @@ import 'package:isotopeit_b2b/view/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController extends GetxController {
-  bool obscurePassword = true;
-  bool isLoading = false;
+  var obscurePassword = true.obs; // Make it reactive
+  var isLoading = false.obs; // Make loading state reactive
   final formKey = GlobalKey<FormState>();
 
   final TextEditingController emailController = TextEditingController();
@@ -26,14 +27,13 @@ class LoginController extends GetxController {
 
   // Toggle password visibility
   void togglePasswordVisibility() {
-    obscurePassword = !obscurePassword;
-    update(); // Refresh the UI
+    obscurePassword.value = !obscurePassword.value;
   }
 
   // Validate email
   String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter your email'; 
+      return 'Please enter your email';
     }
     final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
     if (!emailRegex.hasMatch(value)) {
@@ -62,8 +62,7 @@ class LoginController extends GetxController {
   Future<void> login() async {
     if (!validateForm()) return;
 
-    isLoading = true;
-    update(); // Show circular avatar
+    isLoading.value = true;
 
     final url = Uri.parse(AppURL.login);
     final headers = {
@@ -129,8 +128,7 @@ class LoginController extends GetxController {
         colorText: Colors.white,
       );
     } finally {
-      isLoading = false;
-      update(); // Hide loading spinner
+      isLoading.value = false;
     }
   }
 
