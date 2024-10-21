@@ -111,9 +111,9 @@ class _AddAttributeValueFormState extends State<AddAttributeValueForm> {
             CustomTextField(
               prefixIcon: Icons.email,
               hintText: 'Attribute value',
-              controller: _controller.emailController,
+              controller: _controller.appEmailValidator,
               keyboardType: TextInputType.emailAddress,
-              validator: _controller.validateEmail,
+              //validator: _controller.validateEmail,
             ),
 
             const SizedBox(height: 16.0),
@@ -126,9 +126,9 @@ class _AddAttributeValueFormState extends State<AddAttributeValueForm> {
             CustomTextField(
               prefixIcon: Icons.email,
               hintText: '4',
-              controller: _controller.emailController,
+              controller: _controller.appEmailValidator,
               keyboardType: TextInputType.emailAddress,
-              validator: _controller.validateEmail,
+              //validator: _controller.validateEmail,
             ),
             // List Order TextField
 

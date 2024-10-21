@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:isotopeit_b2b/utils/url.dart';
+import 'package:isotopeit_b2b/utils/validator.dart';
 import 'package:isotopeit_b2b/view/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,8 +13,11 @@ class LoginController extends GetxController {
   var isLoading = false.obs; // Make loading state reactive
   final formKey = GlobalKey<FormState>();
 
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  
+  //app validation from 
+  final appValidator = AppValidation();
+  final appEmailValidator = TextEditingController();
+  final appPasswordValidator = TextEditingController();
 
   // Store user info
   var userInfo = {}.obs;
@@ -21,36 +25,13 @@ class LoginController extends GetxController {
   @override
   void dispose() {
     super.dispose();
-    emailController.dispose();
-    passwordController.dispose();
+    appEmailValidator.dispose();
+    appPasswordValidator.dispose();
   }
 
   // Toggle password visibility
   void togglePasswordVisibility() {
     obscurePassword.value = !obscurePassword.value;
-  }
-
-  // Validate email
-  String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your email';
-    }
-    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-    if (!emailRegex.hasMatch(value)) {
-      return 'Please enter a valid email';
-    }
-    return null;
-  }
-
-  // Validate password
-  String? validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your password';
-    }
-    if (value.length < 6) {
-      return 'Password must be at least 6 characters long';
-    }
-    return null;
   }
 
   // Validate the form
@@ -70,8 +51,9 @@ class LoginController extends GetxController {
       'Accept': 'application/json',
     };
     final body = jsonEncode({
-      'email': emailController.text,
-      'password': passwordController.text,
+      'email': appEmailValidator.text,
+      'password': appPasswordValidator.text,
+
     });
 
     try {

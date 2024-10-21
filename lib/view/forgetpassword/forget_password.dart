@@ -71,9 +71,9 @@ class ForgetPasswordState extends State<ForgetPassword> {
               CustomTextField(
                 prefixIcon: Icons.email,
                 hintText: 'anwar@gmail.com',
-                controller: _loginController.emailController,
+                controller: _loginController.appEmailValidator,
                 keyboardType: TextInputType.emailAddress,
-                validator: _loginController.validateEmail,
+                //validator: _loginController.validateEmail,
                 onChanged: (_) {
                   //_loginController.formKey.currentState?.validate();
                 },

@@ -80,9 +80,9 @@ class _AttributeValueFormState extends State<AttributeValueForm> {
             CustomTextField(
               prefixIcon: Icons.email,
               hintText: 'Attribute name',
-              controller: _controller.emailController,
+              controller: _controller.appEmailValidator,
               keyboardType: TextInputType.emailAddress,
-              validator: _controller.validateEmail,
+              //validator: _controller.validateEmail,
             ),
 
             const SizedBox(height: 16.0),
@@ -95,9 +95,9 @@ class _AttributeValueFormState extends State<AttributeValueForm> {
             CustomTextField(
               prefixIcon: Icons.email,
               hintText: '4',
-              controller: _controller.emailController,
+              controller: _controller.appEmailValidator,
               keyboardType: TextInputType.emailAddress,
-              validator: _controller.validateEmail,
+              //validator: _controller.validateEmail,
             ),
             // List Order TextField
 

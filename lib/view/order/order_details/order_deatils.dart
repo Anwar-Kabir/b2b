@@ -46,11 +46,13 @@ class OrderDetails extends StatelessWidget {
                 _buildDetailRow('Customer Email:', order.customerEmail),
                 _buildDetailRow('Customer Phone:', order.customerPhoneNumber),
                  
-                _buildDetailRow('Total Amount:', '${order.total} tk'),
-                _buildDetailRow('Tax:', '${order.taxes} tk'),
+                // _buildDetailRow('Total Amount:', '${order.total} tk'),
+                _buildDetailRow('Total Amount:',
+                    '${double.parse(order.total).toStringAsFixed(2)} tk'),
+                _buildDetailRow('Tax:', '${double.parse(order.taxes).toStringAsFixed(2)} tk'),
                 _buildDetailRow(
                     'Payment Status:', order.paymentStatus ? 'Paid' : 'Unpaid'),
-                _buildDetailRow('Grand Total:', '${order.grandTotal} tk',
+                _buildDetailRow('Grand Total:', '${double.parse(order.grandTotal).toStringAsFixed(2)} tk',
                     color: Colors.green),
                 const SizedBox(height: 20),
                 const Text(

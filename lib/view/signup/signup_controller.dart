@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:isotopeit_b2b/utils/validator.dart';
 import 'package:isotopeit_b2b/view/login/login.dart';
 
 class SignupController extends GetxController {
@@ -11,74 +12,34 @@ class SignupController extends GetxController {
   // Form validation key
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  // Text controllers for email and password fields
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController conformpasswordController =
-      TextEditingController();
+ 
+  //app validation from
+  final appValidator = AppValidation();
+  final appNameValidator = TextEditingController();
+  final appPhoneValidator = TextEditingController();
+  final appEmailValidator = TextEditingController();
+  final appPasswordValidator = TextEditingController();
+  final appConformPasswordValidator = TextEditingController();
+
 
   @override
   void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
+    appNameValidator.dispose();
+    appPhoneValidator.dispose();
+    appEmailValidator.dispose();
+    appPasswordValidator.dispose();
+    appConformPasswordValidator.dispose();
     super.dispose();
   }
 
-  // Email validation
-  String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your email';
-    }
-    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-    if (!emailRegex.hasMatch(value)) {
-      return 'Please enter a valid email';
-    }
-    return null;
-  }
-
-  String? validatePhoneNumber(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your phone number';
-    }
-
-    // Regex for validating phone numbers (adjust according to your needs)
-    final phoneRegex = RegExp(r'^\+?[0-9]{7,15}$');
-    if (!phoneRegex.hasMatch(value)) {
-      return 'Please enter a valid phone number';
-    }
-
-    return null;
-  }
-
-  String? validateName(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your name';
-    }
-    if (value.length < 3) {
-      return 'Name must be at least 3 characters long';
-    }
-    return null;
-  }
-
-  // Password validation
-  String? validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your password';
-    }
-    if (value.length < 6) {
-      return 'Password must be at least 6 characters long';
-    }
-    return null;
-  }
+  
 
   // Confirm password validation function
   String? validateConfirmPassword(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please confirm your password';
     }
-    if (value != passwordController.text) {
+    if (value != appPasswordValidator.text) {
       return 'Passwords do not match';
     }
     return null;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/view/login/login_controller.dart';
 
@@ -31,7 +32,6 @@ class PersonalInfo extends StatelessWidget {
       body: Obx(() {
         // Check if user info is available
         if (loginController.userInfo.isEmpty) {
-          
           return const Center(child: Text('No user data available'));
         }
 
@@ -88,6 +88,22 @@ class PersonalInfo extends StatelessWidget {
 
   // Helper function to build table rows
   TableRow _buildTableRow(String key, dynamic value) {
+    String formattedValue;
+
+    // Check if the key is 'created_at' and if value is a valid date string
+    if (key.toLowerCase() == 'created at' && value != null) {
+      try {
+        // Parse the date and format it
+        DateTime parsedDate = DateTime.parse(value).toLocal();
+        formattedValue = DateFormat('MMM dd, yyyy, h:mm a').format(parsedDate);
+      } catch (e) {
+        formattedValue = 'Invalid date';
+      }
+    } else {
+      // Otherwise, just display the value as a string or 'N/A'
+      formattedValue = value?.toString() ?? 'N/A';
+    }
+
     return TableRow(
       children: [
         Padding(
@@ -103,7 +119,7 @@ class PersonalInfo extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
-            value?.toString() ?? 'N/A',
+            formattedValue,
             style: const TextStyle(fontSize: 16),
             textAlign: TextAlign.right,
           ),

@@ -63,7 +63,7 @@ class _BalanceRequestState extends State<BalanceRequest> {
             CustomTextField(
               prefixIcon: Icons.monetization_on,
               hintText: '500',
-              controller: _controller.nameController,
+              controller: _controller.appNameValidator,
               keyboardType: TextInputType.emailAddress,
               //validator: _controller.validateName,
               onChanged: (value) {

@@ -55,9 +55,9 @@ class LoginState extends State<Login> {
                         CustomTextField(
                           prefixIcon: Icons.email,
                           hintText: 'anwar@gmail.com',
-                          controller: _loginController.emailController,
+                          controller: _loginController.appEmailValidator,
                           keyboardType: TextInputType.emailAddress,
-                          validator: _loginController.validateEmail,
+                          validator: (value) => _loginController.appValidator.validateEmail(value),
                         ),
                         const SizedBox(height: 20),
 
@@ -67,14 +67,15 @@ class LoginState extends State<Login> {
                             prefixIcon: Icons.lock,
                             hintText: '**Ban71',
                             maxLines: 1,
-                            controller: _loginController.passwordController,
+                            controller: _loginController.appPasswordValidator,
                             isObscure: _loginController.obscurePassword.value,
                             suffixIcon: _loginController.obscurePassword.value
                                 ? Icons.visibility_off
                                 : Icons.visibility,
                             onSuffixTap:
                                 _loginController.togglePasswordVisibility,
-                            validator: _loginController.validatePassword,
+                            validator: (value) => _loginController.appValidator
+                                .validatePassword(value),
                           );
                         }),
 

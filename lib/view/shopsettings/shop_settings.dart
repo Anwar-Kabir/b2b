@@ -541,8 +541,8 @@ class _ShopSettingsPageState extends State<ShopSettingsPage> {
               prefixIcon: Icons.person,
               labelText: 'Shop Name',
               hintText: "Ak Shop",
-              controller: _controller.nameController,
-              validator: _controller.validateName,
+              controller: _controller.appNameValidator,
+              validator: (value)=> _controller.appValidator.validateName(value),
             ),
             const SizedBox(height: 20),
             const LabelWithAsterisk(
@@ -552,9 +552,9 @@ class _ShopSettingsPageState extends State<ShopSettingsPage> {
             CustomTextField(
               prefixIcon: Icons.note_add,
               hintText: "Slug",
-              controller: _controller.phoneController,
+              controller: _controller.appPhoneValidator,
               keyboardType: TextInputType.phone,
-              validator: _controller.validatePhoneNumber,
+             // validator: _controller.validatePhoneNumber,
             ),
             const SizedBox(height: 20),
             const LabelWithAsterisk(
@@ -564,9 +564,9 @@ class _ShopSettingsPageState extends State<ShopSettingsPage> {
             CustomTextField(
               prefixIcon: Icons.people,
               hintText: 'Full Name (Trade License',
-              controller: _controller.emailController,
+              controller: _controller.appEmailValidator,
               keyboardType: TextInputType.emailAddress,
-              validator: _controller.validateEmail,
+              //validator: _controller.validateEmail,
             ),
             const SizedBox(height: 20),
             const LabelWithAsterisk(
@@ -576,9 +576,9 @@ class _ShopSettingsPageState extends State<ShopSettingsPage> {
             CustomTextField(
               prefixIcon: Icons.info,
               hintText: 'Trade license',
-              controller: _controller.emailController,
+              controller: _controller.appEmailValidator,
               keyboardType: TextInputType.emailAddress,
-              validator: _controller.validateEmail,
+              //validator: _controller.validateEmail,
             ),
             const SizedBox(height: 20),
             const LabelWithAsterisk(
@@ -588,9 +588,9 @@ class _ShopSettingsPageState extends State<ShopSettingsPage> {
             CustomTextField(
               prefixIcon: Icons.email,
               hintText: 'ak@gmail.com',
-              controller: _controller.emailController,
+              controller: _controller.appEmailValidator,
               keyboardType: TextInputType.emailAddress,
-              validator: _controller.validateEmail,
+              //validator: _controller.validateEmail,
             ),
             const SizedBox(height: 20),
             const LabelWithAsterisk(
@@ -600,9 +600,9 @@ class _ShopSettingsPageState extends State<ShopSettingsPage> {
             CustomTextField(
               prefixIcon: Icons.library_add,
               hintText: 'External url',
-              controller: _controller.emailController,
+              controller: _controller.appEmailValidator,
               keyboardType: TextInputType.emailAddress,
-              validator: _controller.validateEmail,
+              //validator: _controller.validateEmail,
             ),
             const SizedBox(height: 20),
             const LabelWithAsterisk(
@@ -613,9 +613,9 @@ class _ShopSettingsPageState extends State<ShopSettingsPage> {
               prefixIcon: Icons.note_alt,
               hintText: 'Description',
               maxLines: 3,
-              controller: _controller.emailController,
+              controller: _controller.appEmailValidator,
               keyboardType: TextInputType.emailAddress,
-              validator: _controller.validateEmail,
+              //validator: _controller.validateEmail,
             ),
             const SizedBox(height: 20),
             const LabelWithAsterisk(
@@ -626,9 +626,9 @@ class _ShopSettingsPageState extends State<ShopSettingsPage> {
               prefixIcon: Icons.note_sharp,
               hintText: 'Return & refund policy',
               maxLines: 3,
-              controller: _controller.emailController,
+              controller: _controller.appEmailValidator,
               keyboardType: TextInputType.emailAddress,
-              validator: _controller.validateEmail,
+              //validator: _controller.validateEmail,
             ),
             const SizedBox(
               height: 20,

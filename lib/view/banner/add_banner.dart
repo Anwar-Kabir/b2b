@@ -117,9 +117,9 @@ class _AddBannerState extends State<AddBanner> {
                   CustomTextField(
                     prefixIcon: Icons.person,
                     hintText: 'Title',
-                    controller: _controller.nameController,
+                    controller: _controller.appNameValidator,
                     keyboardType: TextInputType.emailAddress,
-                    validator: _controller.validateName,
+                    //validator: _controller.validateName,
                     onChanged: (value) {
                       _controller.onFieldChanged();
                     },
@@ -145,9 +145,9 @@ class _AddBannerState extends State<AddBanner> {
                     prefixIcon: Icons.note,
                     maxLines: 3,
                     hintText: 'Description',
-                    controller: _controller.phoneController,
+                    controller: _controller.appPhoneValidator,
                     keyboardType: TextInputType.name,
-                    validator: _controller.validatePhoneNumber,
+                    //validator: _controller.validatePhoneNumber,
                     onChanged: (value) {
                       _controller.onFieldChanged();
                     },
@@ -174,9 +174,9 @@ class _AddBannerState extends State<AddBanner> {
                   CustomTextField(
                     prefixIcon: Icons.email,
                     hintText: 'Redirect Link',
-                    controller: _controller.emailController,
+                    controller: _controller.appEmailValidator,
                     keyboardType: TextInputType.emailAddress,
-                    validator: _controller.validateEmail,
+                    //validator: _controller.validateEmail,
                     onChanged: (value) {
                       _controller.onFieldChanged();
                     },
@@ -201,9 +201,9 @@ class _AddBannerState extends State<AddBanner> {
                   CustomTextField(
                     prefixIcon: Icons.email,
                     hintText: '4',
-                    controller: _controller.emailController,
+                    controller: _controller.appEmailValidator,
                     keyboardType: TextInputType.emailAddress,
-                    validator: _controller.validateEmail,
+                    //validator: _controller.validateEmail,
                     onChanged: (value) {
                       _controller.onFieldChanged();
                     },
@@ -229,9 +229,9 @@ class _AddBannerState extends State<AddBanner> {
                   CustomTextField(
                     prefixIcon: Icons.email,
                     hintText: 'no',
-                    controller: _controller.emailController,
+                    controller: _controller.appEmailValidator,
                     keyboardType: TextInputType.emailAddress,
-                    validator: _controller.validateEmail,
+                    //validator: _controller.validateEmail,
                     onChanged: (value) {
                       _controller.onFieldChanged();
                     },
@@ -256,9 +256,9 @@ class _AddBannerState extends State<AddBanner> {
                   CustomTextField(
                     prefixIcon: Icons.email,
                     hintText: 'Shop Now',
-                    controller: _controller.emailController,
+                    controller: _controller.appEmailValidator,
                     keyboardType: TextInputType.emailAddress,
-                    validator: _controller.validateEmail,
+                    //validator: _controller.validateEmail,
                     onChanged: (value) {
                       _controller.onFieldChanged();
                     },
@@ -283,9 +283,9 @@ class _AddBannerState extends State<AddBanner> {
                   CustomTextField(
                     prefixIcon: Icons.email,
                     hintText: 'Serial Number',
-                    controller: _controller.emailController,
+                    controller: _controller.appEmailValidator,
                     keyboardType: TextInputType.emailAddress,
-                    validator: _controller.validateEmail,
+                    //validator: _controller.validateEmail,
                     onChanged: (value) {
                       _controller.onFieldChanged();
                     },
@@ -310,9 +310,9 @@ class _AddBannerState extends State<AddBanner> {
                   CustomTextField(
                     prefixIcon: Icons.email,
                     hintText: '#ab7553',
-                    controller: _controller.emailController,
+                    controller: _controller.appEmailValidator,
                     keyboardType: TextInputType.emailAddress,
-                    validator: _controller.validateEmail,
+                    //validator: _controller.validateEmail,
                     onChanged: (value) {
                       _controller.onFieldChanged();
                     },

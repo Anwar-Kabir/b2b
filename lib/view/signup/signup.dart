@@ -10,6 +10,7 @@ import 'package:isotopeit_b2b/utils/string.dart';
 import 'package:isotopeit_b2b/view/login/login.dart';
 import 'package:isotopeit_b2b/view/signup/signup_controller.dart';
 import 'package:isotopeit_b2b/widget/custom_text_field.dart';
+import 'package:isotopeit_b2b/widget/label_with_asterisk.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -20,15 +21,11 @@ class Signup extends StatefulWidget {
 
 class _SignupState extends State<Signup> {
   // Initialize the controller using GetX
-  final SignupController _controller = Get.put(SignupController());
+  final SignupController signupController = Get.put(SignupController());
 
   final ImagePicker _picker = ImagePicker();
 
   XFile? _imageFile;
-
-  final _formKey = GlobalKey<FormState>();
-  // GlobalKey for form validation
-  final TextEditingController _zipController = TextEditingController();
 
   Future<void> _pickImage(ImageSource source) async {
     final XFile? pickedFile = await _picker.pickImage(source: source);
@@ -57,7 +54,7 @@ class _SignupState extends State<Signup> {
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: SingleChildScrollView(
           child: Form(
-            key: _controller.formKey,
+            key: signupController.formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -103,135 +100,94 @@ class _SignupState extends State<Signup> {
                   ),
                 ),
 
-                const Row(
-                  children: [
-                    Text(
-                      "Name",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                    ),
-                    Text(
-                      "*",
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  ],
-                ),
+                
+
+                const LabelWithAsterisk(labelText: "Name", isRequired: true,),
 
                 //Name TextField
                 CustomTextField(
                   prefixIcon: Icons.person,
                   hintText: 'Anwar Kabir',
-                  controller: _controller.nameController,
+                  controller: signupController.appNameValidator,
                   keyboardType: TextInputType.emailAddress,
-                  validator: _controller.validateName,
+                  validator: (value)=> signupController.appValidator.validateName(value),
                   onChanged: (value) {
-                    _controller.onFieldChanged();
+                    signupController.onFieldChanged();
                   },
                 ),
                 const SizedBox(height: 20),
 
-                const Row(
-                  children: [
-                    Text(
-                      "Phone",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                    ),
-                    Text(
-                      "*",
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  ],
+                 
+
+                const LabelWithAsterisk(
+                  labelText: "Phone",
+                  isRequired: true,
                 ),
 
                 //Phone TextField
                 CustomTextField(
                   prefixIcon: Icons.phone,
                   hintText: '01000000000',
-                  controller: _controller.phoneController,
+                  controller: signupController.appPhoneValidator,
                   keyboardType: TextInputType.phone,
-                  validator: _controller.validatePhoneNumber,
+                  validator: (value)=> signupController.appValidator.validatePhoneNumber(value),
                   maxLength: 11,
                   onChanged: (value) {
-                    _controller.onFieldChanged();
+                    signupController.onFieldChanged();
                   },
                 ),
                 // const SizedBox(height: 20),
 
-                const Row(
-                  children: [
-                    Text(
-                      AppStrings.loginEmail,
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                    ),
-                    Text(
-                      "*",
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  ],
+                
+
+                const LabelWithAsterisk(
+                  labelText: "Email",
+                  isRequired: true,
                 ),
 
                 //Email TextField
                 CustomTextField(
                   prefixIcon: Icons.email,
                   hintText: 'anwar@gmail.com',
-                  controller: _controller.emailController,
+                  controller: signupController.appEmailValidator,
                   keyboardType: TextInputType.emailAddress,
-                  validator: _controller.validateEmail,
+                  validator:(value)=> signupController.appValidator.validateEmail(value),
                   onChanged: (value) {
-                    _controller.onFieldChanged();
+                    signupController.onFieldChanged();
                   },
                 ),
                 const SizedBox(height: 20),
 
                 //password
-                const Row(
-                  children: [
-                    Text(
-                      AppStrings.loginPassword,
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                    ),
-                    Text(
-                      "*",
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  ],
+                const LabelWithAsterisk(
+                  labelText: "Password",
+                  isRequired: true,
                 ),
-
+                
+                //password
                 Obx(() => CustomTextField(
                       prefixIcon: Icons.lock,
                       maxLines: 1,
                       hintText: '#33anwar',
-                      controller: _controller.passwordController,
-                      isObscure: _controller.obscurePassword.value,
-                      suffixIcon: _controller.obscurePassword.value
+                      controller: signupController.appPasswordValidator,
+                      isObscure: signupController.obscurePassword.value,
+                      suffixIcon: signupController.obscurePassword.value
                           ? Icons.visibility_off
                           : Icons.visibility,
                       onSuffixTap: () {
-                        _controller.togglePasswordVisibility();
+                        signupController.togglePasswordVisibility();
                       },
-                      validator: _controller.validatePassword,
+                      validator: (value)=> signupController.appValidator.validatePassword(value),
                       onChanged: (value) {
-                        _controller.onFieldChanged();
+                        signupController.onFieldChanged();
                       },
                     )),
                 const SizedBox(height: 20),
 
                 //conform password
-                const Row(
-                  children: [
-                    Text(
-                      "Conform Password",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                    ),
-                    Text(
-                      "*",
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  ],
+                const LabelWithAsterisk(
+                  labelText: "Conform Password",
+                  isRequired: true,
                 ),
 
                 // Password TextField with toggle visibility
@@ -239,17 +195,17 @@ class _SignupState extends State<Signup> {
                       prefixIcon: Icons.lock,
                       hintText: '#33anwar',
                       maxLines: 1,
-                      controller: _controller.conformpasswordController,
-                      isObscure: _controller.obscurePassword.value,
-                      suffixIcon: _controller.obscurePassword.value
+                      controller: signupController.appConformPasswordValidator,
+                      isObscure: signupController.obscurePassword.value,
+                      suffixIcon: signupController.obscurePassword.value
                           ? Icons.visibility_off
                           : Icons.visibility,
                       onSuffixTap: () {
-                        _controller.togglePasswordVisibility();
+                        signupController.togglePasswordVisibility();
                       },
-                      validator: _controller.validateConfirmPassword,
+                      validator: signupController.validateConfirmPassword,
                       onChanged: (value) {
-                        _controller.onFieldChanged();
+                        signupController.onFieldChanged();
                       },
                     )),
                 const SizedBox(height: 20),
@@ -258,9 +214,9 @@ class _SignupState extends State<Signup> {
                 Obx(() => Row(
                       children: [
                         Checkbox(
-                          value: _controller.isAgreed.value,
+                          value: signupController.isAgreed.value,
                           onChanged: (bool? value) {
-                            _controller.updateAgreement(value);
+                            signupController.updateAgreement(value);
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -304,13 +260,13 @@ class _SignupState extends State<Signup> {
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: _controller.isButtonEnabled.value
+                        onPressed: signupController.isButtonEnabled.value
                             ? () {
-                                _controller.handleSignup();
+                                signupController.handleSignup();
                               }
                             : null,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: _controller.isButtonEnabled.value
+                          backgroundColor: signupController.isButtonEnabled.value
                               ? AppColor.primaryColor
                               : Colors.grey,
                           shape: RoundedRectangleBorder(

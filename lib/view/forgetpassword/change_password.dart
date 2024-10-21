@@ -68,7 +68,7 @@ class ChangePasswordState extends State<ChangePassword> {
               CustomTextField(
                 prefixIcon: Icons.password,
                 hintText: '#33anwar',
-                controller: _loginController.emailController,
+                controller: _loginController.appPasswordValidator,
                 keyboardType: TextInputType.emailAddress,
                 //validator: _loginController.validateEmail,
                 onChanged: (_) {
@@ -94,7 +94,7 @@ class ChangePasswordState extends State<ChangePassword> {
               CustomTextField(
                 prefixIcon: Icons.password,
                 hintText: '#33anwar',
-                controller: _loginController.emailController,
+                controller: _loginController.appEmailValidator,
                 keyboardType: TextInputType.emailAddress,
                 //validator: _loginController.validateEmail,
                 onChanged: (_) {
