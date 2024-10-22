@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/view/attributes/add_attribute_value/add_attribute_value.dart';
-import 'package:isotopeit_b2b/view/attributes/attribute_details/attribute_deatils.dart';
+import 'package:isotopeit_b2b/view/attributes/attribute_details/attribute_details_page.dart';
 import 'package:isotopeit_b2b/view/attributes/attribute_value/attribute_value.dart';
 
 import 'attribute_controller.dart';
@@ -85,7 +85,7 @@ class AttributeListPage extends StatelessWidget {
                   child: GestureDetector(
                     onTap: () {
                       Get.to(
-                        const AttributeDetails(),
+                        AttributeDetailPage(attribute: attribute),
                         transition: Transition.rightToLeftWithFade,
                       );
                     },

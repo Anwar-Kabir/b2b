@@ -36,17 +36,14 @@ class AttributesController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        final jsonResponse = json.decode(response.body);
+        var data = json.decode(response.body);
+        var attributeList = data['data']['attributes'] as List;
 
-        if (jsonResponse['status'] == 'success') {
-          final attributeResponse =
-              AttributeResponse.fromJson(jsonResponse['data']);
-          attributes.value = attributeResponse.attributes ?? [];
-        } else {
-          errorMessage.value = 'Failed to load attributes';
-        }
+        attributes.value = attributeList
+            .map((attribute) => Attribute.fromJson(attribute))
+            .toList();
       } else {
-        errorMessage.value = 'Failed to load attributes';
+        Get.snackbar("Error", "Failed to load attributes");
       }
     } catch (e) {
       errorMessage.value = 'An error occurred: $e';
