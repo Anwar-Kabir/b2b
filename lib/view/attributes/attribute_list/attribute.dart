@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:isotopeit_b2b/utils/color.dart';
-import 'package:isotopeit_b2b/view/attributes/add_attribute_value/add_attribute_value.dart';
-import 'package:isotopeit_b2b/view/attributes/attribute_details/attribute_details_page.dart';
-import 'package:isotopeit_b2b/view/attributes/attribute_value/attribute_value.dart';
 
+import '../../../utils/color.dart';
+import '../add_attribute_value/add_attribute_value.dart';
+import '../attribute_details/attribute_details_page.dart';
+import '../create_attribute/create_attribute_page.dart';
 import 'attribute_controller.dart';
 
 class AttributeListPage extends StatelessWidget {
@@ -28,8 +28,10 @@ class AttributeListPage extends StatelessWidget {
         actions: [
           TextButton.icon(
             onPressed: () {
-              Get.to(const AddAttributeValueForm(),
-                  transition: Transition.rightToLeftWithFade);
+              Get.to(
+                const AddAttributeValueForm(),
+                transition: Transition.rightToLeftWithFade,
+              );
             },
             label: const Text(
               "AAV",
@@ -42,8 +44,10 @@ class AttributeListPage extends StatelessWidget {
           ),
           TextButton.icon(
             onPressed: () {
-              Get.to(const AttributeValueForm(),
-                  transition: Transition.rightToLeftWithFade);
+              Get.to(
+                const CreateAttributePage(),
+                transition: Transition.rightToLeftWithFade,
+              );
             },
             label: const Text(
               "AV",
