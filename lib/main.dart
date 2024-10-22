@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
+import 'package:isotopeit_b2b/view/signup/signup.dart';
 import 'package:isotopeit_b2b/view/splash/splash.dart';
 
 void main() {
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: AppColor.primaryColor),
         useMaterial3: true,
       ),
-      home: const Splash (),
+      home: const Signup (),
     );
   }
 }

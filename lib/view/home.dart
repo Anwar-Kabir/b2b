@@ -186,7 +186,7 @@ class BottomNavState extends State<BottomNav> {
                   leading: const Icon(Icons.image),
                   title: const Text('Shop Banner'),
                   onTap: () {
-                    Get.to(const BannerManager(),
+                    Get.to(  BannerManager(),
                         transition: Transition.rightToLeftWithFade);
                   },
                 ),
