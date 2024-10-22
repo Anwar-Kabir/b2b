@@ -16,7 +16,7 @@ class AddBanner extends StatefulWidget {
 }
 
 class _AddBannerState extends State<AddBanner> {
-  final SignupController _controller = Get.put(SignupController());
+  final SignUpController _controller = Get.put(SignUpController());
 
   final ImagePicker _picker = ImagePicker();
 

@@ -2,8 +2,8 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 
-class AttributeDeatils extends StatelessWidget {
-  const AttributeDeatils({super.key});
+class AttributeDetails extends StatelessWidget {
+  const AttributeDetails({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,6 @@ class AttributeDeatils extends StatelessWidget {
               _buildDetailRow('Attribute Name:', 'Color'),
               _buildDetailRow('Entites:', '5'),
               _buildDetailRow('Sub Sub Category:', 'food, fish, meet'),
-               
               const SizedBox(height: 25),
               DottedLine(
                 dashColor: Colors.black.withOpacity(0.2),
@@ -43,7 +42,6 @@ class AttributeDeatils extends StatelessWidget {
                 'Attribute Values',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-
               Card(
                 elevation: 2,
                 margin: EdgeInsets.symmetric(vertical: 16),
@@ -56,7 +54,8 @@ class AttributeDeatils extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('White',
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
                           Row(
                             children: [
                               CircleAvatar(
@@ -85,22 +84,16 @@ class AttributeDeatils extends StatelessWidget {
                         ],
                       ),
                       Text('#fffff', style: TextStyle(fontSize: 16)),
-                     
                     ],
                   ),
                 ),
               ),
-             
-               
-              
             ],
           ),
         ),
       ),
     );
   }
-
-   
 
   Widget _buildDetailRow(String title, String value, {Color? color}) {
     return Padding(
@@ -128,6 +121,4 @@ class AttributeDeatils extends StatelessWidget {
       ),
     );
   }
-
-   
 }

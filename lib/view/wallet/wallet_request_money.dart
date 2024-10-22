@@ -13,7 +13,7 @@ class BalanceRequest extends StatefulWidget {
 }
 
 class _BalanceRequestState extends State<BalanceRequest> {
-  final SignupController _controller = Get.put(SignupController());
+  final SignUpController _controller = Get.put(SignUpController());
 
   @override
   Widget build(BuildContext context) {

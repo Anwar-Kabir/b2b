@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/view/signup/signup_controller.dart';
 import 'package:isotopeit_b2b/widget/custom_text_field.dart';
 import 'package:isotopeit_b2b/widget/label_with_asterisk.dart';
 
-class AddAttributeValueForm extends StatefulWidget {
-  const AddAttributeValueForm({super.key});
+class AttributeValueForm extends StatefulWidget {
+  const AttributeValueForm({super.key});
 
   @override
-  State<AddAttributeValueForm> createState() => _AddAttributeValueFormState();
+  State<AttributeValueForm> createState() => _AttributeValueFormState();
 }
 
-class _AddAttributeValueFormState extends State<AddAttributeValueForm> {
-  final SignupController _controller = Get.put(SignupController());
+class _AttributeValueFormState extends State<AttributeValueForm> {
+  final SignUpController _controller = Get.put(SignUpController());
 
   final TextEditingController attributeValueController =
       TextEditingController();
@@ -23,44 +22,14 @@ class _AddAttributeValueFormState extends State<AddAttributeValueForm> {
   String? selectedAttribute;
 
   // Dummy data for the dropdown
-  final List<String> attributes = ['Size', 'Color', 'Material'];
-
-  // Function to show the color picker dialog
-  void pickColor(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Pick a color'),
-          content: SingleChildScrollView(
-            child: BlockPicker(
-              pickerColor: selectedColor,
-              onColorChanged: (color) {
-                setState(() {
-                  selectedColor = color;
-                });
-              },
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Select'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  final List<String> attributes = ['TV', 'Phone', 'Computer'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Add Attribute Value',
+          'Attribute Value',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: AppColor.primaryColor.withOpacity(0.7),
@@ -74,7 +43,7 @@ class _AddAttributeValueFormState extends State<AddAttributeValueForm> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const LabelWithAsterisk(
-              labelText: "Attribute",
+              labelText: "Categories",
               isRequired: true,
             ),
 
@@ -104,13 +73,13 @@ class _AddAttributeValueFormState extends State<AddAttributeValueForm> {
             // Attribute Value TextField
 
             const LabelWithAsterisk(
-              labelText: "Attribute value",
+              labelText: "Attribute name",
               isRequired: true,
             ),
 
             CustomTextField(
               prefixIcon: Icons.email,
-              hintText: 'Attribute value',
+              hintText: 'Attribute name',
               controller: _controller.appEmailValidator,
               keyboardType: TextInputType.emailAddress,
               //validator: _controller.validateEmail,
@@ -119,7 +88,7 @@ class _AddAttributeValueFormState extends State<AddAttributeValueForm> {
             const SizedBox(height: 16.0),
 
             const LabelWithAsterisk(
-              labelText: "List Order",
+              labelText: "List order ",
               isRequired: true,
             ),
 
@@ -134,30 +103,13 @@ class _AddAttributeValueFormState extends State<AddAttributeValueForm> {
 
             const SizedBox(height: 16.0),
 
-            // Color Picker
-            Row(
-              children: [
-                const Text('Color attribute: '),
-                GestureDetector(
-                  onTap: () => pickColor(context),
-                  child: Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      color: selectedColor,
-                    ),
-                  ),
-                ),
-              ],
-            ),
             const SizedBox(height: 16.0),
 
             const Spacer(),
             ElevatedButton.icon(
               onPressed: () {},
               icon: const Icon(Icons.add),
-              label: const Text("Add Attribute value"),
+              label: const Text("Save Attribute value"),
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),
                 backgroundColor: AppColor.primaryColor,

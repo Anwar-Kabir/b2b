@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
-import 'package:isotopeit_b2b/view/attributes/attribute.dart';
+import 'package:isotopeit_b2b/view/attributes/attribute_list/attribute.dart';
 import 'package:isotopeit_b2b/view/auction/auction.dart';
 import 'package:isotopeit_b2b/view/banner/banner.dart';
 import 'package:isotopeit_b2b/view/category&tag/category_and_tag.dart';
 import 'package:isotopeit_b2b/view/courier/courier.dart';
-
 import 'package:isotopeit_b2b/view/inventory/inventory.dart';
 import 'package:isotopeit_b2b/view/login/login_controller.dart';
 import 'package:isotopeit_b2b/view/order/orderlist/order_list.dart';
@@ -79,10 +78,8 @@ class BottomNavState extends State<BottomNav> {
           : null,
       drawer: Drawer(
         child: Obx(() {
-          // Using Obx to reactively update the UI when userInfo changes
           if (loginController.userInfo.isEmpty) {
-            // If userInfo is empty, show a loading or default state
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else {
             return ListView(
               padding: EdgeInsets.zero,
@@ -130,16 +127,20 @@ class BottomNavState extends State<BottomNav> {
                   leading: const Icon(Icons.account_circle),
                   title: const Text('Attribute'),
                   onTap: () {
-                    Get.to(const SizeColorManager(),
-                        transition: Transition.rightToLeftWithFade);
+                    Get.to(
+                      AttributeListPage(),
+                      transition: Transition.rightToLeftWithFade,
+                    );
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.settings),
                   title: const Text('Inventory'),
                   onTap: () {
-                    Get.to(const ProductManager(),
-                        transition: Transition.rightToLeftWithFade);
+                    Get.to(
+                      const ProductManager(),
+                      transition: Transition.rightToLeftWithFade,
+                    );
                   },
                 ),
                 ListTile(
@@ -186,7 +187,7 @@ class BottomNavState extends State<BottomNav> {
                   leading: const Icon(Icons.image),
                   title: const Text('Shop Banner'),
                   onTap: () {
-                    Get.to(  BannerManager(),
+                    Get.to(BannerManager(),
                         transition: Transition.rightToLeftWithFade);
                   },
                 ),
