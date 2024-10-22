@@ -25,7 +25,10 @@ class AttributeDetailPage extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(
+          vertical: 8,
+          horizontal: 12,
+        ),
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
@@ -48,10 +51,6 @@ class AttributeDetailPage extends StatelessWidget {
                 title: 'ub Sub Category:',
                 value: attribute.categories ?? '',
               ),
-
-              // _buildDetailRow('Attribute Name:', 'Color'),
-              // _buildDetailRow('Entites:', '5'),
-              // _buildDetailRow('Sub Sub Category:', 'food, fish, meet'),
               const SizedBox(height: 25),
               DottedLine(
                 dashColor: Colors.black.withOpacity(0.2),
