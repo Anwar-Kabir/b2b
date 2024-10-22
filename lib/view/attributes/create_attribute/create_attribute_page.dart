@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/color.dart';
+import '../attribute_list/attribute.dart';
 import 'category_group_controller.dart';
 import 'create_attribute_controller.dart';
 
@@ -58,12 +59,10 @@ class _CreateAttributePageState extends State<CreateAttributePage> {
                 if (categoryController.isLoading.value) {
                   return const Center(child: CircularProgressIndicator());
                 }
-
                 if (categoryController.errorMessage.isNotEmpty) {
                   return Center(
                       child: Text(categoryController.errorMessage.value));
                 }
-
                 return DropdownButtonFormField<String>(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -124,16 +123,28 @@ class _CreateAttributePageState extends State<CreateAttributePage> {
                 return ElevatedButton.icon(
                   onPressed: _controller.isLoading.value
                       ? null
-                      : () {
+                      : () async {
                           if (_controller.validateForm()) {
-                            _controller.createAttribute(
-                              [
-                                selectedCategory.toString(),
-                              ],
-                            );
+                            if (selectedCategory != null) {
+                              await _controller.createAttribute(
+                                  [selectedCategory.toString()]);
+
+                              Get.snackbar(
+                                "Success",
+                                "Attribute created successfully",
+                                backgroundColor: Colors.green.withOpacity(0.4),
+                              );
+
+                              Get.to(() => AttributeListPage());
+                            } else {
+                              Get.snackbar(
+                                "Error",
+                                "Please select a valid category",
+                                backgroundColor:
+                                    Colors.red.shade200.withOpacity(0.4),
+                              );
+                            }
                           }
-                          print(
-                              "====>>> sent category group name $selectedCategory");
                         },
                   icon: const Icon(Icons.add),
                   label: _controller.isLoading.value
