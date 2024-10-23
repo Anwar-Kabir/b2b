@@ -2,33 +2,32 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:isotopeit_b2b/utils/url.dart';
-import 'package:isotopeit_b2b/view/category&tag/model_category.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CategoryController extends GetxController {
-  var categories = <Category>[].obs;
-  var isLoading = true.obs;
+import 'attribute_model.dart';
+
+class AttributesController extends GetxController {
+  var isLoading = false.obs;
+  var attributes = <Attribute>[].obs;
   var errorMessage = ''.obs;
 
   @override
   void onInit() {
-    fetchCategories();
-
     super.onInit();
+    fetchAttributes();
   }
 
-  ///category ======<<<<<
-  void fetchCategories() async {
+  Future<void> fetchAttributes() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    // Ensure that we retrieve a non-null token
     final token = prefs.getString('token') ?? '';
+
+    const url = 'https://e-commerce.isotopeit.com/api/attribute';
 
     try {
       isLoading(true);
+
       final response = await http.get(
-        Uri.parse(AppURL.categoryList),
+        Uri.parse(url),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -37,14 +36,17 @@ class CategoryController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        var data = json.decode(response.body)['data']['categoryGroups'];
-        categories.value =
-            List<Category>.from(data.map((item) => Category.fromJson(item)));
+        var data = json.decode(response.body);
+        var attributeList = data['data']['attributes'] as List;
+
+        attributes.value = attributeList
+            .map((attribute) => Attribute.fromJson(attribute))
+            .toList();
       } else {
-        errorMessage('Failed to load categories');
+        Get.snackbar("Error", "Failed to load attributes");
       }
     } catch (e) {
-      errorMessage('An error occurred: $e');
+      errorMessage.value = 'An error occurred: $e';
     } finally {
       isLoading(false);
     }

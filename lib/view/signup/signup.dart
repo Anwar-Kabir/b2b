@@ -6,22 +6,21 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/utils/image.dart';
-import 'package:isotopeit_b2b/utils/string.dart';
 import 'package:isotopeit_b2b/view/login/login.dart';
 import 'package:isotopeit_b2b/view/signup/signup_controller.dart';
 import 'package:isotopeit_b2b/widget/custom_text_field.dart';
 import 'package:isotopeit_b2b/widget/label_with_asterisk.dart';
 
-class Signup extends StatefulWidget {
-  const Signup({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<Signup> createState() => _SignupState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _SignupState extends State<Signup> {
+class _SignUpPageState extends State<SignUpPage> {
   // Initialize the controller using GetX
-  final SignupController signupController = Get.put(SignupController());
+  final SignUpController signupController = Get.put(SignUpController());
 
   final ImagePicker _picker = ImagePicker();
 
@@ -98,7 +97,6 @@ class _SignupState extends State<Signup> {
                                     ),
                                   ),
                                 ),
-                                 
                               ],
                             ),
                           ),

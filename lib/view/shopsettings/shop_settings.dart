@@ -460,7 +460,7 @@ class ShopSettingsPage extends StatefulWidget {
 }
 
 class _ShopSettingsPageState extends State<ShopSettingsPage> {
-  final SignupController _controller = Get.put(SignupController());
+  final SignUpController _controller = Get.put(SignUpController());
   final ImagePicker _picker = ImagePicker();
   XFile? _logoImageFile;
   XFile? _coverImageFile;
@@ -500,9 +500,9 @@ class _ShopSettingsPageState extends State<ShopSettingsPage> {
             color: Colors.white,
           ),
           bottom: const TabBar(
-             labelColor: Colors.white, // Color for selected tab
+            labelColor: Colors.white, // Color for selected tab
             unselectedLabelColor: Colors.grey, // Color for unselected tabs
-            indicatorColor: AppColor.primaryColor, 
+            indicatorColor: AppColor.primaryColor,
             tabs: [
               Tab(text: 'General'),
               Tab(text: 'Image'),
@@ -542,7 +542,8 @@ class _ShopSettingsPageState extends State<ShopSettingsPage> {
               labelText: 'Shop Name',
               hintText: "Ak Shop",
               controller: _controller.appNameValidator,
-              validator: (value)=> _controller.appValidator.validateName(value),
+              validator: (value) =>
+                  _controller.appValidator.validateName(value),
             ),
             const SizedBox(height: 20),
             const LabelWithAsterisk(
@@ -554,7 +555,7 @@ class _ShopSettingsPageState extends State<ShopSettingsPage> {
               hintText: "Slug",
               controller: _controller.appPhoneValidator,
               keyboardType: TextInputType.phone,
-             // validator: _controller.validatePhoneNumber,
+              // validator: _controller.validatePhoneNumber,
             ),
             const SizedBox(height: 20),
             const LabelWithAsterisk(

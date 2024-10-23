@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/validator.dart';
 import 'package:isotopeit_b2b/view/login/login.dart';
 
-class SignupController extends GetxController {
+class SignUpController extends GetxController {
   // Variables
   var obscurePassword = true.obs;
   var isAgreed = false.obs;
@@ -23,7 +23,6 @@ class SignupController extends GetxController {
   final appPasswordValidator = TextEditingController();
   final appConformPasswordValidator = TextEditingController();
 
-
   @override
   void dispose() {
     appNameValidator.dispose();
@@ -33,8 +32,6 @@ class SignupController extends GetxController {
     appConformPasswordValidator.dispose();
     super.dispose();
   }
-
-  
 
   // Confirm password validation function
   String? validateConfirmPassword(String? value) {

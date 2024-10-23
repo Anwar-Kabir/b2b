@@ -1,8 +1,3 @@
-
-
-
-
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -57,7 +52,8 @@ class LoginState extends State<Login> {
                           hintText: 'anwar@gmail.com',
                           controller: _loginController.appEmailValidator,
                           keyboardType: TextInputType.emailAddress,
-                          validator: (value) => _loginController.appValidator.validateEmail(value),
+                          validator: (value) => _loginController.appValidator
+                              .validateEmail(value),
                         ),
                         const SizedBox(height: 20),
 
@@ -154,7 +150,7 @@ class LoginState extends State<Login> {
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
                                       Get.to(
-                                        Signup(),
+                                        SignUpPage(),
                                         transition:
                                             Transition.rightToLeftWithFade,
                                       );
