@@ -12,6 +12,8 @@ class SignupController extends GetxController {
   // Form validation key
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+   final GlobalKey<FormState> bannerKey = GlobalKey<FormState>();
+
  
   //app validation from
   final appValidator = AppValidation();

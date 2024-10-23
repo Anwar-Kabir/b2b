@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:isotopeit_b2b/utils/color.dart';
-import 'package:isotopeit_b2b/utils/image.dart';
+import 'package:isotopeit_b2b/view/attributes/add_attribute_value.dart';
+import 'package:isotopeit_b2b/view/banner/add_banner.dart';
 import 'package:isotopeit_b2b/view/banner/controller_banner.dart';
  
 
@@ -16,15 +18,19 @@ class BannerManager extends StatelessWidget {
           "Banners",
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor:  AppColor.primaryColor.withOpacity(0.7),
+        backgroundColor: AppColor.primaryColor.withOpacity(0.7),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
         actions: [
-          IconButton(
+             TextButton.icon(
             onPressed: () {
-              // Navigate to Add Banner
+                Get.to(AddBanner(), transition: Transition.rightToLeftWithFade);
             },
+            label: const Text(
+              "Add Banner",
+              style: TextStyle(color: Colors.white),
+            ),
             icon: const Icon(
               Icons.add,
               color: Colors.white,
@@ -68,10 +74,12 @@ class BannerManager extends StatelessWidget {
                               height: 80,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
-                                color: Color(int.parse(banner.bgColor.replaceAll(
-                                    '#', '0xff'))), // Background color
+                                color: Colors.grey[200],
+                                image: DecorationImage(
+                                  image: NetworkImage(banner.featureImage),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
-                              child: Image.asset(AppImages.splashLogo) ,
                             ),
                             const SizedBox(width: 12),
                             Expanded(
@@ -87,7 +95,7 @@ class BannerManager extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 6),
                                   Text(
-                                    'Columns: ${banner.columns}, Serial Number: ${banner.order}',
+                                    'Columns: ${banner.columns}, Serial Number: ${banner.serialNumber}',
                                     style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500),
@@ -95,16 +103,9 @@ class BannerManager extends StatelessWidget {
                                   Text(
                                     'Link label: ${banner.linkLabel ?? 'null'}, Link: ${banner.link ?? 'null'}',
                                   ),
-                                  Text(
-                                    'Description: ${banner.description}',
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500),
-                                  ),
                                 ],
                               ),
                             ),
-                  
                             Row(
                               children: <Widget>[
                                 CircleAvatar(
@@ -113,26 +114,25 @@ class BannerManager extends StatelessWidget {
                                     onPressed: () {
                                       // Implement edit functionality here
                                     },
-                                    icon:
-                                        const Icon(Icons.edit, color: Colors.blue),
+                                    icon: const Icon(Icons.edit,
+                                        color: Colors.blue),
                                   ),
                                 ),
-                                const SizedBox(width: 5,),
+                                const SizedBox(width: 5),
                                 CircleAvatar(
-                                    backgroundColor: Colors.red.withOpacity(0.2),
-                                  
+                                  backgroundColor: Colors.red.withOpacity(0.2),
                                   child: IconButton(
                                     onPressed: () {
-                                      // Implement delete functionality here
+                                      // Show confirmation dialog before delete
+                                      _showDeleteConfirmationDialog(
+                                          context, banner.id);
                                     },
-                                    icon:
-                                        const Icon(Icons.delete, color: Colors.red),
+                                    icon: const Icon(Icons.delete,
+                                        color: Colors.red),
                                   ),
                                 ),
                               ],
                             ),
-                            
-                    
                           ],
                         ),
                       ),
@@ -144,6 +144,49 @@ class BannerManager extends StatelessWidget {
           );
         }
       }),
+    );
+  }
+
+  // Confirmation dialog for delete
+  void _showDeleteConfirmationDialog(BuildContext context, int bannerId) {
+    Get.defaultDialog(
+      title: 'Delete Banner',
+      content: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start, // Align title to the left
+        children: [
+          Text('Are you sure you want to delete this banner?'),
+        ],
+      ),
+      barrierDismissible:
+          false, // Prevent closing the dialog by tapping outside
+      actions: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor:
+                Colors.grey, // Set cancel button background to grey
+          ),
+          onPressed: () {
+            Get.back(); // Close the dialog
+          },
+          child: const Text(
+            'Cancel',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.red, // Set delete button background to red
+          ),
+          onPressed: () {
+            bannerController.deleteBanner(bannerId);
+            Get.back(); // Close the dialog after deletion
+          },
+          child: const Text(
+            'Delete',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ],
     );
   }
 }

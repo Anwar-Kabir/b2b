@@ -1,13 +1,18 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:isotopeit_b2b/view/banner/model_banner.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:isotopeit_b2b/view/banner/model_banner.dart';
 import 'dart:convert';
- 
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class BannerController extends GetxController {
+  var banners = <BannerData>[].obs;
   var isLoading = true.obs;
-  var banners = <BannerItem>[].obs;
+
+  final bannerController = GlobalKey<FormState>();
+  final TextEditingController nameController = TextEditingController();
+
 
   @override
   void onInit() {
@@ -15,34 +20,95 @@ class BannerController extends GetxController {
     fetchBanners();
   }
 
+  // Fetch banners from API
   Future<void> fetchBanners() async {
-    isLoading(true);
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Ensure that we retrieve a non-null token
+    final token = prefs.getString('token') ?? '';
+
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('token');
+      isLoading(true);
+      final response = await http.get(
+        Uri.parse('https://e-commerce.isotopeit.com/api/banners/'),
 
-      var headers = {
-        'Authorization': 'Bearer $token',
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      };
-
-      var response = await http.get(
-        Uri.parse('https://e-commerce.isotopeit.com/api/banners'),
-        headers: headers,
+        headers: {
+          'Authorization': 'Bearer $token', // Token authorization
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
       );
 
       if (response.statusCode == 200) {
-        var data = json.decode(response.body);
-        BannerResponse bannerResponse = BannerResponse.fromJson(data);
-        banners.value = bannerResponse.data.banners;
+        final jsonData = json.decode(response.body);
+        ApiResponse apiResponse = ApiResponse.fromJson(jsonData);
+        banners.value = apiResponse.data;
       } else {
-        Get.snackbar('Error', 'Failed to load banners');
+        Get.snackbar('Error', 'Failed to fetch banners',
+            snackPosition: SnackPosition.BOTTOM);
       }
     } catch (e) {
-      Get.snackbar('Error', 'Something went wrong');
+      Get.snackbar('Error', 'Failed to fetch banners',
+          snackPosition: SnackPosition.BOTTOM);
     } finally {
       isLoading(false);
+    }
+  }
+
+  // Delete banner from API
+  Future<void> deleteBanner(int id) async {
+
+     final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    
+    final token = prefs.getString('token') ?? '';
+
+    try {
+      final response = await http.delete(
+        Uri.parse('https://e-commerce.isotopeit.com/api/banners/$id'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Remove the banner from the local list
+        banners.removeWhere((banner) => banner.id == id);
+         
+        Get.snackbar(
+          "Success",
+          'Banner deleted successfully',
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+          margin: const EdgeInsets.all(10),
+          borderRadius: 8,
+          duration: const Duration(seconds: 3),
+        );    
+      } else {
+        Get.snackbar('Error', 'Failed to delete banner',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+          colorText: Colors.white,
+          
+          margin: const EdgeInsets.all(10),
+          borderRadius: 8,
+          duration: const Duration(seconds: 3),
+            );
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to delete banner',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+        colorText: Colors.white,
+        
+        margin: const EdgeInsets.all(10),
+        borderRadius: 8,
+        duration: const Duration(seconds: 3),
+          );
     }
   }
 }

@@ -8,6 +8,8 @@ import 'package:isotopeit_b2b/utils/image.dart';
 import 'package:isotopeit_b2b/view/signup/signup_controller.dart';
 import 'package:isotopeit_b2b/widget/custom_text_field.dart';
 
+ 
+
 class AddBanner extends StatefulWidget {
   const AddBanner({super.key});
 
@@ -22,10 +24,7 @@ class _AddBannerState extends State<AddBanner> {
 
   XFile? _imageFile;
 
-  final _formKey = GlobalKey<FormState>();
-  // GlobalKey for form validation
-  final TextEditingController _zipController = TextEditingController();
-
+   
   Future<void> _pickImage(ImageSource source) async {
     final XFile? pickedFile = await _picker.pickImage(source: source);
 
@@ -51,7 +50,7 @@ class _AddBannerState extends State<AddBanner> {
         ),
         body: SingleChildScrollView(
           child: Form(
-            key: _controller.formKey,
+            key: _controller.bannerKey,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
