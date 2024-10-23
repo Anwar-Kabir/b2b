@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/view/attributes/attribute_list/attribute.dart';
 import 'package:isotopeit_b2b/view/auction/auction.dart';
-import 'package:isotopeit_b2b/view/banner/banner.dart';
+import 'package:isotopeit_b2b/view/banner/banner/banner.dart';
 import 'package:isotopeit_b2b/view/category&tag/category_and_tag.dart';
 import 'package:isotopeit_b2b/view/courier/courier.dart';
 import 'package:isotopeit_b2b/view/inventory/inventory.dart';

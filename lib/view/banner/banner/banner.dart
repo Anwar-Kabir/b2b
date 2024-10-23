@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:isotopeit_b2b/utils/color.dart';
-import 'package:isotopeit_b2b/view/attributes/add_attribute_value.dart';
+
 import 'package:isotopeit_b2b/view/banner/add_banner.dart';
-import 'package:isotopeit_b2b/view/banner/controller_banner.dart';
+import 'package:isotopeit_b2b/view/banner/banner/controller_banner.dart';
  
 
 class BannerManager extends StatelessWidget {

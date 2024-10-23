@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:isotopeit_b2b/view/banner/model_banner.dart';
+import 'package:isotopeit_b2b/view/banner/banner/model_banner.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 

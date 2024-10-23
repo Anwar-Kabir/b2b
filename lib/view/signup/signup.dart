@@ -7,6 +7,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/utils/image.dart';
 import 'package:isotopeit_b2b/view/login/login.dart';
+import 'package:isotopeit_b2b/view/signup/model/district_model.dart';
+import 'package:isotopeit_b2b/view/signup/model/model_division.dart';
+import 'package:isotopeit_b2b/view/signup/model/upazila_model.dart';
 import 'package:isotopeit_b2b/view/signup/signup_controller.dart';
 import 'package:isotopeit_b2b/widget/custom_text_field.dart';
 import 'package:isotopeit_b2b/widget/label_with_asterisk.dart';
@@ -19,7 +22,6 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  // Initialize the controller using GetX
   final SignUpController signupController = Get.put(SignUpController());
 
   final ImagePicker _picker = ImagePicker();
@@ -209,58 +211,103 @@ class _SignUpPageState extends State<SignUpPage> {
                             labelText: "Division",
                             isRequired: true,
                           ),
+                          
+                          //// Division
+                           Obx((){
+                            return DropdownButtonFormField<String>(
+        decoration: InputDecoration(
+          prefixIcon: const Icon(Icons.map),
+          hintText: 'Select Division',
+          enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: AppColor.primaryColor, width: 2.0),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+        dropdownColor: Colors.grey,
+        items: signupController.divisions
+            .map<DropdownMenuItem<String>>((Division division) {
+          return DropdownMenuItem<String>(
+            value: division.name,
+            child: Text(division.name),
+          );
+        }).toList(),
+        onChanged: (value) {
+          if (value != null) {
+            signupController.updateSelectedDivision(value); // Trigger district fetching
+          }
+        },
+        validator: (value) {
+          if (value == null) {
+            return 'Please select a division';
+          }
+          return null;
+        },
+      );
+                           }),
+                          
 
-                          //Name TextField
-                          CustomTextField(
-                            prefixIcon: Icons.person,
-                            hintText: 'Division',
-                            controller: signupController.appNameValidator,
-                            keyboardType: TextInputType.emailAddress,
-                            dropdownItems: [
-                              const DropdownMenuItem(
-                                  child: Text('Option 1'), value: '1'),
-                              const DropdownMenuItem(
-                                  child: Text('Option 2'), value: '2'),
-                            ],
-                            selectedDropdownValue: '1',
-                            onDropdownChanged: (value) {
-                              print('Selected: $value');
-                            },
-                            validator: (value) => signupController.appValidator
-                                .validateName(value),
-                            onChanged: (value) {
-                              signupController.onFieldChanged();
-                            },
-                          ),
                           const SizedBox(height: 20),
+                          
 
+                          //District
                           const LabelWithAsterisk(
                             labelText: "District",
                             isRequired: true,
                           ),
 
-                          //Name TextField
-                          CustomTextField(
-                            prefixIcon: Icons.person,
-                            hintText: 'District',
-                            controller: signupController.appNameValidator,
-                            keyboardType: TextInputType.emailAddress,
-                            dropdownItems: [
-                              const DropdownMenuItem(
-                                  child: Text('Option 1'), value: '1'),
-                              const DropdownMenuItem(
-                                  child: Text('Option 2'), value: '2'),
-                            ],
-                            selectedDropdownValue: '1',
-                            onDropdownChanged: (value) {
-                              print('Selected: $value');
-                            },
-                            validator: (value) => signupController.appValidator
-                                .validateName(value),
-                            onChanged: (value) {
-                              signupController.onFieldChanged();
-                            },
-                          ),
+                           
+
+                          
+                          
+
+                       
+
+                          Obx(() {
+  if (signupController.isLoadingDistricts.value) {
+    return const CircularProgressIndicator();
+  }
+
+  return DropdownButtonFormField<String>(
+    decoration: InputDecoration(
+      prefixIcon: const Icon(Icons.location_city),
+      hintText: 'Select District',
+      enabledBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: AppColor.primaryColor, width: 2.0),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+    ),
+    dropdownColor: Colors.grey,
+    items: signupController.districts
+        .map<DropdownMenuItem<String>>((District district) {
+      return DropdownMenuItem<String>(
+        value: district.name,
+        child: Text(district.name),
+      );
+    }).toList(),
+    onChanged: signupController.districts.isNotEmpty
+        ? (value) {
+            print('Selected District: $value');
+            signupController.updateSelectedDistrict(value); // Trigger Upazila fetching here
+        }
+        : null, // Disable if districts are empty
+    validator: (value) {
+      if (value == null && signupController.districts.isNotEmpty) {
+        return 'Please select a district';
+      }
+      return null;
+    },
+  );
+}),
+
+
                           const SizedBox(height: 20),
 
                           const LabelWithAsterisk(
@@ -269,27 +316,54 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
 
                           //Name TextField
-                          CustomTextField(
-                            prefixIcon: Icons.person,
-                            hintText: 'Upazila',
-                            controller: signupController.appNameValidator,
-                            keyboardType: TextInputType.emailAddress,
-                            dropdownItems: [
-                              const DropdownMenuItem(
-                                  child: Text('Option 1'), value: '1'),
-                              const DropdownMenuItem(
-                                  child: Text('Option 2'), value: '2'),
-                            ],
-                            selectedDropdownValue: '1',
-                            onDropdownChanged: (value) {
-                              print('Selected: $value');
-                            },
-                            validator: (value) => signupController.appValidator
-                                .validateName(value),
-                            onChanged: (value) {
-                              signupController.onFieldChanged();
-                            },
-                          ),
+                          // Upazila Dropdown
+      // Upazila Dropdown
+                          Obx(() {
+                            if (signupController.isLoadingUpazilas.value) {
+                              return const CircularProgressIndicator();
+                            }
+
+                            return DropdownButtonFormField<String>(
+                              decoration: InputDecoration(
+                                prefixIcon: const Icon(Icons.location_on),
+                                hintText: 'Select Upazila',
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors.grey, width: 1.0),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: AppColor.primaryColor, width: 2.0),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              dropdownColor: Colors.grey,
+                              items: signupController.upazilas
+                                  .map<DropdownMenuItem<String>>(
+                                      (Upazila upazila) {
+                                return DropdownMenuItem<String>(
+                                  value: upazila.name,
+                                  child: Text(upazila.name),
+                                );
+                              }).toList(),
+                              onChanged: signupController.upazilas.isNotEmpty
+                                  ? (value) {
+                                      signupController.updateSelectedUpazila(
+                                          value); // Trigger zip code fetching
+                                    }
+                                  : null, // Disable if upazilas are empty
+                              validator: (value) {
+                                if (value == null &&
+                                    signupController.upazilas.isNotEmpty) {
+                                  return 'Please select an upazila';
+                                }
+                                return null;
+                              },
+                            );
+                          }),
+    
+  
                           const SizedBox(height: 20),
 
                           const LabelWithAsterisk(
@@ -297,28 +371,73 @@ class _SignUpPageState extends State<SignUpPage> {
                             isRequired: true,
                           ),
 
-                          //Name TextField
-                          CustomTextField(
-                            prefixIcon: Icons.person,
-                            hintText: 'Postal Code',
-                            controller: signupController.appNameValidator,
-                            keyboardType: TextInputType.emailAddress,
-                            dropdownItems: [
-                              const DropdownMenuItem(
-                                  child: Text('Option 1'), value: '1'),
-                              const DropdownMenuItem(
-                                  child: Text('Option 2'), value: '2'),
-                            ],
-                            selectedDropdownValue: '1',
-                            onDropdownChanged: (value) {
-                              print('Selected: $value');
-                            },
-                            validator: (value) => signupController.appValidator
-                                .validateName(value),
-                            onChanged: (value) {
-                              signupController.onFieldChanged();
-                            },
-                          ),
+                          // //Name TextField
+                          // CustomTextField(
+                          //   prefixIcon: Icons.person,
+                          //   hintText: 'Postal Code',
+                          //   controller: signupController.appNameValidator,
+                          //   keyboardType: TextInputType.emailAddress,
+                          //   dropdownItems: [
+                          //     const DropdownMenuItem(
+                          //         child: Text('Option 1'), value: '1'),
+                          //     const DropdownMenuItem(
+                          //         child: Text('Option 2'), value: '2'),
+                          //   ],
+                          //   selectedDropdownValue: '1',
+                          //   onDropdownChanged: (value) {
+                          //     print('Selected: $value');
+                          //   },
+                          //   validator: (value) => signupController.appValidator
+                          //       .validateName(value),
+                          //   onChanged: (value) {
+                          //     signupController.onFieldChanged();
+                          //   },
+                          // ),
+
+
+                          Obx(() {
+                            if (signupController.isLoadingZipCodes.value) {
+                              return const CircularProgressIndicator();
+                            }
+
+                            return DropdownButtonFormField<String>(
+                              decoration: InputDecoration(
+                                prefixIcon: const Icon(Icons.local_post_office),
+                                hintText: 'Select Zip Code',
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors.grey, width: 1.0),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: AppColor.primaryColor, width: 2.0),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              dropdownColor: Colors.grey,
+                              items: signupController.zipCodes
+                                  .map<DropdownMenuItem<String>>(
+                                      (String zipCode) {
+                                return DropdownMenuItem<String>(
+                                  value: zipCode,
+                                  child: Text(zipCode),
+                                );
+                              }).toList(),
+                              onChanged: signupController.zipCodes.isNotEmpty
+                                  ? (value) {
+                                      print('Selected Zip Code: $value');
+                                    }
+                                  : null, // Disable if zip codes are empty
+                              validator: (value) {
+                                if (value == null &&
+                                    signupController.zipCodes.isNotEmpty) {
+                                  return 'Please select a zip code';
+                                }
+                                return null;
+                              },
+                            );
+                          }),
                           const SizedBox(height: 20),
 
                           const LabelWithAsterisk(
