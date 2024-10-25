@@ -1,6 +1,8 @@
 class AppURL {
   static const String baseURL = "https://e-commerce.isotopeit.com/";
 
+  static const String baseURLAPI = "https://e-commerce.isotopeit.com/api/";
+
   //autu
   static const String login = "${baseURL}api/suppliers-login"; //post
 
@@ -33,6 +35,24 @@ class AppURL {
   static const String bannersList = "${baseURL}api/banners"; //get
   static const String bannerCreate = "${baseURL}api/banners"; //post
   static const String bannerUpdate = "${baseURL}api/banners/14"; //put
-  static const String bannerDelete = "${baseURL}api/banners/14"; //delete
+  static const String bannerDelete = "${baseURL}api/banners/"; //delete
+
+   
+
+  //wallet
+  static const String walletBalance = "${baseURL}api/wallet/balance"; //get
+
+  //requestWithdraw
+  static const String requestWithdraw = "${baseURLAPI}wallet-withdraw-requests/"; //post
+
+  //courier-list //get
+  static const String courierList = "${baseURLAPI}courier-list/"; 
+
+
+   
+
+
+
+
   
 }

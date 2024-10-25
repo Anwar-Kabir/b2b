@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:isotopeit_b2b/view/home.dart';
+import 'package:isotopeit_b2b/view/BottomNav.dart';
 import 'package:isotopeit_b2b/view/order/order_details/order_deatils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:isotopeit_b2b/view/login/login.dart';

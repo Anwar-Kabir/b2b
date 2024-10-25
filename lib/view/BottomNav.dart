@@ -5,7 +5,8 @@ import 'package:isotopeit_b2b/view/attributes/attribute_list/attribute.dart';
 import 'package:isotopeit_b2b/view/auction/auction.dart';
 import 'package:isotopeit_b2b/view/banner/banner/banner.dart';
 import 'package:isotopeit_b2b/view/category&tag/category_and_tag.dart';
-import 'package:isotopeit_b2b/view/courier/courier.dart';
+import 'package:isotopeit_b2b/view/courier/courier_list/courier.dart';
+import 'package:isotopeit_b2b/view/home/home.dart';
 import 'package:isotopeit_b2b/view/inventory/inventory.dart';
 import 'package:isotopeit_b2b/view/login/login_controller.dart';
 import 'package:isotopeit_b2b/view/order/orderlist/order_list.dart';
@@ -29,7 +30,7 @@ class BottomNavState extends State<BottomNav> {
 
   // Screens for each tab
   static final List<Widget> _pages = <Widget>[
-    const Center(child: Text('Home Page')),
+       HomePage(),
     OrderListScreen(),
     const Wallet(),
     const ProductManager(),
@@ -171,7 +172,7 @@ class BottomNavState extends State<BottomNav> {
                   leading: const Icon(Icons.accessible),
                   title: const Text('Courier'),
                   onTap: () {
-                    Get.to(const Courier(),
+                    Get.to(  Courier(),
                         transition: Transition.rightToLeftWithFade);
                   },
                 ),

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:isotopeit_b2b/utils/url.dart';
 import 'package:isotopeit_b2b/utils/validator.dart';
 import 'package:isotopeit_b2b/view/login/login.dart';
 import 'package:isotopeit_b2b/view/signup/model/district_model.dart';
@@ -121,7 +122,7 @@ class SignUpController extends GetxController {
     try {
       isLoading(true);
       final response = await http.get(
-        Uri.parse('https://e-commerce.isotopeit.com/divisions'),
+        Uri.parse('${AppURL.baseURL}divisions'),
         headers: {
           'Authorization':
               token,  
@@ -153,7 +154,7 @@ class SignUpController extends GetxController {
     try {
       isLoadingDistricts(true);
       final response = await http.get(
-        Uri.parse('https://e-commerce.isotopeit.com/districts/$divisionName'),
+        Uri.parse('${AppURL.baseURL}districts/$divisionName'),
         headers: {
           'Authorization': token,
           'Accept': 'application/json',
@@ -183,7 +184,7 @@ class SignUpController extends GetxController {
     try {
       isLoadingUpazilas(true);
       final response = await http.get(
-        Uri.parse('https://e-commerce.isotopeit.com/upazillas/$districtName'),
+        Uri.parse('${AppURL.baseURL}upazillas/$districtName'),
         headers: {
           'Authorization': token,
           'Accept': 'application/json',
@@ -213,7 +214,7 @@ class SignUpController extends GetxController {
     try {
       isLoadingZipCodes(true);
       final response = await http.get(
-        Uri.parse('https://e-commerce.isotopeit.com/postcodes/$upazilaName'),
+        Uri.parse('${AppURL.baseURL}postcodes/$upazilaName'),
         headers: {
           'Authorization': token,
           'Accept': 'application/json',

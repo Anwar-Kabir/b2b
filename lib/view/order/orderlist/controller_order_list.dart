@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:isotopeit_b2b/utils/url.dart';
 import 'package:isotopeit_b2b/view/order/orderlist/model_order_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,7 +27,7 @@ class OrderController extends GetxController {
     try {
       isLoading(true);
       final response = await http.get(
-        Uri.parse('https://e-commerce.isotopeit.com/api/order/'),
+        Uri.parse(AppURL.orderList),
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:isotopeit_b2b/helper/token_service.dart';
 import 'package:isotopeit_b2b/view/login/login.dart';
 import 'package:isotopeit_b2b/view/login/login_controller.dart';
 import 'package:isotopeit_b2b/view/personal_info/personal_info.dart';
@@ -236,9 +237,12 @@ void _showDeleteDialog() {
                     await Future.delayed(const Duration(seconds: 2));
 
                     // After deleting the token, navigate to the login page with a smooth transition
+                    
+                    TokenService().clearToken();
+
                     Get.offAll(() => const Login(),
-                        transition: Transition.fadeIn,
-                        duration: const Duration(milliseconds: 500));
+                    transition: Transition.fadeIn,
+                    duration: const Duration(milliseconds: 500));
 
                     // Optionally show success message
                     Get.snackbar(

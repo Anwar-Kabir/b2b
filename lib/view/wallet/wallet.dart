@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/view/wallet/wallet_request_details.dart';
-import 'package:isotopeit_b2b/view/wallet/wallet_request_money.dart';
+import 'package:isotopeit_b2b/view/wallet/withdraw_request/wallet_request_money.dart';
 
 class Wallet extends StatefulWidget {
   const Wallet({super.key});

@@ -2,12 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:isotopeit_b2b/utils/url.dart';
 import 'package:isotopeit_b2b/view/product/product_details/model_product_details.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductDetailsController extends GetxController {
-  final String baseUrl = "https://e-commerce.isotopeit.com/api/product/";
+  //final String baseUrl = "https://e-commerce.isotopeit.com/api/product/";
 
   // Reactive state variables
   var product = Rx<Product?>(null);
@@ -30,7 +31,7 @@ class ProductDetailsController extends GetxController {
         throw Exception('No token found');
       }
 
-      final url = Uri.parse('$baseUrl$productId/show');
+      final url = Uri.parse('${AppURL.baseURL}api/product/$productId/show');
       final response = await http.get(
         url,
         headers: {

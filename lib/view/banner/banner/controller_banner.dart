@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:isotopeit_b2b/utils/url.dart';
 import 'package:isotopeit_b2b/view/banner/banner/model_banner.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,7 +32,7 @@ class BannerController extends GetxController {
     try {
       isLoading(true);
       final response = await http.get(
-        Uri.parse('https://e-commerce.isotopeit.com/api/banners/'),
+        Uri.parse(AppURL.bannersList),
 
         headers: {
           'Authorization': 'Bearer $token', // Token authorization
@@ -66,7 +67,7 @@ class BannerController extends GetxController {
 
     try {
       final response = await http.delete(
-        Uri.parse('https://e-commerce.isotopeit.com/api/banners/$id'),
+        Uri.parse('${AppURL.bannerDelete}$id'),
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',

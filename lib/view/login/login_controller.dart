@@ -1,11 +1,11 @@
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:isotopeit_b2b/helper/token_service.dart';
 import 'package:isotopeit_b2b/utils/url.dart';
 import 'package:isotopeit_b2b/utils/validator.dart';
-import 'package:isotopeit_b2b/view/home.dart';
+import 'package:isotopeit_b2b/view/BottomNav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController extends GetxController {
@@ -13,8 +13,7 @@ class LoginController extends GetxController {
   var isLoading = false.obs; // Make loading state reactive
   final formKey = GlobalKey<FormState>();
 
-  
-  //app validation from 
+  //app validation from
   final appValidator = AppValidation();
   final appEmailValidator = TextEditingController();
   final appPasswordValidator = TextEditingController();
@@ -53,7 +52,6 @@ class LoginController extends GetxController {
     final body = jsonEncode({
       'email': appEmailValidator.text,
       'password': appPasswordValidator.text,
-
     });
 
     try {
@@ -72,6 +70,8 @@ class LoginController extends GetxController {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', token);
         await prefs.setString('userInfo', json.encode(user));
+
+        await TokenService().setToken(token);
 
         // Store the user info in memory
         userInfo.value = user;
