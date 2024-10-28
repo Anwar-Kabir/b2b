@@ -121,7 +121,7 @@ class BottomNavState extends State<BottomNav> {
                   leading: const Icon(Icons.home),
                   title: const Text('Home'),
                   onTap: () {
-                    //Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreen()));
+                    Get.back();
                   },
                 ),
                 ListTile(

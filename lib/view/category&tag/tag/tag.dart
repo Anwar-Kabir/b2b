@@ -18,7 +18,9 @@ class TagPage extends StatelessWidget {
         }
 
         if (tagController.errorMessage.isNotEmpty) {
-          return Center(child: Text(tagController.errorMessage.value));
+          return Center(child: 
+          //Text(tagController.errorMessage.value));
+          Text('No Tag found.'));
         }
 
         return ListView.builder(

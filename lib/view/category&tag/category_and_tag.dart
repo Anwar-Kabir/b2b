@@ -45,7 +45,9 @@ class CategoryTagPage extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               } else if (categoryController.errorMessage.isNotEmpty) {
                 return Center(
-                    child: Text(categoryController.errorMessage.value));
+                    child: 
+                    //Text(categoryController.errorMessage.value));
+                    Text('No Category found.'));
               } else {
                 return ListView.builder(
                   itemCount: categoryController.categories.length,
