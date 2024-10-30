@@ -1,0 +1,126 @@
+// order_report_controller.dart
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:isotopeit_b2b/view/order_report/order_report_model.dart';
+ 
+// import 'package:isotopeit_b2b/lib/helper/token_service.dart'; // Import TokenService
+import 'package:isotopeit_b2b/helper/token_service.dart'; // Import TokenService
+
+
+ 
+
+ 
+
+// class SupplierOrderController extends GetxController {
+//   var isLoading = false.obs;
+//   var orders = <SupplierOrder>[].obs;
+
+//   final TokenService _tokenService = TokenService();
+
+//   @override
+//   void onInit() {
+//     super.onInit();
+//     _tokenService.init(); // Initialize TokenService
+//   }
+
+//   Future<void> fetchSupplierOrders(String startDate, String endDate) async {
+//     isLoading(true);
+//     print(_tokenService.token);
+//     try {
+//       final uri = Uri.parse(
+//           'https://e-commerce.isotopeit.com/api/time-range-wise-suppliyer-order-report')
+//           .replace(queryParameters: {'start_date': startDate, 'end_date': endDate});
+
+//       final response = await http.get(
+//         uri,
+//         headers: {
+//           'Authorization': 'Bearer ${_tokenService.token}', // Add token to headers
+//           'Accept': 'application/json',
+//           'Content-Type': 'application/json',
+//         },
+//       );
+
+//       if (response.statusCode == 200) {
+//         var data = json.decode(response.body);
+//         if (data['success']) {
+//           orders.value = (data['data']['data'] as List)
+//               .map((json) => SupplierOrder.fromJson(json))
+//               .toList();
+//         } else {
+//           Get.snackbar('Error', 'Failed to fetch data');
+//         }
+//       } else {
+//         Get.snackbar('Error', 'Server error');
+//       }
+//     } catch (e) {
+//       Get.snackbar('Error', 'Something went wrong');
+//     } finally {
+//       isLoading(false);
+//     }
+//   }
+// }
+
+
+class SupplierOrderController extends GetxController {
+  var isLoading = false.obs;
+  var orders = <SupplierOrder>[].obs;
+
+  final TokenService _tokenService = TokenService();
+
+  @override
+  void onInit() {
+    super.onInit();
+    _tokenService.init(); // Initialize TokenService
+  }
+
+  Future<void> fetchSupplierOrders(String startDate, String endDate) async {
+    isLoading(true);
+    print("Token: ${_tokenService.token}"); // Debugging: Print token
+    print("Start Date: $startDate, End Date: $endDate"); // Debugging: Print dates
+
+    try {
+      final uri = Uri.parse(
+          'https://e-commerce.isotopeit.com/api/time-range-wise-suppliyer-order-report')
+          .replace(queryParameters: {'start_date': startDate, 'end_date': endDate});
+
+      print("Request URL: ${uri.toString()}"); // Debugging: Print request URL
+      print("Headers: ${{
+        'Authorization': 'Bearer ${_tokenService.token}',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }}"); // Debugging: Print headers
+
+      final response = await http.get(
+        uri,
+        headers: {
+          'Authorization': 'Bearer ${_tokenService.token}', // Add token to headers
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
+        if (data['success']) {
+          orders.value = (data['data']['data'] as List)
+              .map((json) => SupplierOrder.fromJson(json))
+              .toList();
+          print("Fetched Orders: ${orders}"); // Debugging: Print orders fetched
+        } else {
+          print("Data fetch unsuccessful: ${data}"); // Debugging: Print unsuccessful data
+          Get.snackbar('Error', 'Failed to fetch data: ${data['message'] ?? 'Unknown error'}');
+        }
+      } else {
+        print("Response status: ${response.statusCode}"); // Debugging: Print response status
+        print("Response body: ${response.body}"); // Debugging: Print response body
+        Get.snackbar('Error', 'Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Exception: $e"); // Debugging: Print exception
+      Get.snackbar('Error', 'Something went wrong: $e');
+    } finally {
+      isLoading(false);
+    }
+  }
+}

@@ -111,7 +111,7 @@ class _AddAttributeValueFormState extends State<AddAttributeValueForm> {
             CustomTextField(
               prefixIcon: Icons.email,
               hintText: 'Attribute value',
-              controller: _controller.appEmailValidator,
+              controller: listOrderController,
               keyboardType: TextInputType.emailAddress,
               //validator: _controller.validateEmail,
             ),
@@ -126,7 +126,7 @@ class _AddAttributeValueFormState extends State<AddAttributeValueForm> {
             CustomTextField(
               prefixIcon: Icons.email,
               hintText: '4',
-              controller: _controller.appEmailValidator,
+              controller: listOrderController,
               keyboardType: TextInputType.emailAddress,
               //validator: _controller.validateEmail,
             ),

@@ -3,13 +3,13 @@ class Division {
 
   Division({required this.name});
 
-  factory Division.fromJson(String key, dynamic value) {
-    return Division(name: value);
+  // Factory constructor to create a Division from JSON
+  factory Division.fromJson(Map<String, dynamic> json) {
+    return Division(name: json['name']);
   }
 
-  static List<Division> fromJsonList(Map<String, dynamic> json) {
-    return json.entries
-        .map((entry) => Division.fromJson(entry.key, entry.value))
-        .toList();
+  // Static method to convert the response into a list of Division objects
+  static List<Division> fromJsonList(List<dynamic> jsonList) {
+    return jsonList.map((item) => Division.fromJson(item)).toList();
   }
 }

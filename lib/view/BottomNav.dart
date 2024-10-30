@@ -7,14 +7,14 @@ import 'package:isotopeit_b2b/view/banner/banner/banner.dart';
 import 'package:isotopeit_b2b/view/category&tag/category_and_tag.dart';
 import 'package:isotopeit_b2b/view/courier/courier_list/courier.dart';
 import 'package:isotopeit_b2b/view/home/home.dart';
-import 'package:isotopeit_b2b/view/inventory/inventory.dart';
+import 'package:isotopeit_b2b/view/inventory/inventrory/inventory.dart';
 import 'package:isotopeit_b2b/view/login/login_controller.dart';
 import 'package:isotopeit_b2b/view/order/orderlist/order_list.dart';
 import 'package:isotopeit_b2b/view/product/productlist/product_list.dart';
-import 'package:isotopeit_b2b/view/report/report.dart';
+import 'package:isotopeit_b2b/view/order_report/report.dart';
 import 'package:isotopeit_b2b/view/settings/settings.dart';
 import 'package:isotopeit_b2b/view/shopsettings/shop_settings.dart';
-import 'package:isotopeit_b2b/view/wallet/wallet.dart';
+import 'package:isotopeit_b2b/view/wallet/wallet_index/wallet.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
@@ -32,8 +32,8 @@ class BottomNavState extends State<BottomNav> {
   static final List<Widget> _pages = <Widget>[
        HomePage(),
     OrderListScreen(),
-    const Wallet(),
-    const ProductManager(),
+      Wallet(),
+      Inventory(),
     const Settings(),
   ];
 
@@ -139,7 +139,7 @@ class BottomNavState extends State<BottomNav> {
                   title: const Text('Inventory'),
                   onTap: () {
                     Get.to(
-                      const ProductManager(),
+                        Inventory(),
                       transition: Transition.rightToLeftWithFade,
                     );
                   },
@@ -196,7 +196,7 @@ class BottomNavState extends State<BottomNav> {
                   leading: const Icon(Icons.currency_exchange),
                   title: const Text('Wallet'),
                   onTap: () {
-                    Get.to(const Wallet(),
+                    Get.to(  Wallet(),
                         transition: Transition.rightToLeftWithFade);
                   },
                 ),
@@ -218,9 +218,9 @@ class BottomNavState extends State<BottomNav> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.note),
-                  title: const Text('Reports'),
+                  title: const Text('Order Reports'),
                   onTap: () {
-                    Get.to(const ReportManagerPage(),
+                    Get.to(  SupplierOrderScreen(),
                         transition: Transition.rightToLeftWithFade);
                   },
                 ),

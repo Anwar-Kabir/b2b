@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/utils/image.dart';
+import 'package:isotopeit_b2b/view/banner/add_banner/add_banner_controller.dart';
 import 'package:isotopeit_b2b/view/signup/signup_controller.dart';
 import 'package:isotopeit_b2b/widget/custom_text_field.dart';
 
@@ -18,7 +19,7 @@ class AddBanner extends StatefulWidget {
 }
 
 class _AddBannerState extends State<AddBanner> {
-  final SignUpController _controller = Get.put(SignUpController());
+  final AddBannerController _controller = Get.put(AddBannerController());
 
   final ImagePicker _picker = ImagePicker();
 
@@ -50,7 +51,7 @@ class _AddBannerState extends State<AddBanner> {
         ),
         body: SingleChildScrollView(
           child: Form(
-            key: _controller.bannerKey,
+            
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -116,11 +117,11 @@ class _AddBannerState extends State<AddBanner> {
                   CustomTextField(
                     prefixIcon: Icons.person,
                     hintText: 'Title',
-                    controller: _controller.appNameValidator,
+                    controller: _controller.appEmailValidator,
                     keyboardType: TextInputType.emailAddress,
                     //validator: _controller.validateName,
                     onChanged: (value) {
-                      _controller.onFieldChanged();
+                      //_controller.onFieldChanged();
                     },
                   ),
                   const SizedBox(height: 20),
@@ -144,11 +145,11 @@ class _AddBannerState extends State<AddBanner> {
                     prefixIcon: Icons.note,
                     maxLines: 3,
                     hintText: 'Description',
-                    controller: _controller.appPhoneValidator,
+                    controller: _controller.appEmailValidator,
                     keyboardType: TextInputType.name,
                     //validator: _controller.validatePhoneNumber,
                     onChanged: (value) {
-                      _controller.onFieldChanged();
+                      //_controller.onFieldChanged();
                     },
                   ),
                   //
@@ -177,7 +178,7 @@ class _AddBannerState extends State<AddBanner> {
                     keyboardType: TextInputType.emailAddress,
                     //validator: _controller.validateEmail,
                     onChanged: (value) {
-                      _controller.onFieldChanged();
+                     // _controller.onFieldChanged();
                     },
                   ),
                   const SizedBox(height: 20),
@@ -204,7 +205,7 @@ class _AddBannerState extends State<AddBanner> {
                     keyboardType: TextInputType.emailAddress,
                     //validator: _controller.validateEmail,
                     onChanged: (value) {
-                      _controller.onFieldChanged();
+                     // _controller.onFieldChanged();
                     },
                   ),
 
@@ -232,7 +233,7 @@ class _AddBannerState extends State<AddBanner> {
                     keyboardType: TextInputType.emailAddress,
                     //validator: _controller.validateEmail,
                     onChanged: (value) {
-                      _controller.onFieldChanged();
+                      //_controller.onFieldChanged();
                     },
                   ),
 
@@ -259,7 +260,7 @@ class _AddBannerState extends State<AddBanner> {
                     keyboardType: TextInputType.emailAddress,
                     //validator: _controller.validateEmail,
                     onChanged: (value) {
-                      _controller.onFieldChanged();
+                      //_controller.onFieldChanged();
                     },
                   ),
 
@@ -286,7 +287,7 @@ class _AddBannerState extends State<AddBanner> {
                     keyboardType: TextInputType.emailAddress,
                     //validator: _controller.validateEmail,
                     onChanged: (value) {
-                      _controller.onFieldChanged();
+                      //_controller.onFieldChanged();
                     },
                   ),
 
@@ -313,7 +314,7 @@ class _AddBannerState extends State<AddBanner> {
                     keyboardType: TextInputType.emailAddress,
                     //validator: _controller.validateEmail,
                     onChanged: (value) {
-                      _controller.onFieldChanged();
+                     // _controller.onFieldChanged();
                     },
                   ),
 

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import 'package:isotopeit_b2b/utils/color.dart';
 
-import 'package:isotopeit_b2b/view/banner/add_banner.dart';
+import 'package:isotopeit_b2b/view/banner/add_banner/add_banner.dart';
 import 'package:isotopeit_b2b/view/banner/banner/controller_banner.dart';
  
 

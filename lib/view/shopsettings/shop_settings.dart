@@ -448,6 +448,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/utils/image.dart';
+import 'package:isotopeit_b2b/view/shopsettings/shop_setting_controller.dart';
 import 'package:isotopeit_b2b/view/signup/signup_controller.dart';
 import 'package:isotopeit_b2b/widget/custom_text_field.dart';
 import 'package:isotopeit_b2b/widget/label_with_asterisk.dart';
@@ -460,17 +461,17 @@ class ShopSettingsPage extends StatefulWidget {
 }
 
 class _ShopSettingsPageState extends State<ShopSettingsPage> {
-  final SignUpController _controller = Get.put(SignUpController());
+
+  final ShopSettingController _controller = Get.put(ShopSettingController());
+ 
   final ImagePicker _picker = ImagePicker();
+
   XFile? _logoImageFile;
   XFile? _coverImageFile;
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _divisionController = TextEditingController();
-  final TextEditingController _districtController = TextEditingController();
-  final TextEditingController _upazilaController = TextEditingController();
-  final TextEditingController _addressLineController = TextEditingController();
-  final TextEditingController _zipController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
+
+   final TextEditingController _zipController = TextEditingController();
+
+ 
 
   Future<void> _pickImage(ImageSource source, String imageType) async {
     final XFile? pickedFile = await _picker.pickImage(source: source);
@@ -528,7 +529,7 @@ class _ShopSettingsPageState extends State<ShopSettingsPage> {
   Widget _buildGeneralTab() {
     return SingleChildScrollView(
       child: Form(
-        key: _controller.formKey,
+        
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -851,7 +852,7 @@ class _ShopSettingsPageState extends State<ShopSettingsPage> {
           ),
           child: SingleChildScrollView(
             child: Form(
-              key: _formKey,
+              //key: _formKey,
               child: Column(
                 children: <Widget>[
                   const LabelWithAsterisk(
@@ -859,7 +860,7 @@ class _ShopSettingsPageState extends State<ShopSettingsPage> {
                   CustomTextField(
                     prefixIcon: Icons.location_city_rounded,
                     hintText: "Division",
-                    controller: _divisionController,
+                    controller: _zipController,
                   ),
                   const SizedBox(height: 20),
                   const LabelWithAsterisk(
@@ -867,7 +868,7 @@ class _ShopSettingsPageState extends State<ShopSettingsPage> {
                   CustomTextField(
                     prefixIcon: Icons.location_on,
                     hintText: "District",
-                    controller: _districtController,
+                    controller: _zipController,
                   ),
                   const SizedBox(height: 20),
                   const LabelWithAsterisk(
@@ -875,7 +876,7 @@ class _ShopSettingsPageState extends State<ShopSettingsPage> {
                   CustomTextField(
                     prefixIcon: Icons.map,
                     hintText: 'Upazila',
-                    controller: _upazilaController,
+                    controller: _zipController,
                   ),
                   const SizedBox(height: 20),
                   const LabelWithAsterisk(
@@ -883,7 +884,7 @@ class _ShopSettingsPageState extends State<ShopSettingsPage> {
                   CustomTextField(
                     prefixIcon: Icons.home,
                     hintText: 'Address Line',
-                    controller: _addressLineController,
+                    controller: _zipController,
                   ),
                   const SizedBox(height: 20),
                   const LabelWithAsterisk(
@@ -898,14 +899,14 @@ class _ShopSettingsPageState extends State<ShopSettingsPage> {
                   CustomTextField(
                     prefixIcon: Icons.phone,
                     hintText: 'Phone',
-                    controller: _phoneController,
+                    controller: _zipController,
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton.icon(
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        Navigator.pop(context); // Dismiss form after save
-                      }
+                      // if (_formKey.currentState!.validate()) {
+                      //   Navigator.pop(context); // Dismiss form after save
+                      // }
                     },
                     icon: const Icon(Icons.save),
                     label: const Text("Save Address"),

@@ -1,43 +1,60 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:isotopeit_b2b/utils/url.dart';
 import 'package:isotopeit_b2b/utils/validator.dart';
-import 'package:isotopeit_b2b/view/login/login.dart';
-import 'package:isotopeit_b2b/view/signup/model/district_model.dart';
-import 'package:isotopeit_b2b/view/signup/model/model_division.dart';
-import 'package:http/http.dart' as http;
-import 'package:isotopeit_b2b/view/signup/model/upazila_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:isotopeit_b2b/view/signup/model/sign_up_model.dart';
+import 'model/district_model.dart';
+import 'model/model_division.dart';
+import 'model/upazila_model.dart';
 
 class SignUpController extends GetxController {
-  // Variables
+  // Observable fields
   var obscurePassword = true.obs;
   var isAgreed = false.obs;
   var isButtonEnabled = false.obs;
+  var isLoading = false.obs;
+  var errorMessage = ''.obs;
 
   var divisions = <Division>[].obs;
-  var isLoading = false.obs;
-
   var districts = <District>[].obs;
-  var isLoadingDistricts = false.obs;
-  var selectedDivision = ''.obs; 
-
   var upazilas = <Upazila>[].obs;
-  var isLoadingUpazilas = false.obs;
+  var zipCodes = <String>[].obs;
+  var selectedDivision = ''.obs;
   var selectedDistrict = ''.obs;
+  var selectedUpazila = ''.obs;
+  var selectedZipCode = ''.obs;
+  var sameAddress = ''.obs;
 
-  var zipCodes = <String>[].obs; // To hold the zip codes
+  // Loading indicators
+  var isLoadingDivisions = false.obs;
+  var isLoadingDistricts = false.obs;
+  var isLoadingUpazilas = false.obs;
   var isLoadingZipCodes = false.obs;
-  var selectedUpazila = ''.obs; // To store selected upazila
 
-  // Form validation key
+  // Form validation
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final appValidator = AppValidation();
 
-   final GlobalKey<FormState> bannerKey = GlobalKey<FormState>();
-
-  
+  // Text controllers for form fields
+  final TextEditingController sellerNameCont = TextEditingController();
+  final TextEditingController shopEmailNameCont = TextEditingController();
+  final TextEditingController slug = TextEditingController();
+  final TextEditingController tradeLicenseCont = TextEditingController();
+  final TextEditingController companyCertificationCont =
+      TextEditingController();
+  final TextEditingController cityCorporationCont = TextEditingController();
+  final TextEditingController addressLineCont = TextEditingController();
+  final TextEditingController merchantNameCont = TextEditingController();
+  final TextEditingController merchantNIDCont = TextEditingController();
+  final TextEditingController merchantPhoneCont = TextEditingController();
+  final TextEditingController merchantAddressCont = TextEditingController();
+  final TextEditingController merchantEmailCont = TextEditingController();
+  final TextEditingController merchantPasswordCont = TextEditingController();
+  final TextEditingController merchantConfirmPasswordCont =
+      TextEditingController();
 
   @override
   void onInit() {
@@ -45,23 +62,27 @@ class SignUpController extends GetxController {
     fetchDivisions();
   }
 
- 
-  //app validation from
-  final appValidator = AppValidation();
-  final appNameValidator = TextEditingController();
-  final appPhoneValidator = TextEditingController();
-  final appEmailValidator = TextEditingController();
-  final appPasswordValidator = TextEditingController();
-  final appConformPasswordValidator = TextEditingController();
-
   @override
   void dispose() {
-    appNameValidator.dispose();
-    appPhoneValidator.dispose();
-    appEmailValidator.dispose();
-    appPasswordValidator.dispose();
-    appConformPasswordValidator.dispose();
+    // Dispose controllers when the controller is destroyed
+    sellerNameCont.dispose();
+    shopEmailNameCont.dispose();
+    slug.dispose();
+    tradeLicenseCont.dispose();
+    cityCorporationCont.dispose();
+    addressLineCont.dispose();
+    merchantNameCont.dispose();
+    merchantNIDCont.dispose();
+    merchantPhoneCont.dispose();
+    merchantEmailCont.dispose();
+    merchantPasswordCont.dispose();
+    merchantConfirmPasswordCont.dispose();
     super.dispose();
+  }
+
+  void updateSameAddress(String? value) {
+    sameAddress.value = value ?? '';
+    updateButtonState();
   }
 
   // Confirm password validation function
@@ -69,197 +90,166 @@ class SignUpController extends GetxController {
     if (value == null || value.isEmpty) {
       return 'Please confirm your password';
     }
-    if (value != appPasswordValidator.text) {
+    if (value != merchantPasswordCont.text) {
       return 'Passwords do not match';
     }
     return null;
   }
 
-  // Toggle password visibility
-  void togglePasswordVisibility() {
-    obscurePassword.value = !obscurePassword.value;
+  Future<void> fetchDivisions() async {
+    await fetchData(
+        '${AppURL.baseURL}divisions', divisions, isLoadingDivisions);
   }
 
-  // Update agreement status
+  Future<void> fetchDistricts(String division) async {
+    await fetchData(
+        '${AppURL.baseURL}districts/$division', districts, isLoadingDistricts);
+  }
+
+  Future<void> fetchUpazilas(String district) async {
+    await fetchData(
+        '${AppURL.baseURL}upazillas/$district', upazilas, isLoadingUpazilas);
+  }
+
+  Future<void> fetchZipCodes(String upazila) async {
+    await fetchData(
+        '${AppURL.baseURL}postcodes/$upazila', zipCodes, isLoadingZipCodes);
+  }
+
+  Future<void> fetchData(
+      String endpoint, RxList targetList, RxBool loading) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
+
+    try {
+      loading.value = true;
+      final response = await http.get(
+        Uri.parse(endpoint),
+        headers: {
+          'Authorization': token,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (endpoint.contains('divisions') && data is Map) {
+          targetList.value =
+              data.entries.map((entry) => Division(name: entry.value)).toList();
+        } else if (endpoint.contains('districts') && data is Map) {
+          targetList.value =
+              data.entries.map((entry) => District(name: entry.value)).toList();
+        } else if (endpoint.contains('upazillas') && data is Map) {
+          targetList.value =
+              data.entries.map((entry) => Upazila(name: entry.value)).toList();
+        } else if (endpoint.contains('postcodes') && data is Map) {
+          targetList.value = data.keys.toList();
+        } else {
+          throw Exception('Invalid data format');
+        }
+      } else {
+        Get.snackbar('Error', 'Failed to load data');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'An error occurred while loading data');
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  void updateSelectedDivision(String division) {
+    selectedDivision.value = division;
+    districts.clear();
+    upazilas.clear();
+    fetchDistricts(division);
+  }
+
+  void updateSelectedDistrict(String district) {
+    selectedDistrict.value = district;
+    upazilas.clear();
+    fetchUpazilas(district);
+  }
+
+  void updateSelectedUpazila(String upazila) {
+    selectedUpazila.value = upazila;
+    fetchZipCodes(upazila);
+  }
+
+  void updateSelectedZipCode(String zipCode) {
+    selectedZipCode.value = zipCode;
+  }
+
+  void togglePasswordVisibility() =>
+      obscurePassword.value = !obscurePassword.value;
+
   void updateAgreement(bool? value) {
     isAgreed.value = value ?? false;
     updateButtonState();
   }
 
-  // Update button state based on form and agreement
-  void updateButtonState() {
-    isButtonEnabled.value =
-        isAgreed.value && formKey.currentState?.validate() == true;
-  }
+  void updateButtonState() => isButtonEnabled.value =
+      isAgreed.value && formKey.currentState?.validate() == true;
 
- 
-  void onFieldChanged() {
-    formKey.currentState?.validate();
-
-    updateButtonState();
-  }
-
-  // Handle the sign-up logic
   Future<void> handleSignup() async {
-    if (formKey.currentState!.validate() && isAgreed.value) {
-      Get.snackbar("Success", "Sign up successful!",
-          backgroundColor: Colors.green, colorText: Colors.white);
-
-      Get.offAll(const Login());
-    } else {
+    if (formKey.currentState?.validate() != true || !isAgreed.value) {
       Get.snackbar("Error", "Please complete the form",
           backgroundColor: Colors.red, colorText: Colors.white);
+      return;
     }
+
+    SupplierRegistrationModel registrationData = SupplierRegistrationModel(
+      shopName: sellerNameCont.text,
+      shopEmail: shopEmailNameCont.text,
+      slug: slug.text,
+      tradeLicenseNo: tradeLicenseCont.text,
+      nid: merchantNIDCont.text,
+      merchantName: merchantNameCont.text,
+      merchantPhone: merchantPhoneCont.text,
+      merchantEmail: merchantEmailCont.text,
+      division: selectedDivision.value,
+      district: selectedDistrict.value,
+      upazila: selectedUpazila.value,
+      addressLine1: addressLineCont.text,
+      postalCode: selectedZipCode.value,
+      password: merchantPasswordCont.text,
+      passwordConfirmation: merchantConfirmPasswordCont.text,
+      cityCorporationPourashova: cityCorporationCont.text,
+      sameAddress: sameAddress.value,
+    );
+
+    await registerSupplier(registrationData);
   }
 
-
-  ///===> Divisions
-  Future<void> fetchDivisions() async {
-
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token') ?? '';
+  Future<void> registerSupplier(
+      SupplierRegistrationModel registrationData) async {
+    const apiUrl = "https://e-commerce.isotopeit.com/api/suppliers-register";
+    isLoading.value = true;
+    errorMessage.value = '';
 
     try {
-      isLoading(true);
-      final response = await http.get(
-        Uri.parse('${AppURL.baseURL}divisions'),
+      final response = await http.post(
+        Uri.parse(apiUrl),
         headers: {
-          'Authorization':
-              token,  
-          'Accept': 'application/json',
           'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
+        body: jsonEncode(registrationData.toJson()),
       );
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body) as Map<String, dynamic>;
-        divisions(Division.fromJsonList(data));
+      if (response.statusCode == 201) {
+        Get.snackbar("Success", "Registration successful!",
+            snackPosition: SnackPosition.BOTTOM);
       } else {
-        Get.snackbar('Error', 'Failed to load divisions');
+        final errorResponse = jsonDecode(response.body);
+        errorMessage.value = errorResponse['errors'].toString();
       }
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      errorMessage.value = e.toString();
+      print("Exception occurred: $e");
     } finally {
-      isLoading(false);
-    }
-  }
-
-  
-   // Fetch districts based on selected division
-   // Fetch districts based on the selected division
-  Future<void> fetchDistricts(String divisionName) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token') ?? '';
-
-    try {
-      isLoadingDistricts(true);
-      final response = await http.get(
-        Uri.parse('${AppURL.baseURL}districts/$divisionName'),
-        headers: {
-          'Authorization': token,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body) as Map<String, dynamic>;
-        districts(District.fromJsonList(data));
-      } else {
-        Get.snackbar('Error', 'Failed to load districts');
-      }
-    } catch (e) {
-      Get.snackbar('Error', e.toString());
-    } finally {
-      isLoadingDistricts(false);
-    }
-  }
-
-
-  // Fetch Upazilas based on the selected district
-  Future<void> fetchUpazilas(String districtName) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token') ?? '';
-
-    try {
-      isLoadingUpazilas(true);
-      final response = await http.get(
-        Uri.parse('${AppURL.baseURL}upazillas/$districtName'),
-        headers: {
-          'Authorization': token,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body) as Map<String, dynamic>;
-        upazilas(Upazila.fromJsonList(data));
-      } else {
-        Get.snackbar('Error', 'Failed to load upazilas');
-      }
-    } catch (e) {
-      Get.snackbar('Error', e.toString());
-    } finally {
-      isLoadingUpazilas(false);
-    }
-  }
-
-
-    // Fetch Zip Codes based on the selected Upazila
-  Future<void> fetchZipCodes(String upazilaName) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token') ?? '';
-
-    try {
-      isLoadingZipCodes(true);
-      final response = await http.get(
-        Uri.parse('${AppURL.baseURL}postcodes/$upazilaName'),
-        headers: {
-          'Authorization': token,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body) as Map<String, dynamic>;
-
-        // Extract keys (zip codes) from the response and update the observable list
-        zipCodes.value = data.keys.toList();
-      } else {
-        Get.snackbar('Error', 'Failed to load zip codes');
-      }
-    } catch (e) {
-      Get.snackbar('Error', e.toString());
-    } finally {
-      isLoadingZipCodes(false);
-    }
-  }
-
-  // Update selected upazila and fetch corresponding zip codes
-  void updateSelectedUpazila(String? upazilaName) {
-    if (upazilaName != null) {
-      selectedUpazila.value = upazilaName;
-      fetchZipCodes(upazilaName); // Trigger zip code fetching
-    }
-  }
-
-
-  // Update selected district and fetch corresponding upazilas
-  void updateSelectedDistrict(String? districtName) {
-    if (districtName != null) {
-      selectedDistrict.value = districtName;
-      fetchUpazilas(districtName);
-    }
-  }
-
-
-  // Update selected division and fetch corresponding districts
-  void updateSelectedDivision(String? divisionName) {
-    if (divisionName != null) {
-      selectedDivision.value = divisionName;
-      fetchDistricts(divisionName);
+      isLoading.value = false;
     }
   }
 }

@@ -4,14 +4,12 @@ class District {
   District({required this.name});
 
   // Factory constructor to create a District from JSON
-  factory District.fromJson(String name) {
-    return District(name: name);
+  factory District.fromJson(Map<String, dynamic> json) {
+    return District(name: json['name']);
   }
 
   // Static method to convert the response into a list of District objects
-  static List<District> fromJsonList(Map<String, dynamic> json) {
-    return json.entries.map((entry) {
-      return District(name: entry.value);
-    }).toList();
+  static List<District> fromJsonList(List<dynamic> jsonList) {
+    return jsonList.map((item) => District.fromJson(item)).toList();
   }
 }
