@@ -23,6 +23,9 @@ dependencies:
   dotted_line: ^3.2.2
   shared_preferences: ^2.3.2
   connectivity_plus: ^3.0.3
+  flutter_screenutil: ^5.9.3
+  animated_text_kit: ^4.2.2
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:
@@ -35,6 +38,7 @@ flutter:
 
   assets:
     - assets/
+    - assets/logos/
   #   - images/a_dot_ham.jpeg
 
   # fonts:

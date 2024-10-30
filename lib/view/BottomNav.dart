@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/view/attributes/attribute_list/attribute.dart';
@@ -67,10 +68,7 @@ class BottomNavState extends State<BottomNav> {
     return Scaffold(
       appBar: _titles[_selectedIndex] != null
           ? AppBar(
-              title: Text(
-                _titles[_selectedIndex]!,
-                style: const TextStyle(color: Colors.white),
-              ),
+              title: Image.asset('assets/logos/logo.png', width : 60.w),
               backgroundColor: AppColor.primaryColor.withOpacity(0.7),
               iconTheme: const IconThemeData(
                 color: Colors.white,
