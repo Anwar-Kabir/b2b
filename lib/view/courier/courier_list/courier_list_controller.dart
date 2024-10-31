@@ -38,12 +38,11 @@ class CourierController extends GetxController {
           Get.snackbar('Error', data.message);
         }
       } else {
-        Get.snackbar(
-            'Error', 'Failed to load data. Status: ${response.statusCode}');
+        //Get.snackbar( 'Error', 'Failed to load data. Status: ${response.statusCode}');
       }
     } catch (e) {
       print("Error: $e");
-      Get.snackbar('Error', 'Failed to fetch data: ${e.toString()}');
+      //Get.snackbar('Error', 'Failed to fetch data: ${e.toString()}');
     } finally {
       isLoading.value = false;
     }

@@ -335,205 +335,205 @@ class _SignUpPageState extends State<SignUpPage> {
       
                   const SizedBox(height: 20),
 
-                  // const LabelWithAsterisk(
-                  //   labelText: "Merchant Division",
-                  //   isRequired: true,
-                  // ),
+                  const LabelWithAsterisk(
+                    labelText: "Merchant Division",
+                    isRequired: true,
+                  ),
 
-                  // //// Division
-                  // Obx(() {
-                  //   return DropdownButtonFormField<String>(
-                  //     decoration: InputDecoration(
-                  //       prefixIcon: const Icon(Icons.map),
-                  //       hintText: 'Select Division',
-                  //       enabledBorder: OutlineInputBorder(
-                  //         borderSide:
-                  //             const BorderSide(color: Colors.grey, width: 1.0),
-                  //         borderRadius: BorderRadius.circular(10.0),
-                  //       ),
-                  //       focusedBorder: OutlineInputBorder(
-                  //         borderSide: const BorderSide(
-                  //             color: AppColor.primaryColor, width: 2.0),
-                  //         borderRadius: BorderRadius.circular(10.0),
-                  //       ),
-                  //     ),
-                  //     dropdownColor: Colors.grey,
-                  //     items: signupController.divisions
-                  //         .map<DropdownMenuItem<String>>((Division division) {
-                  //       return DropdownMenuItem<String>(
-                  //         value: division.name,
-                  //         child: Text(division.name),
-                  //       );
-                  //     }).toList(),
-                  //     onChanged: (value) {
-                  //       if (value != null) {
-                  //         signupController.updateSelectedDivision(
-                  //             value); // Trigger district fetching
-                  //       }
-                  //     },
-                  //     validator: (value) {
-                  //       if (value == null) {
-                  //         return 'Please select a division';
-                  //       }
-                  //       return null;
-                  //     },
-                  //   );
-                  // }),
+                  //// Division
+                  Obx(() {
+                    return DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.map),
+                        hintText: 'Select Division',
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: Colors.grey, width: 1.0),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: AppColor.primaryColor, width: 2.0),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      dropdownColor: Colors.grey,
+                      items: signupController.divisions
+                          .map<DropdownMenuItem<String>>((Division division) {
+                        return DropdownMenuItem<String>(
+                          value: division.name,
+                          child: Text(division.name),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        if (value != null) {
+                          signupController.updateSelectedDivision(
+                              value); // Trigger district fetching
+                        }
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Please select a division';
+                        }
+                        return null;
+                      },
+                    );
+                  }),
 
-                  // const SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-                  // const LabelWithAsterisk(
-                  //   labelText: "Merchant District",
-                  //   isRequired: true,
-                  // ),
+                  const LabelWithAsterisk(
+                    labelText: "Merchant District",
+                    isRequired: true,
+                  ),
 
-                  // //district TextField
-                  // Obx(() {
-                  //   if (signupController.isLoadingDistricts.value) {
-                  //     return const CircularProgressIndicator();
-                  //   }
+                  //district TextField
+                  Obx(() {
+                    if (signupController.isLoadingDistricts.value) {
+                      return const CircularProgressIndicator();
+                    }
 
-                  //   return DropdownButtonFormField<String>(
-                  //     decoration: InputDecoration(
-                  //       prefixIcon: const Icon(Icons.location_city),
-                  //       hintText: 'Select District',
-                  //       enabledBorder: OutlineInputBorder(
-                  //         borderSide:
-                  //             const BorderSide(color: Colors.grey, width: 1.0),
-                  //         borderRadius: BorderRadius.circular(10.0),
-                  //       ),
-                  //       focusedBorder: OutlineInputBorder(
-                  //         borderSide: const BorderSide(
-                  //             color: AppColor.primaryColor, width: 2.0),
-                  //         borderRadius: BorderRadius.circular(10.0),
-                  //       ),
-                  //     ),
-                  //     dropdownColor: Colors.grey,
-                  //     items: signupController.districts
-                  //         .map<DropdownMenuItem<String>>((District district) {
-                  //       return DropdownMenuItem<String>(
-                  //         value: district.name,
-                  //         child: Text(district.name),
-                  //       );
-                  //     }).toList(),
-                  //     onChanged: signupController.districts.isNotEmpty
-                  //         ? (value) {
-                  //             print('Selected District: $value');
-                  //             signupController.updateSelectedDistrict(
-                  //                 value!); // Trigger Upazila fetching here
-                  //           }
-                  //         : null, // Disable if districts are empty
-                  //     validator: (value) {
-                  //       if (value == null &&
-                  //           signupController.districts.isNotEmpty) {
-                  //         return 'Please select a district';
-                  //       }
-                  //       return null;
-                  //     },
-                  //   );
-                  // }),
+                    return DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.location_city),
+                        hintText: 'Select District',
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: Colors.grey, width: 1.0),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: AppColor.primaryColor, width: 2.0),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      dropdownColor: Colors.grey,
+                      items: signupController.districts
+                          .map<DropdownMenuItem<String>>((District district) {
+                        return DropdownMenuItem<String>(
+                          value: district.name,
+                          child: Text(district.name),
+                        );
+                      }).toList(),
+                      onChanged: signupController.districts.isNotEmpty
+                          ? (value) {
+                              print('Selected District: $value');
+                              signupController.updateSelectedDistrict(
+                                  value!); // Trigger Upazila fetching here
+                            }
+                          : null, // Disable if districts are empty
+                      validator: (value) {
+                        if (value == null &&
+                            signupController.districts.isNotEmpty) {
+                          return 'Please select a district';
+                        }
+                        return null;
+                      },
+                    );
+                  }),
 
-                  // const SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-                  // const LabelWithAsterisk(
-                  //   labelText: "Merchant Upazila",
-                  //   isRequired: true,
-                  // ),
+                  const LabelWithAsterisk(
+                    labelText: "Merchant Upazila",
+                    isRequired: true,
+                  ),
 
-                  // // Upazila Dropdown
-                  // Obx(() {
-                  //   if (signupController.isLoadingUpazilas.value) {
-                  //     return const CircularProgressIndicator();
-                  //   }
+                  // Upazila Dropdown
+                  Obx(() {
+                    if (signupController.isLoadingUpazilas.value) {
+                      return const CircularProgressIndicator();
+                    }
 
-                  //   return DropdownButtonFormField<String>(
-                  //     decoration: InputDecoration(
-                  //       prefixIcon: const Icon(Icons.location_on),
-                  //       hintText: 'Select Upazila',
-                  //       enabledBorder: OutlineInputBorder(
-                  //         borderSide:
-                  //             const BorderSide(color: Colors.grey, width: 1.0),
-                  //         borderRadius: BorderRadius.circular(10.0),
-                  //       ),
-                  //       focusedBorder: OutlineInputBorder(
-                  //         borderSide: const BorderSide(
-                  //             color: AppColor.primaryColor, width: 2.0),
-                  //         borderRadius: BorderRadius.circular(10.0),
-                  //       ),
-                  //     ),
-                  //     dropdownColor: Colors.grey,
-                  //     items: signupController.upazilas
-                  //         .map<DropdownMenuItem<String>>((Upazila upazila) {
-                  //       return DropdownMenuItem<String>(
-                  //         value: upazila.name,
-                  //         child: Text(upazila.name),
-                  //       );
-                  //     }).toList(),
-                  //     onChanged: signupController.upazilas.isNotEmpty
-                  //         ? (value) {
-                  //             signupController.updateSelectedUpazila(
-                  //                 value!); // Trigger zip code fetching
-                  //           }
-                  //         : null, // Disable if upazilas are empty
-                  //     validator: (value) {
-                  //       if (value == null &&
-                  //           signupController.upazilas.isNotEmpty) {
-                  //         return 'Please select an upazila';
-                  //       }
-                  //       return null;
-                  //     },
-                  //   );
-                  // }),
+                    return DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.location_on),
+                        hintText: 'Select Upazila',
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: Colors.grey, width: 1.0),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: AppColor.primaryColor, width: 2.0),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      dropdownColor: Colors.grey,
+                      items: signupController.upazilas
+                          .map<DropdownMenuItem<String>>((Upazila upazila) {
+                        return DropdownMenuItem<String>(
+                          value: upazila.name,
+                          child: Text(upazila.name),
+                        );
+                      }).toList(),
+                      onChanged: signupController.upazilas.isNotEmpty
+                          ? (value) {
+                              signupController.updateSelectedUpazila(
+                                  value!); // Trigger zip code fetching
+                            }
+                          : null, // Disable if upazilas are empty
+                      validator: (value) {
+                        if (value == null &&
+                            signupController.upazilas.isNotEmpty) {
+                          return 'Please select an upazila';
+                        }
+                        return null;
+                      },
+                    );
+                  }),
 
-                  // const SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-                  // const LabelWithAsterisk(
-                  //   labelText: "Merchant Postal Code",
-                  //   isRequired: true,
-                  // ),
+                  const LabelWithAsterisk(
+                    labelText: "Merchant Postal Code",
+                    isRequired: true,
+                  ),
 
-                  // Obx(() {
-                  //   if (signupController.isLoadingZipCodes.value) {
-                  //     return const CircularProgressIndicator();
-                  //   }
+                  Obx(() {
+                    if (signupController.isLoadingZipCodes.value) {
+                      return const CircularProgressIndicator();
+                    }
 
-                  //   return DropdownButtonFormField<String>(
-                  //     decoration: InputDecoration(
-                  //       prefixIcon: const Icon(Icons.local_post_office),
-                  //       hintText: 'Select Zip Code',
-                  //       enabledBorder: OutlineInputBorder(
-                  //         borderSide:
-                  //             const BorderSide(color: Colors.grey, width: 1.0),
-                  //         borderRadius: BorderRadius.circular(10.0),
-                  //       ),
-                  //       focusedBorder: OutlineInputBorder(
-                  //         borderSide: const BorderSide(
-                  //             color: AppColor.primaryColor, width: 2.0),
-                  //         borderRadius: BorderRadius.circular(10.0),
-                  //       ),
-                  //     ),
-                  //     dropdownColor: Colors.grey,
-                  //     items: signupController.zipCodes
-                  //         .map<DropdownMenuItem<String>>((String zipCode) {
-                  //       return DropdownMenuItem<String>(
-                  //         value: zipCode,
-                  //         child: Text(zipCode),
-                  //       );
-                  //     }).toList(),
-                  //     onChanged: signupController.zipCodes.isNotEmpty
-                  //         ? (value) {
-                  //             print('Selected Zip Code: $value');
-                  //           }
-                  //         : null, // Disable if zip codes are empty
-                  //     validator: (value) {
-                  //       if (value == null &&
-                  //           signupController.zipCodes.isNotEmpty) {
-                  //         return 'Please select a zip code';
-                  //       }
-                  //       return null;
-                  //     },
-                  //   );
-                  // }),
+                    return DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.local_post_office),
+                        hintText: 'Select Zip Code',
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: Colors.grey, width: 1.0),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: AppColor.primaryColor, width: 2.0),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      dropdownColor: Colors.grey,
+                      items: signupController.zipCodes
+                          .map<DropdownMenuItem<String>>((String zipCode) {
+                        return DropdownMenuItem<String>(
+                          value: zipCode,
+                          child: Text(zipCode),
+                        );
+                      }).toList(),
+                      onChanged: signupController.zipCodes.isNotEmpty
+                          ? (value) {
+                              print('Selected Zip Code: $value');
+                            }
+                          : null, // Disable if zip codes are empty
+                      validator: (value) {
+                        if (value == null &&
+                            signupController.zipCodes.isNotEmpty) {
+                          return 'Please select a zip code';
+                        }
+                        return null;
+                      },
+                    );
+                  }),
                   const SizedBox(height: 20),
 
                    _buildTextField(

@@ -46,7 +46,7 @@ class CategoryTagPage extends StatelessWidget {
               } else if (categoryController.errorMessage.isNotEmpty) {
                 return Center(
                     child: 
-                    //Text(categoryController.errorMessage.value));
+                    
                     Text('No Category found.'));
               } else {
                 return ListView.builder(

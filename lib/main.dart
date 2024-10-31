@@ -8,6 +8,7 @@ import 'package:isotopeit_b2b/helper/token_service.dart';
 import 'package:isotopeit_b2b/view/login/login.dart';
 import 'package:isotopeit_b2b/view/signup/signup.dart';
 import 'package:isotopeit_b2b/view/splash/splash.dart';
+import 'package:isotopeit_b2b/widget/no_internet_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,21 +17,19 @@ void main() async {
   await TokenService().init();
 
   // Initialize ConnectivityService to track connectivity status
-    Get.put(ConnectivityService()); 
+  Get.put(ConnectivityService());
 
   runApp(const MyApp());
 }
 
-final ConnectivityService connectivityService = ConnectivityService(); // Global instance
-
+final ConnectivityService connectivityService =
+    ConnectivityService(); // Global instance
 final ThemeController themeController = Get.put(ThemeController());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  
-
- @override
+  @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
@@ -42,7 +41,25 @@ class MyApp extends StatelessWidget {
       ),
       themeMode:
           themeController.isDarkMode.value ? ThemeMode.dark : ThemeMode.light,
-      home: const Splash(),
+      home: FutureBuilder<bool>(
+        future: _checkInternetConnection(), // Check connection status
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+                child:
+                    CircularProgressIndicator()); // Loading indicator while checking
+          } else if (snapshot.hasData && snapshot.data!) {
+            return const Splash(); // Show splash if connected
+          } else {
+            return const NoInternetPage(); // Show no internet page if not connected
+          }
+        },
+      ),
     );
+  }
+
+  Future<bool> _checkInternetConnection() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    return connectivityResult != ConnectivityResult.none;
   }
 }

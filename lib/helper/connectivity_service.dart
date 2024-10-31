@@ -1,9 +1,12 @@
+ // connectivity_service.dart
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:isotopeit_b2b/view/splash/splash.dart';
+import 'package:isotopeit_b2b/widget/no_internet_page.dart';
+ 
 
 class ConnectivityService extends GetxService {
-  // Observable for connectivity status
   var isConnected = false.obs;
   final Connectivity _connectivity = Connectivity();
 
@@ -21,18 +24,24 @@ class ConnectivityService extends GetxService {
 
   void _updateConnectionStatus(ConnectivityResult result) {
     isConnected.value = result != ConnectivityResult.none;
-    // Show an alert if the connection status changes
     if (!isConnected.value) {
-      Get.snackbar(
-        "No Internet Connection",
-        "Please check your internet settings.",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Get.theme.snackBarTheme.backgroundColor ?? Colors.red,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 5),
-        
-        
-      );
+      // Navigate to the NoInternetPage if disconnected
+      Get.to(() => const NoInternetPage());
+    } else {
+      // Go back to the previous page if reconnected
+      if (Get.currentRoute == '/NoInternetPage') {
+        // Get.back();
+       Get.offAll(() => const Splash());
+      }
     }
   }
+
+  void checkConnection() async {
+    var connectivityResult = await _connectivity.checkConnectivity();
+    _updateConnectionStatus(connectivityResult);
+  }
 }
+
+
+
+   

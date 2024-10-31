@@ -17,21 +17,23 @@ class TagPage extends StatelessWidget {
           return Center(child: CircularProgressIndicator());
         }
 
-        if (tagController.errorMessage.isNotEmpty) {
+        else if (tagController.errorMessage.isNotEmpty) {
           return Center(child: 
           //Text(tagController.errorMessage.value));
           Text('No Tag found.'));
         }
 
-        return ListView.builder(
-          itemCount: tagController.tags.length,
-          itemBuilder: (context, index) {
-            final tag = tagController.tags[index];
-            return ListTile(
-              title: Text(tag.name),
-            );
-          },
-        );
+       else {
+         return ListView.builder(
+            itemCount: tagController.tags.length,
+            itemBuilder: (context, index) {
+              final tag = tagController.tags[index];
+              return ListTile(
+                title: Text(tag.name),
+              );
+            },
+          );
+       }
       }),
     );
   }
