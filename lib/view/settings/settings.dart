@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:isotopeit_b2b/helper/language_controller.dart';
 import 'package:isotopeit_b2b/helper/theme_controller.dart';
 import 'package:isotopeit_b2b/helper/token_service.dart';
+import 'package:isotopeit_b2b/utils/translations/language_data.dart';
 import 'package:isotopeit_b2b/view/login/login.dart';
-import 'package:isotopeit_b2b/view/login/login_controller.dart';
 import 'package:isotopeit_b2b/view/personal_info/personal_info.dart';
+import 'package:isotopeit_b2b/view/splash/splash.dart';
 
 final ThemeController themeController = Get.find();
 
@@ -31,7 +34,8 @@ class Settings extends StatelessWidget {
                   leading: const Icon(Icons.info),
                   trailing: const Icon(Icons.arrow_forward),
                   onTap: () {
-                    Get.to(const PersonalInfo(), transition: Transition.rightToLeftWithFade);
+                    Get.to(const PersonalInfo(),
+                        transition: Transition.rightToLeftWithFade);
                   },
                 ),
               ),
@@ -46,27 +50,38 @@ class Settings extends StatelessWidget {
               ),
               const SizedBox(height: 5.0),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                   const Text(
-                'Switch Day and Night Mode',
-                style: TextStyle(fontSize: 18),
-              ),
-              const SizedBox(height: 20),
-              Obx(
-                () => Switch(
-                  value: themeController.isDarkMode.value,
-                  onChanged: (value) {
-                    themeController.toggleTheme();
+              // Language Change Button
+              Card(
+                child: ListTile(
+                  title: const Text("Change Language"),
+                  leading: const Icon(Icons.language),
+                  trailing: const Icon(Icons.arrow_forward),
+                  onTap: () {
+                    _showLanguageDialog(context);
                   },
                 ),
               ),
+
+              const SizedBox(height: 5.0),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Switch Day and Night Mode',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  const SizedBox(height: 20),
+                  Obx(
+                    () => Switch(
+                      value: themeController.isDarkMode.value,
+                      onChanged: (value) {
+                        themeController.toggleTheme();
+                      },
+                    ),
+                  ),
                 ],
               ),
-
-             
-           
 
               Card(
                 child: ListTile(
@@ -97,6 +112,55 @@ class Settings extends StatelessWidget {
       ],
     )));
   }
+
+  void _showLanguageDialog(BuildContext context) {
+    final languageController = Get.find<LanguageController>();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Select Language"),
+          content: SizedBox(
+            width: double.minPositive,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: languages.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: SvgPicture.asset(
+                    languages[index].flag,
+                    width: 30,
+                    height: 30,
+                  ),
+                  title: Text(languages[index].name),
+                  onTap: () {
+                    Get.back(); // Close the dialog
+                    Get.dialog(
+                      const Center(
+                        child: const CircularProgressIndicator(),
+                      ),
+                      barrierDismissible: false,
+                    );
+
+                    // Change language and navigate to the splash screen after a delay
+                    Future.delayed(const Duration(seconds: 2), () {
+                      languageController.changeLanguage(languages[index].code);
+                      Get.back(); // Close the loading indicator
+                      Get.offAll(() => const Splash());
+                    });
+                  },
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+  
 }
 
 void _showDeleteDialog() {
@@ -134,12 +198,12 @@ void _showDeleteDialog() {
                     await Future.delayed(const Duration(seconds: 2));
 
                     // After deleting the token, navigate to the login page with a smooth transition
-                    
+
                     TokenService().clearToken();
 
                     Get.offAll(() => const Login(),
-                    transition: Transition.fadeIn,
-                    duration: const Duration(milliseconds: 500));
+                        transition: Transition.fadeIn,
+                        duration: const Duration(milliseconds: 500));
 
                     // Optionally show success message
                     Get.snackbar(

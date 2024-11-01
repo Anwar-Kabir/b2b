@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/utils/image.dart';
@@ -29,27 +30,46 @@ class LoginState extends State<Login> {
                 minHeight: constraints.maxHeight,
               ),
               child: IntrinsicHeight(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20.0,
-                    vertical: MediaQuery.of(context).viewInsets.bottom,
+                child: 
+                Padding(
+                  padding: EdgeInsets.only(
+                   left: 16.w, right: 16.w, top: 16.w
                   ),
                   child: Form(
                     key: _loginController.formKey,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         const SizedBox(height: 150),
                         Image.asset(
-                          AppImages.splashLogo,
-                          height: 80,
-                          width: MediaQuery.of(context).size.width - 50,
+                          // AppImages.splashLogo,
+                          // height: 80,
+                          // width: MediaQuery.of(context).size.width - 50,
+                           'assets/logos/logo.png',
+                          width: 150.w,
                         ),
-                        const SizedBox(height: 80),
+                        SizedBox(height: 15.h),
+                        Text(
+                          "Welcome Back!",
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.bold,
+                            color: AppColor.pykariTitle,
+                          ),
+                        ),
+                        SizedBox(height: 2.h),
+                        Text(
+                          "Sign in to continue",
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            color: AppColor.pykariSubTitle,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
                         // Email field
                         CustomTextField(
                           prefixIcon: Icons.email,
-                          hintText: 'anwar@gmail.com',
+                          hintText: 'Enter Your Email',
                           controller: _loginController.appEmailValidator,
                           keyboardType: TextInputType.emailAddress,
                           validator: (value) => _loginController.appValidator
@@ -61,7 +81,7 @@ class LoginState extends State<Login> {
                         Obx(() {
                           return CustomTextField(
                             prefixIcon: Icons.lock,
-                            hintText: '**Ban71',
+                            hintText: 'Password',
                             maxLines: 1,
                             controller: _loginController.appPasswordValidator,
                             isObscure: _loginController.obscurePassword.value,

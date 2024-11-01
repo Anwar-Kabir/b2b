@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:isotopeit_b2b/helper/language_controller.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/view/attributes/attribute_list/attribute.dart';
 import 'package:isotopeit_b2b/view/auction/auction.dart';
@@ -30,10 +32,10 @@ class BottomNavState extends State<BottomNav> {
 
   // Screens for each tab
   static final List<Widget> _pages = <Widget>[
-       HomePage(),
+    HomePage(),
     OrderListScreen(),
-      Wallet(),
-      Inventory(),
+    Wallet(),
+    Inventory(),
     const Settings(),
   ];
 
@@ -60,6 +62,8 @@ class BottomNavState extends State<BottomNav> {
     loginController.loadUserInfo();
   }
 
+   final LanguageController languageController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     //Load user info if not already loaded
@@ -67,10 +71,11 @@ class BottomNavState extends State<BottomNav> {
     return Scaffold(
       appBar: _titles[_selectedIndex] != null
           ? AppBar(
-              title: Text(
-                _titles[_selectedIndex]!,
-                style: const TextStyle(color: Colors.white),
-              ),
+              // title: Text(
+              //   _titles[_selectedIndex]!,
+              //   style: const TextStyle(color: Colors.white),
+              // ),
+              title: Image.asset('assets/logos/logo.png', width: 60.w),
               backgroundColor: AppColor.primaryColor.withOpacity(0.7),
               iconTheme: const IconThemeData(
                 color: Colors.white,
@@ -119,14 +124,14 @@ class BottomNavState extends State<BottomNav> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.home),
-                  title: const Text('Home'),
+                  title:   Text('home'.tr),
                   onTap: () {
                     Get.back();
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.account_circle),
-                  title: const Text('Attribute'),
+                  title:  Text('attribute'.tr),
                   onTap: () {
                     Get.to(
                       AttributeListPage(),
@@ -136,17 +141,17 @@ class BottomNavState extends State<BottomNav> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.settings),
-                  title: const Text('Inventory'),
+                  title: Text('inventory'.tr),
                   onTap: () {
                     Get.to(
-                        Inventory(),
+                      Inventory(),
                       transition: Transition.rightToLeftWithFade,
                     );
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.shop),
-                  title: const Text('Product'),
+                  title:   Text('product'.tr),
                   onTap: () {
                     Get.to(ProductListCard(),
                         transition: Transition.rightToLeftWithFade);
@@ -154,7 +159,7 @@ class BottomNavState extends State<BottomNav> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.category),
-                  title: const Text('Category and Tag'),
+                  title: Text('categorytag'.tr),
                   onTap: () {
                     Get.to(CategoryTagPage(),
                         transition: Transition.rightToLeftWithFade);
@@ -162,7 +167,7 @@ class BottomNavState extends State<BottomNav> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.accessible),
-                  title: const Text('Order'),
+                  title: Text('order'.tr),
                   onTap: () {
                     Get.to(OrderListScreen(),
                         transition: Transition.rightToLeftWithFade);
@@ -170,15 +175,15 @@ class BottomNavState extends State<BottomNav> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.accessible),
-                  title: const Text('Courier'),
+                  title: Text('courier'.tr),
                   onTap: () {
-                    Get.to(  Courier(),
+                    Get.to(Courier(),
                         transition: Transition.rightToLeftWithFade);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.send),
-                  title: const Text('Sub-order and Courier'),
+                  title: Text('suborder'.tr),
                   onTap: () {
                     Navigator.of(context).pop(); // Close drawer
                     // Add logout functionality here
@@ -186,7 +191,7 @@ class BottomNavState extends State<BottomNav> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.image),
-                  title: const Text('Shop Banner'),
+                  title: Text('shobbanner'.tr),
                   onTap: () {
                     Get.to(BannerManager(),
                         transition: Transition.rightToLeftWithFade);
@@ -194,15 +199,15 @@ class BottomNavState extends State<BottomNav> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.currency_exchange),
-                  title: const Text('Wallet'),
+                  title: Text('wallet'.tr),
                   onTap: () {
-                    Get.to(  Wallet(),
+                    Get.to(Wallet(),
                         transition: Transition.rightToLeftWithFade);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.report),
-                  title: const Text('Auction'),
+                  title: Text('auction'.tr),
                   onTap: () {
                     Get.to(const AuctionPage(),
                         transition: Transition.rightToLeftWithFade);
@@ -210,7 +215,7 @@ class BottomNavState extends State<BottomNav> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.shop_rounded),
-                  title: const Text('Shop Settings'),
+                  title:  Text('shobsettings'.tr),
                   onTap: () {
                     Get.to(const ShopSettingsPage(),
                         transition: Transition.rightToLeftWithFade);
@@ -218,15 +223,15 @@ class BottomNavState extends State<BottomNav> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.note),
-                  title: const Text('Order Reports'),
+                  title: Text('orderreport'.tr),
                   onTap: () {
-                    Get.to(  SupplierOrderScreen(),
+                    Get.to(SupplierOrderScreen(),
                         transition: Transition.rightToLeftWithFade);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.settings),
-                  title: const Text('App Settings'),
+                  title:   Text('appsettings'.tr),
                   onTap: () {
                     Navigator.of(context).pop(); // Close drawer
                     // Add logout functionality here
@@ -240,26 +245,28 @@ class BottomNavState extends State<BottomNav> {
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed, // to show all tabs
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Home',
+            
+
+            label: 'home'.tr,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.gavel),
-            label: 'Order',
+            label: 'order'.tr,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_balance_wallet),
-            label: 'Wallet',
+            label: 'wallet'.tr,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_bag),
-            label: 'Inventory',
+            label: 'inventory'.tr,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'Profile',
+            label: 'profile'.tr,
           ),
         ],
         currentIndex: _selectedIndex,

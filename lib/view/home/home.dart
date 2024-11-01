@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:isotopeit_b2b/helper/language_controller.dart';
 import 'package:isotopeit_b2b/view/home/home_controller.dart';
 
 class HomePage extends StatelessWidget {
@@ -9,10 +10,13 @@ class HomePage extends StatelessWidget {
 
   final WalletController walletController = Get.put(WalletController());
 
+   final LanguageController languageController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     print("balance");
     print(walletController.wallet.value.balance);
+      
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(

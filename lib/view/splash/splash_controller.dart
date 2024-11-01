@@ -5,33 +5,34 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:isotopeit_b2b/view/login/login.dart';
 
 class SplashController extends GetxController {
-  var textOpacity = 0.0.obs;
-  var imageOpacity = 0.0.obs;
-  var indicatorOpacity = 0.0.obs;
+  // var textOpacity = 0.0.obs;
+  // var imageOpacity = 0.0.obs;
+  // var indicatorOpacity = 0.0.obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
     splashToLoginOrHome();
+    //await checkToken();
   }
 
   void splashToLoginOrHome() async {
-    await Future.delayed(const Duration(milliseconds: 500), () {
-      textOpacity.value = 1.0;
-    });
+    // await Future.delayed(const Duration(milliseconds: 500), () {
+    //   textOpacity.value = 1.0;
+    // });
 
-    // Animate the image opacity
-    await Future.delayed(const Duration(milliseconds: 500), () {
-      imageOpacity.value = 1.0;
-    });
+    // //Animate the image opacity
+    // await Future.delayed(const Duration(milliseconds: 500), () {
+    //   imageOpacity.value = 1.0;
+    // });
 
-    // Animate the circular progress indicator
-    await Future.delayed(const Duration(milliseconds: 500), () {
-      indicatorOpacity.value = 1.0;
-    });
+    // //Animate the circular progress indicator
+    // await Future.delayed(const Duration(milliseconds: 500), () {
+    //   indicatorOpacity.value = 1.0;
+    // });
 
-    // Check for token and navigate accordingly
-     await checkToken();
+    //Check for token and navigate accordingly
+    await checkToken();
     //Get.to(OrderDeatils());
   }
 
