@@ -56,11 +56,34 @@ class MyApp extends StatelessWidget {
           translations: AppTranslations(),
           locale: languageController.locale.value,
           fallbackLocale: const Locale('en', 'US'),
-          darkTheme: ThemeData.dark(),
-          theme: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.fromSeed(seedColor: AppColor.primaryColor),
-            useMaterial3: true,
-          ),
+          //darkTheme: ThemeData.dark(),
+          darkTheme: ThemeData.dark().copyWith(
+            brightness: Brightness.dark,
+             // colorSchemeSeed: const Color.fromRGBO(86, 80, 14, 171),
+                  appBarTheme: const AppBarTheme(
+                    color: Colors.black, // Background color in dark mode
+                    titleTextStyle:
+                        TextStyle(color: Colors.white, fontSize: 20),
+                    iconTheme: IconThemeData(color: Colors.white), // Icon color
+                  ),
+                ),
+          theme: 
+          // ThemeData.light().copyWith(
+          //   colorScheme: ColorScheme.fromSeed(seedColor: AppColor.primaryColor),
+          //   useMaterial3: true,
+          // ),
+          ThemeData(
+                  colorScheme:
+                      ColorScheme.fromSeed(seedColor: AppColor.primaryColor),
+                  useMaterial3: true,
+                  appBarTheme:   AppBarTheme(
+                    //color: AppColor.primaryColor.withOpacity(0.8), // Background color of AppBar
+                    backgroundColor: AppColor.primaryColor.withOpacity(0.8), 
+                    titleTextStyle:
+                        TextStyle(color: Colors.white, fontSize: 20),
+                    iconTheme: IconThemeData(color: Colors.white), // Icon color
+                  ),
+                ),
           themeMode: themeController.isDarkMode.value
               ? ThemeMode.dark
               : ThemeMode.light,
@@ -89,3 +112,7 @@ class MyApp extends StatelessWidget {
     return connectivityResult != ConnectivityResult.none;
   }
 }
+
+//initialRoute: RoutesName.splashScreen
+//onGenerateRoute: Routes.generateRoute
+//Navigator.pushnamed(context, Routesname.splashScreen);

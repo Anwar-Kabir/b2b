@@ -27,6 +27,9 @@ dependencies:
   flutter_screenutil: ^5.9.3
   animated_text_kit: ^4.2.2
   google_fonts: ^6.2.1
+  url_launcher: ^6.3.1
+  font_awesome_flutter: ^10.4.0
+  mailer: ^6.2.0
 
 dev_dependencies:
   flutter_test:

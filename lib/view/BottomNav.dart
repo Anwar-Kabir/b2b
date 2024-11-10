@@ -7,6 +7,7 @@ import 'package:isotopeit_b2b/view/attributes/attribute_list/attribute.dart';
 import 'package:isotopeit_b2b/view/auction/auction.dart';
 import 'package:isotopeit_b2b/view/banner/banner/banner.dart';
 import 'package:isotopeit_b2b/view/category&tag/category_and_tag.dart';
+import 'package:isotopeit_b2b/view/contactus/contact_us.dart';
 import 'package:isotopeit_b2b/view/courier/courier_list/courier.dart';
 import 'package:isotopeit_b2b/view/home/home.dart';
 import 'package:isotopeit_b2b/view/inventory/inventrory/inventory.dart';
@@ -235,6 +236,14 @@ class BottomNavState extends State<BottomNav> {
                   onTap: () {
                     Navigator.of(context).pop(); // Close drawer
                     // Add logout functionality here
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.settings),
+                  title: const Text('Contact Us'),
+                  onTap: () {
+                    Get.to(ContactUsPage(),
+                        transition: Transition.rightToLeftWithFade);
                   },
                 ),
               ],

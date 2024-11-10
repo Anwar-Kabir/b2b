@@ -38,6 +38,18 @@ class AppValidation {
     return null;
   }
 
+ 
+
+  String? validateText(String? value, String fieldLabel) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter $fieldLabel';
+    }
+    if (value.length < 3) {
+      return '$fieldLabel must be at least 3 characters long';
+    }
+    return null;
+  }
+
   // Password validation
   String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {

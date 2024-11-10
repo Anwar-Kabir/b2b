@@ -17,9 +17,9 @@ const Map<String, String> enUS = {
   'categorytag' :'Category and Tag',
   'courier': 'courier',
   'suborder': "suborder",
-  'shobbanner':'shobbanner',
+  'shobbanner':'Banner',
   'auction': 'auction',
-  'shobsettings' : 'shobsetings',
+  'shobsettings' : 'shop settings',
   'orderreport' : 'order Report',
   'appsettings' : 'App Settings' 
 
