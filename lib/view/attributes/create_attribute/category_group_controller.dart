@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:isotopeit_b2b/utils/url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CategoryGroupController extends GetxController {
@@ -13,7 +14,9 @@ class CategoryGroupController extends GetxController {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
 
-    const url = 'https://e-commerce.isotopeit.com/api/select/category-groups';
+    //const url = 'https://e-commerce.isotopeit.com/api/select/category-groups';
+    const url = '${AppURL.baseURL}api/select/category-groups';
+
 
     try {
       isLoading(true);

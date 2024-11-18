@@ -134,91 +134,91 @@ class _AddBannerState extends State<AddBanner> {
                     ),
                   ),
                 const SizedBox(height: 20),
-                const LabelWithAsterisk(labelText: "Title", isRequired: true),
+                const LabelWithAsterisk(labelText: "Title", ),
                 CustomTextField(
                   prefixIcon: Icons.person,
                   hintText: 'Title',
                   controller: _controller.titleController,
                   keyboardType: TextInputType.name,
-                  validator: (value) =>
-                      AppValidation().validateText(value, 'Title'),
+                  // validator: (value) =>
+                  //     AppValidation().validateText(value, 'Title'),
                 ),
                 const SizedBox(height: 20),
                 const LabelWithAsterisk(
-                    labelText: "Description", isRequired: true),
+                    labelText: "Description", ),
                 CustomTextField(
                   prefixIcon: Icons.description,
                   hintText: 'Description',
                   controller: _controller.descriptionController,
                   keyboardType: TextInputType.text,
-                  validator: (value) =>
-                      AppValidation().validateText(value, 'Description'),
+                  // validator: (value) =>
+                  //     AppValidation().validateText(value, 'Description'),
                 ),
                 const SizedBox(height: 20),
                 const SizedBox(height: 20),
                 const LabelWithAsterisk(
-                    labelText: "Redirect Link", isRequired: true),
+                    labelText: "Redirect Link", ),
                 CustomTextField(
                   prefixIcon: Icons.person,
                   hintText: 'Redirect Link',
                   controller: _controller.linkController,
                   keyboardType: TextInputType.name,
-                  validator: (value) => AppValidation()
-                      .validateText(value, 'Redirect Link'), // Pass field label
+                  // validator: (value) => AppValidation()
+                  //     .validateText(value, 'Redirect Link'), // Pass field label
                 ),
                 const SizedBox(height: 20),
-                const LabelWithAsterisk(labelText: "Columns", isRequired: true),
+                const LabelWithAsterisk(labelText: "Columns", ),
                 CustomTextField(
                   prefixIcon: Icons.person,
                   hintText: '4',
                   controller: _controller.columnsController,
                   keyboardType: TextInputType.name,
-                  validator: (value) => AppValidation()
-                      .validateText(value, 'Colum'), // Pass field label
+                  // validator: (value) => AppValidation()
+                  //     .validateText(value, 'Colum'), // Pass field label
                 ),
                 const SizedBox(height: 20),
                 const LabelWithAsterisk(
-                    labelText: "Zoom effect", isRequired: true),
+                    labelText: "Zoom effect", ),
                 CustomTextField(
                   prefixIcon: Icons.zoom_in,
                   hintText: 'no',
                   controller: _controller.effectController,
                   keyboardType: TextInputType.name,
-                  validator: (value) =>
-                      AppValidation().validateText(value, 'Zoom effect'),
+                  // validator: (value) =>
+                  //     AppValidation().validateText(value, 'Zoom effect'),
                 ),
                 const SizedBox(height: 20),
                 const LabelWithAsterisk(
-                    labelText: "Link Label", isRequired: true),
+                    labelText: "Link Label", ),
                 CustomTextField(
                   prefixIcon: Icons.label,
                   hintText: 'Shop Now',
                   controller: _controller.linkLabelController,
                   keyboardType: TextInputType.name,
-                  validator: (value) =>
-                      AppValidation().validateText(value, 'Link Label'),
+                  // validator: (value) =>
+                  //     AppValidation().validateText(value, 'Link Label'),
                 ),
                 const SizedBox(height: 20),
                 const LabelWithAsterisk(
-                    labelText: "Serial Number", isRequired: true),
+                    labelText: "Serial Number", ),
                 CustomTextField(
                   prefixIcon: Icons.format_list_numbered,
                   hintText: 'Serial Number',
                   controller: _controller.orderController,
                   keyboardType: TextInputType.number,
-                  validator: (value) =>
-                      AppValidation().validateText(value, 'Serial Number'),
+                  // validator: (value) =>
+                  //     AppValidation().validateText(value, 'Serial Number'),
                 ),
                 const SizedBox(height: 20),
                 const LabelWithAsterisk(
-                    labelText: "Background", isRequired: true),
+                    labelText: "Background", ),
                 CustomTextField(
                   prefixIcon: Icons.color_lens,
                   hintText: '#ab7553',
                   controller: _controller.bgColorController,
                   keyboardType: TextInputType.text,
-                  validator: (value) =>
-                      AppValidation().validateText(value, 'Background'),
+                  // validator: (value) =>
+                  //     AppValidation().validateText(value, 'Background'),
                 ),
                 const SizedBox(height: 20),
               ],

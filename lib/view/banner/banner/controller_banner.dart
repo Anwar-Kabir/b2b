@@ -6,14 +6,12 @@ import 'package:isotopeit_b2b/view/banner/banner/model_banner.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class BannerController extends GetxController {
   var banners = <BannerData>[].obs;
   var isLoading = true.obs;
 
   final bannerController = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
-
 
   @override
   void onInit() {
@@ -50,7 +48,7 @@ class BannerController extends GetxController {
             snackPosition: SnackPosition.BOTTOM);
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch banners',
+      Get.snackbar('Error', ' $e Failed to fetch banners',
           snackPosition: SnackPosition.BOTTOM);
     } finally {
       isLoading(false);
@@ -62,7 +60,6 @@ class BannerController extends GetxController {
 
      final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    
     final token = prefs.getString('token') ?? '';
 
     try {
@@ -78,7 +75,7 @@ class BannerController extends GetxController {
       if (response.statusCode == 200) {
         // Remove the banner from the local list
         banners.removeWhere((banner) => banner.id == id);
-         
+
         Get.snackbar(
           "Success",
           'Banner deleted successfully',
@@ -88,13 +85,13 @@ class BannerController extends GetxController {
           margin: const EdgeInsets.all(10),
           borderRadius: 8,
           duration: const Duration(seconds: 3),
-        );    
+        );
       } else {
         Get.snackbar('Error', 'Failed to delete banner',
             snackPosition: SnackPosition.BOTTOM,
             backgroundColor: Colors.red,
           colorText: Colors.white,
-          
+
           margin: const EdgeInsets.all(10),
           borderRadius: 8,
           duration: const Duration(seconds: 3),
@@ -105,7 +102,7 @@ class BannerController extends GetxController {
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
         colorText: Colors.white,
-        
+
         margin: const EdgeInsets.all(10),
         borderRadius: 8,
         duration: const Duration(seconds: 3),
@@ -113,3 +110,18 @@ class BannerController extends GetxController {
     }
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

@@ -3,6 +3,7 @@
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:isotopeit_b2b/helper/token_service.dart';
+import 'package:isotopeit_b2b/utils/url.dart';
 import 'dart:convert';
 import 'package:isotopeit_b2b/view/inventory/inventory_details/inventory_product_details_model.dart';
 
@@ -16,8 +17,9 @@ class InventoryDetailController extends GetxController {
   Future<void> fetchInventoryDetail(int id) async {
     isLoading.value = true;
     hasError.value = false;
-    final url = 'https://e-commerce.isotopeit.com/api/inventory/$id';
-
+    // final url = 'https://e-commerce.isotopeit.com/api/inventory/$id';
+    final url = '${AppURL.baseURL}api/inventory/$id';
+    
     try {
       final response = await http.get(
         Uri.parse(url),
@@ -47,8 +49,9 @@ class InventoryDetailController extends GetxController {
     try {
       isLoading(true);
       final response = await http.delete(
-        Uri.parse(
-            'https://e-commerce.isotopeit.com/api/inventory/$inventoryId'),
+        // Uri.parse('https://e-commerce.isotopeit.com/api/inventory/$inventoryId'),
+        Uri.parse("${AppURL.baseURL}api/inventory/$inventoryId"),
+
         headers: {
           'Authorization': 'Bearer ${_tokenService.token}',
           'Accept': 'application/json',

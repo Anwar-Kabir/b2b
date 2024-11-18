@@ -19,7 +19,7 @@ class CourierDetailController extends GetxController {
 
     try {
       final response = await http.get(
-          Uri.parse('${AppURL.baseURLAPI}courier-show/$id'),
+          Uri.parse('${AppURL.baseURL}courier-show/$id'),
           headers: {
           'Authorization': 'Bearer $token',  
           'Accept': 'application/json',

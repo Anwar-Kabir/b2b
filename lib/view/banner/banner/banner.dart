@@ -5,7 +5,7 @@ import 'package:isotopeit_b2b/utils/color.dart';
 
 import 'package:isotopeit_b2b/view/banner/add_banner/add_banner.dart';
 import 'package:isotopeit_b2b/view/banner/banner/controller_banner.dart';
- 
+import 'package:isotopeit_b2b/view/banner/update_banner/update_banner.dart';
 
 class BannerManager extends StatelessWidget {
   final BannerController bannerController = Get.put(BannerController());
@@ -23,9 +23,9 @@ class BannerManager extends StatelessWidget {
           color: Colors.white,
         ),
         actions: [
-             TextButton.icon(
+          TextButton.icon(
             onPressed: () {
-                Get.to(AddBanner(), transition: Transition.rightToLeftWithFade);
+              Get.to(AddBanner(), transition: Transition.rightToLeftWithFade);
             },
             label: const Text(
               "Add Banner",
@@ -59,7 +59,7 @@ class BannerManager extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: SizedBox(
-                    height: 145,
+                    height: 132,
                     child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
@@ -87,7 +87,7 @@ class BannerManager extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    banner.title,
+                                    "${banner.title}",
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18,
@@ -95,24 +95,44 @@ class BannerManager extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 6),
                                   Text(
-                                    'Columns: ${banner.columns}, Serial Number: ${banner.serialNumber}',
+                                    'Columns: ${banner.columns}',
                                     style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500),
                                   ),
                                   Text(
-                                    'Link label: ${banner.linkLabel ?? 'null'}, Link: ${banner.link ?? 'null'}',
+                                    'Serial Number: ${banner.serialNumber}',
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500),
                                   ),
+                                  Text(
+                                    'Link label: ${banner.linkLabel ?? 'null'}',
+                                  ),
+                                  // Text(
+                                  //   'Link: ${banner.link ?? 'null'}',
+                                  // ),
                                 ],
                               ),
                             ),
                             Row(
                               children: <Widget>[
+                                
                                 CircleAvatar(
                                   backgroundColor: Colors.blue.withOpacity(0.2),
                                   child: IconButton(
                                     onPressed: () {
                                       // Implement edit functionality here
+                                      showModalBottomSheet(
+                                        context: context,
+                                        isScrollControlled: true,
+                                        builder: (BuildContext context) {
+                                          return EditBannerBottomSheet(
+                                            banner: banner
+                                                .toBannerModel(), // Use banner instead of bannerData
+                                          );
+                                        },
+                                      );
                                     },
                                     icon: const Icon(Icons.edit,
                                         color: Colors.blue),

@@ -210,7 +210,7 @@ class BottomNavState extends State<BottomNav> {
                   leading: const Icon(Icons.report),
                   title: Text('auction'.tr),
                   onTap: () {
-                    Get.to(const AuctionPage(),
+                    Get.to(  AuctionPage(),
                         transition: Transition.rightToLeftWithFade);
                   },
                 ),

@@ -493,7 +493,9 @@ class SignUpController extends GetxController {
 
   Future<void> registerSupplier(
       SupplierRegistrationModel registrationData) async {
-    const apiUrl = "https://e-commerce.isotopeit.com/api/suppliers-register";
+    // const apiUrl = "https://e-commerce.isotopeit.com/api/suppliers-register";
+    const apiUrl = "${AppURL.baseURL}api/suppliers-register";
+
     isLoading.value = true;
     errorMessage.value = '';
 

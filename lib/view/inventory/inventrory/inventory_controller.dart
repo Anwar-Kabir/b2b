@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:isotopeit_b2b/helper/token_service.dart';
+import 'package:isotopeit_b2b/utils/url.dart';
 import 'package:isotopeit_b2b/view/inventory/inventrory/inventory_model.dart'; // Adjust the path to your InventoryActiveModel
 
 class InventoryActiveController extends GetxController {
@@ -27,28 +28,33 @@ class InventoryActiveController extends GetxController {
 
   Future<void> fetchActiveProducts() async {
     await _fetchProducts(
-      url: 'https://e-commerce.isotopeit.com/api/inventories/active',
+      // url: 'https://e-commerce.isotopeit.com/api/inventories/active',
+       url: '${AppURL.baseURL}api/inventories/active',
+
       productList: activeProducts,
     );
   }
 
   Future<void> fetchInactiveProducts() async {
     await _fetchProducts(
-      url: 'https://e-commerce.isotopeit.com/api/inventories/inactive',
+      //url: 'https://e-commerce.isotopeit.com/api/inventories/inactive',
+      url: '${AppURL.baseURL}api/inventories/inactive',
       productList: inactiveProducts,
     );
   }
 
   Future<void> fetchInStockProducts() async {
     await _fetchProducts(
-      url: 'https://e-commerce.isotopeit.com/api/inventories/inStock',
+      // url: 'https://e-commerce.isotopeit.com/api/inventories/inStock',
+      url: '${AppURL.baseURL}api/inventories/inStock',
       productList: inStockProducts,
     );
   }
 
   Future<void> fetchOutOfStockProducts() async {
     await _fetchProducts(
-      url: 'https://e-commerce.isotopeit.com/api/inventories/outOfStock',
+      // url: 'https://e-commerce.isotopeit.com/api/inventories/outOfStock',
+      url: '${AppURL.baseURL}api/inventories/outOfStock',
       productList: outOfStockProducts,
     );
   }

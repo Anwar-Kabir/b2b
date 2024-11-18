@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
-import 'package:isotopeit_b2b/view/auction/add_auction.dart';
-import 'package:isotopeit_b2b/view/auction/auction_details.dart';
+import 'package:isotopeit_b2b/view/auction/auction_live/auction_live_controller.dart';
+import 'package:isotopeit_b2b/view/auction/auction_live/auction_live_model.dart';
+ 
 
-class AuctionPage extends StatelessWidget {
-  const AuctionPage({super.key});
+
+ class AuctionPage extends StatelessWidget {
+  AuctionPage({Key? key}) : super(key: key);
+
+  final AuctionController auctionController = Get.put(AuctionController());
 
   @override
   Widget build(BuildContext context) {
@@ -13,39 +17,25 @@ class AuctionPage extends StatelessWidget {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Auction',
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: AppColor.primaryColor.withOpacity(0.7),
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
+          title: const Text('Auction', style: TextStyle(color: Colors.white)),
+           backgroundColor: AppColor.primaryColor.withOpacity(0.7),
+          iconTheme: const IconThemeData(color: Colors.white),
           actions: [
             TextButton.icon(
               onPressed: () {
-                Get.to(const AddAuction(),
-                    transition: Transition.rightToLeftWithFade);
+                Get.toNamed('/add-auction'); // Navigate to Add Auction Page
               },
-              label: const Text(
-                "Add Auction",
-                style: TextStyle(color: Colors.white),
-              ),
-              icon: const Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
+              label: const Text("Add Auction",
+                  style: TextStyle(color: Colors.white)),
+              icon: const Icon(Icons.add, color: Colors.white),
             ),
           ],
           bottom: const TabBar(
-            labelColor: Colors.white, // Color for selected tab
-            unselectedLabelColor: Colors.grey, // Color for unselected tabs
-            indicatorColor:
-                AppColor.primaryColor, // Color of the indicator below the tab
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.grey,
+            indicatorColor: Colors.white,
             tabs: [
-              Tab(
-                text: "Upcoming",
-              ),
+              Tab(text: "Upcoming"),
               Tab(text: "Live"),
               Tab(text: "Closed"),
             ],
@@ -53,9 +43,14 @@ class AuctionPage extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            AuctionList(auctionData: upcomingAuctions),
-            AuctionList(auctionData: liveAuctions),
-            AuctionList(auctionData: closedAuctions),
+            const AuctionList(auctionData: []), // Replace with actual data
+            Obx(() {
+              if (auctionController.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return AuctionList(auctionData: auctionController.liveAuctions);
+            }),
+            const AuctionList(auctionData: []), // Replace with actual data
           ],
         ),
       ),
@@ -63,40 +58,37 @@ class AuctionPage extends StatelessWidget {
   }
 }
 
+// Auction List Widget
 class AuctionList extends StatelessWidget {
-  final List<Map<String, dynamic>> auctionData;
+  final List<Auction> auctionData;
 
-  const AuctionList({super.key, required this.auctionData});
+  const AuctionList({Key? key, required this.auctionData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if (auctionData.isEmpty) {
+      return const Center(child: Text('No auctions available.'));
+    }
     return ListView.builder(
       itemCount: auctionData.length,
       itemBuilder: (context, index) {
         final auction = auctionData[index];
-        return GestureDetector(
-          onTap: () {
-            Get.to(const AuctionDetails(),
-                transition: Transition.rightToLeftWithFade);
-          },
-          child: Card(
-            elevation: 4,
-            margin: const EdgeInsets.all(8),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Auction No: ${auction['auctionNo']}",
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 8),
-                  Text("SKU: ${auction['sku']}"),
-                  Text("Product Name: ${auction['productName']}"),
-                  Text("Base Price: \$${auction['basePrice']}"),
-                  Text("Quantity: ${auction['quantity']}"),
-                  Text("Auction Date: ${auction['auctionDate']}"),
-                ],
-              ),
+        return Card(
+          elevation: 4,
+          margin: const EdgeInsets.all(8),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Auction No: ${auction.auctionNumber}",
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+                Text("UUID: ${auction.uuid}"),
+                Text("Auction Date: ${auction.auctionDate}"),
+                Text("Pre-deposit: ${auction.preDepositePercentage}%"),
+                Text("Highest Bid: ${auction.highestBid}"),
+              ],
             ),
           ),
         );
@@ -104,71 +96,3 @@ class AuctionList extends StatelessWidget {
     );
   }
 }
-
-// Sample Data for Testing
-final List<Map<String, dynamic>> upcomingAuctions = [
-  {
-    'auctionNo': 'AUC00000001',
-    'sku': 'Facilis nisi culpa q',
-    'productName': 'Stripe Floor Mat',
-    'basePrice': 511.00,
-    'quantity': 413,
-    'auctionDate': '2024-10-17 20:33:00'
-  },
-  {
-    'auctionNo': 'AUC00000002',
-    'sku': 'Quis voluptates dolo',
-    'productName': 'NG Opal Plate 10.75 Inch',
-    'basePrice': 518.00,
-    'quantity': 118,
-    'auctionDate': '2024-10-17 10:34:00'
-  },
-  {
-    'auctionNo': 'AUC00000003',
-    'sku': 'werwqerqwe',
-    'productName': 'Watermelon',
-    'basePrice': 10000.00,
-    'quantity': 100,
-    'auctionDate': '2024-10-15 11:32:00'
-  },
-];
-
-final List<Map<String, dynamic>> liveAuctions = [
-  // Live auction data
-  {
-    'auctionNo': 'AUC00000001 live',
-    'sku': 'Facilis nisi culpa q',
-    'productName': 'Stripe Floor Mat',
-    'basePrice': 511.00,
-    'quantity': 413,
-    'auctionDate': '2024-10-17 20:33:00'
-  },
-  {
-    'auctionNo': 'AUC00000002',
-    'sku': 'Quis voluptates dolo',
-    'productName': 'NG Opal Plate 10.75 Inch',
-    'basePrice': 518.00,
-    'quantity': 118,
-    'auctionDate': '2024-10-17 10:34:00'
-  },
-];
-
-final List<Map<String, dynamic>> closedAuctions = [
-  // Closed auction data
-  {
-    'auctionNo': 'AUC00000001 closed',
-    'sku': 'Facilis nisi culpa q',
-    'productName': 'Stripe Floor Mat',
-    'basePrice': 511.00,
-    'quantity': 413,
-    'auctionDate': '2024-10-17 20:33:00'
-  },
-  {
-    'auctionNo': 'AUC00000002',
-    'sku': 'Quis voluptates dolo',
-    'productName': 'NG Opal Plate 10.75 Inch',
-    'basePrice': 518.00,
-    'quantity': 118,
-    'auctionDate': '2024-10-17 10:34:00'
-  },
-];

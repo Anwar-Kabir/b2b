@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:isotopeit_b2b/utils/url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -33,7 +34,9 @@ class CreateAttributeController extends GetxController {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
 
-    const url = 'https://e-commerce.isotopeit.com/api/attribute';
+    // const url = 'https://e-commerce.isotopeit.com/api/attribute';
+    const url = '${AppURL.baseURL}api/attribute';
+
 
     try {
       isLoading(true);

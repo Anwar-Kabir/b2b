@@ -8,10 +8,6 @@ import 'package:isotopeit_b2b/view/order_report/order_report_model.dart';
 import 'package:isotopeit_b2b/helper/token_service.dart'; // Import TokenService
 
 
- 
-
- 
-
 // class SupplierOrderController extends GetxController {
 //   var isLoading = false.obs;
 //   var orders = <SupplierOrder>[].obs;
@@ -81,7 +77,7 @@ class SupplierOrderController extends GetxController {
 
     try {
       final uri = Uri.parse(
-          'https://e-commerce.isotopeit.com/api/time-range-wise-suppliyer-order-report')
+          'https://beta.pykari.com/api/time-range-wise-suppliyer-order-report')           //'https://e-commerce.isotopeit.com/api/time-range-wise-suppliyer-order-report')
           .replace(queryParameters: {'start_date': startDate, 'end_date': endDate});
 
       print("Request URL: ${uri.toString()}"); // Debugging: Print request URL

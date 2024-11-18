@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:isotopeit_b2b/helper/token_service.dart';
+import 'package:isotopeit_b2b/utils/url.dart';
 import 'dart:convert';
 
 import 'package:isotopeit_b2b/view/wallet/wallet_index/wallet_index_model.dart';
@@ -20,9 +21,11 @@ class WalletIndexController extends GetxController {
   Future<void> fetchWithdrawRequests() async {
     isLoading(true);
     try {
-      final response = await http.get(Uri.parse(
-        
-          "https://e-commerce.isotopeit.com/api/wallet-withdraw-requests-index"),
+      // final response = await http.get(Uri.parse("https://e-commerce.isotopeit.com/api/wallet-withdraw-requests-index"),
+      final response = await http.get(
+        Uri.parse(
+            "${AppURL.baseURL}api/wallet-withdraw-requests-index"),
+
           headers: {
           'Authorization': 'Bearer ${_tokenService.token}',
           'Accept': 'application/json',

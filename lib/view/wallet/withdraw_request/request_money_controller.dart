@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:isotopeit_b2b/utils/url.dart';
 import 'package:isotopeit_b2b/view/wallet/withdraw_request/request_money_model.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // For using the Snackbar
 
@@ -11,7 +12,9 @@ class WalletWithdrawController extends GetxController {
   Future<void> requestWithdraw(int amount) async {
     isLoading(true);
 
-    const url = 'https://e-commerce.isotopeit.com/api/wallet-withdraw-requests';
+    // const url = 'https://e-commerce.isotopeit.com/api/wallet-withdraw-requests';
+    const url = '${AppURL.baseURL}api/wallet-withdraw-requests';
+
 
      final SharedPreferences prefs = await SharedPreferences.getInstance();
 

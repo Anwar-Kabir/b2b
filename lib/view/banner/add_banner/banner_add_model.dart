@@ -11,6 +11,7 @@ class BannerModel {
   DateTime? createdAt;
   DateTime? updatedAt;
   int? id;
+  String? description; 
 
   BannerModel({
     this.title,
@@ -25,6 +26,7 @@ class BannerModel {
     this.createdAt,
     this.updatedAt,
     this.id,
+     this.description,
   });
 
   factory BannerModel.fromJson(Map<String, dynamic> json) {
@@ -34,6 +36,7 @@ class BannerModel {
       linkLabel: json['link_label'],
       bgColor: json['bg_color'],
       columns: json['columns'],
+      description: json['description'],
       order: json['order'],
       effect: json['effect'],
       shopId: json['shop_id'],
@@ -55,6 +58,7 @@ class BannerModel {
       'link_label': linkLabel,
       'bg_color': bgColor,
       'columns': columns,
+      'description': description,
       'order': order,
       'effect': effect,
       'shop_id': shopId,
