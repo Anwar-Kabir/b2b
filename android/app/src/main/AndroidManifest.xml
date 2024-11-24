@@ -10,7 +10,7 @@
 
 
     <application
-        android:label="isotopeit_b2b"
+        android:label="Pykari"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:enableOnBackInvokedCallback="true"

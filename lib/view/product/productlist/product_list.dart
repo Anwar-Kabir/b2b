@@ -16,16 +16,9 @@ class ProductListCard extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'Product List',
-          //style: TextStyle(color: Colors.white),
         ),
-        // backgroundColor: AppColor.primaryColor.withOpacity(0.7),
-        // iconTheme: const IconThemeData(
-        //   color: Colors.white,
-        // ),
-         backgroundColor:
-            Theme.of(context).appBarTheme.backgroundColor, // Use theme color
-        iconTheme:
-            Theme.of(context).appBarTheme.iconTheme, // Use theme icon color
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        iconTheme: Theme.of(context).appBarTheme.iconTheme,
         titleTextStyle: Theme.of(context).appBarTheme.titleTextStyle,
       ),
       body: Obx(() {

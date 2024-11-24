@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
+import 'package:isotopeit_b2b/view/auction/add_auction/add_auction.dart';
 import 'package:isotopeit_b2b/view/auction/auction_live/auction_live_controller.dart';
 import 'package:isotopeit_b2b/view/auction/auction_live/auction_live_model.dart';
+import 'package:isotopeit_b2b/view/product/productlist/controller_product_list.dart';
  
 
 
@@ -10,6 +13,7 @@ import 'package:isotopeit_b2b/view/auction/auction_live/auction_live_model.dart'
   AuctionPage({Key? key}) : super(key: key);
 
   final AuctionController auctionController = Get.put(AuctionController());
+  
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +27,7 @@ import 'package:isotopeit_b2b/view/auction/auction_live/auction_live_model.dart'
           actions: [
             TextButton.icon(
               onPressed: () {
-                Get.toNamed('/add-auction'); // Navigate to Add Auction Page
+                Get.to(  AddAuction());  
               },
               label: const Text("Add Auction",
                   style: TextStyle(color: Colors.white)),
@@ -84,8 +88,11 @@ class AuctionList extends StatelessWidget {
                 Text("Auction No: ${auction.auctionNumber}",
                     style: const TextStyle(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 8),
-                Text("UUID: ${auction.uuid}"),
-                Text("Auction Date: ${auction.auctionDate}"),
+               // Text("UUID: ${auction.uuid}"),
+                //Text("Auction Date: ${auction.auctionDate}"),
+                 Text(
+                  "Auction Date: ${DateFormat('MMM dd, yyyy, hh:mm a').format(DateTime.parse(auction.auctionDate))}",
+                ),
                 Text("Pre-deposit: ${auction.preDepositePercentage}%"),
                 Text("Highest Bid: ${auction.highestBid}"),
               ],

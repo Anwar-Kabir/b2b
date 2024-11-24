@@ -50,7 +50,7 @@ class LoginController extends GetxController {
       'Accept': 'application/json',
     };
     final body = jsonEncode({
-      'email': appEmailValidator.text,
+      'email_or_phone': appEmailValidator.text,
       'password': appPasswordValidator.text,
     });
 

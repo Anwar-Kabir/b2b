@@ -79,10 +79,10 @@ class Wallet extends StatelessWidget {
           );
         }
       }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: controller.fetchWithdrawRequests,
-        child: Icon(Icons.refresh),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: controller.fetchWithdrawRequests,
+      //   child: Icon(Icons.refresh),
+      // ),
     );
   }
 }

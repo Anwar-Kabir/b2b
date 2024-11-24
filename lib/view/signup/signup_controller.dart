@@ -412,7 +412,11 @@ class SignUpController extends GetxController {
         }
       } else {
         print("Failed response: ${response.body}");
-        Get.snackbar('Error', 'Failed to load data');
+        Get.snackbar('Error', 'Failed to load data',
+        backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+        );
       }
     } catch (e) {
       print("Exception occurred during data fetch: $e");

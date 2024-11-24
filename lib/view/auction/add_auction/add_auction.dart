@@ -1,9 +1,14 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:isotopeit_b2b/helper/token_service.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
+import 'package:isotopeit_b2b/view/auction/add_auction/action_controller.dart';
+
+import 'package:isotopeit_b2b/view/product/productlist/controller_product_list.dart';
 import 'package:isotopeit_b2b/widget/label_with_asterisk.dart';
+import 'package:http/http.dart' as http;
 
 class AddAuction extends StatefulWidget {
   const AddAuction({super.key});
@@ -13,16 +18,20 @@ class AddAuction extends StatefulWidget {
 }
 
 class _AddAuctionState extends State<AddAuction> {
-  bool isCertified = false;
-
   // Create a TextEditingController to store the selected date and time
+  final _formKey = GlobalKey<FormState>();
+  // GlobalKey for form validation
   final TextEditingController _startDateTimeController =
       TextEditingController();
   final TextEditingController _EnddateTimeController = TextEditingController();
   final TextEditingController _availabledateTimeController =
       TextEditingController();
-
-  // Controllers for key features
+  //final _formKey = GlobalKey<FormState>();
+  final TextEditingController _skuController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _quantityController = TextEditingController();
+  final TextEditingController _metaDescriptionController =
+      TextEditingController();
   final List<TextEditingController> _keyFeatureControllers = [
     TextEditingController()
   ];
@@ -36,27 +45,19 @@ class _AddAuctionState extends State<AddAuction> {
   ];
   final List<String> _selectedTags = [];
 
+  //status
+
+  String? selectedStatus; // To store the selected status as a string
+  int? selectedStatusValue; // To store the corresponding numeric value
+
   //product
   String? _selectedProduct;
-
-  final List<String> _productList = [
-    "Product 1",
-    "Product 2",
-    "Product 3",
-    "Product 4",
-    "Product 5",
-    // Add more products as needed
-  ];
 
   // DateTime? selectedDateTime;
 
   DateTime? selectedStartDateTime;
   DateTime? selectedEndDateTime;
   DateTime? selectedAvailableDateTime;
-
-  final _formKey = GlobalKey<FormState>();
-  // GlobalKey for form validation
-  final TextEditingController _zipController = TextEditingController();
 
   final ImagePicker _picker = ImagePicker();
   final List<XFile> _imageFiles = []; // Holds up to 5 images
@@ -100,6 +101,8 @@ class _AddAuctionState extends State<AddAuction> {
     super.dispose();
   }
 
+  final ProductController productController = Get.put(ProductController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,6 +120,7 @@ class _AddAuctionState extends State<AddAuction> {
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Form(
+            key: _formKey,
             child: Column(
               children: [
                 Row(
@@ -148,19 +152,71 @@ class _AddAuctionState extends State<AddAuction> {
                             labelText: "Product",
                             isRequired: true,
                           ),
-                          _buildTextField("Enter Product Name"),
+                          //_buildTextField("Enter Product Name"),
+                          Obx(() {
+                            if (productController.isLoading.value) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            if (productController.productList.isEmpty) {
+                              return const Text(
+                                "No products available.",
+                                style: TextStyle(color: Colors.red),
+                              );
+                            }
+                            return DropdownButtonFormField<String>(
+                              value: _selectedProduct, // Selected product
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                contentPadding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                              ),
+                              hint: const Text("Select a product"),
+                              items:
+                                  productController.productList.map((product) {
+                                return DropdownMenuItem<String>(
+                                  value: product.id
+                                      .toString(), // Assuming `id` is String or can be converted
+                                  child:
+                                      Text(product.name ?? "Unnamed Product"),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedProduct =
+                                      value; // Update selected product
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Please select a product";
+                                }
+                                return null;
+                              },
+                            );
+                          }),
+                          const SizedBox(
+                            height: 10,
+                          ),
 
+                          ///===>SKU
                           const LabelWithAsterisk(
                             labelText: "SKU",
                             isRequired: true,
                           ),
-                          _buildTextField("Enter Seller SKU"),
+                          _buildTextField("Enter Seller SKU",
+                              controller: _skuController, isRequired: true),
+
+                          //===>Status
                           const LabelWithAsterisk(
                             labelText: "Status",
                             isRequired: true,
                           ),
                           _buildDropdown("Status", ["Active", "Inactive"]),
-                          // _buildCheckbox("BSTI Certification"),
+
                           const LabelWithAsterisk(
                             labelText: "Key features",
                           ),
@@ -179,30 +235,40 @@ class _AddAuctionState extends State<AddAuction> {
                           ),
                           const SizedBox(height: 10),
 
+                          ///===>base price
                           const SizedBox(height: 10),
                           const LabelWithAsterisk(
                             labelText: "Base Price",
                             isRequired: true,
                           ),
-                          _buildTextField("Enter Price"),
+                          _buildTextField("Enter Price",
+                              isRequired: true, controller: _priceController),
+
+                          ///====>Quantity
                           const LabelWithAsterisk(
                             labelText: "Stock Quantity",
                             isRequired: true,
                           ),
-                          _buildTextField("Enter Stock Quantity"),
+                          _buildTextField("Enter Stock Quantity",
+                              isRequired: true,
+                              controller: _quantityController),
 
+                          ////===>meta description
                           const LabelWithAsterisk(
                             labelText: "Meta Description",
                             isRequired: true,
                           ),
                           _buildTextField("Enter Meta Description",
-                              maxLines: 3),
+                              maxLines: 3,
+                              isRequired: true,
+                              controller: _metaDescriptionController),
 
                           const Text(
                             "Additional Info",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
 
+                          ///====>enter tag
                           const LabelWithAsterisk(
                             labelText: "Enter Tags",
                           ),
@@ -252,24 +318,257 @@ class _AddAuctionState extends State<AddAuction> {
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
+      // bottomNavigationBar: Padding(
+      //   padding: const EdgeInsets.all(8.0),
+      //   child: ElevatedButton.icon(
+      //     onPressed: () async {
+      //       if (_formKey.currentState?.validate() ?? false) {
+      //         // Form is valid, proceed with the logic
+
+      //         // Check image validation
+      //         if (_imageFiles.isEmpty) {
+      //           print("No images selected.");
+      //         } else {
+      //           for (int i = 0; i < _imageFiles.length; i++) {
+      //             print("Image ${i + 1}: ${_imageFiles[i].name}");
+      //             print("Path: ${_imageFiles[i].path}");
+      //           }
+      //         }
+
+      //         print("Product ===========>  $_selectedProduct");
+
+      //         print("SKU ============== ${_skuController.text}");
+
+      //         if (selectedStatus != null) {
+      //           print("Selected Status: $selectedStatusValue");
+      //         } else {
+      //           print("No status selected");
+      //         }
+
+      //         print("Key Features ===========>  $_keyFeatureControllers");
+
+      //         print("Price ===========>  ${_priceController.text}");
+
+      //         print("Quantity ===========>  ${_quantityController.text}");
+
+      //         print(
+      //             "Meta Description ===========>  ${_metaDescriptionController.text}");
+
+      //         print("Tags ===========>  $_selectedTags");
+
+      //         if (selectedStartDateTime != null) {
+      //           print(
+      //               "Selected Start Date: ${selectedStartDateTime!.toIso8601String()}");
+      //         } else {
+      //           print("No start date selected");
+      //         }
+
+      //         if (selectedEndDateTime != null) {
+      //           print(
+      //               "Selected End Date: ${selectedEndDateTime!.toIso8601String()}");
+      //         } else {
+      //           print("No end date selected");
+      //         }
+      //       } else {
+      //         // Form is invalid, show error
+      //         print("Form is invalid. Please check the inputs.");
+      //       }
+      //     },
+      //     icon: const Icon(Icons.save),
+      //     label: const Text("Save"),
+      //     style: ElevatedButton.styleFrom(
+      //       minimumSize: const Size(double.infinity, 50),
+      //       backgroundColor: AppColor.primaryColor,
+      //       // For text color:
+      //       foregroundColor: Colors.white,
+      //     ),
+      //   ),
+      // ),
+
+
+
+
+//       bottomNavigationBar: Padding(
+//   padding: const EdgeInsets.all(8.0),
+//   child: ElevatedButton.icon(
+//     onPressed: () async {
+//       if (_formKey.currentState?.validate() ?? false) {
+//         // Collect form data
+//         final formData = {
+//           "product_id": _selectedProduct, // Replace with actual product ID
+//           "sku": _skuController.text,
+//           "active": selectedStatus == "Active" ? 1 : 2,
+//           "key_features": _keyFeatureControllers.map((c) => c.text).toList(),
+//           "sale_price": _priceController.text,
+//           "stock_quantity": _quantityController.text,
+//           "description": _metaDescriptionController.text,
+//           "tag_list": _selectedTags,
+//           "auction_date": selectedStartDateTime?.toIso8601String(),
+//           "registration_last_date": selectedEndDateTime?.toIso8601String(),
+//         };
+
+//         // Convert images to multipart files
+//         var request = http.MultipartRequest(
+//           'POST',
+//           Uri.parse('https://e-commerce.isotopeit.com/api/auctions'),
+//         );
+
+//         // Add form fields
+//         formData.forEach((key, value) {
+//           if (value != null) {
+//             if (value is List) {
+//               for (var item in value) {
+//                 request.fields['$key[]'] = item.toString();
+//               }
+//             } else {
+//               request.fields[key] = value.toString();
+//             }
+//           }
+//         });
+
+//         // Add images to the request
+//         for (int i = 0; i < _imageFiles.length; i++) {
+//           final imageFile = File(_imageFiles[i].path);
+//           request.files.add(await http.MultipartFile.fromPath(
+//             'bluck_image[]',
+//             imageFile.path,
+//           ));
+//         }
+
+//         final TokenService _tokenService = TokenService();
+
+//         // Add headers
+//         //const token = "your_access_token_here";
+//         request.headers.addAll({
+//           'Authorization':
+//               'Bearer ${_tokenService.token}',
+//           'Content-Type': 'multipart/form-data',
+//         });
+
+//         try {
+//           // Send the request
+//           var response = await request.send();
+
+//           if (response.statusCode == 200) {
+//             // Parse the response
+//             var responseBody = await response.stream.bytesToString();
+//             print("API Call Successful: $responseBody");
+//           } else {
+//             print("API Call Failed: ${response.statusCode}");
+//           }
+//         } catch (e) {
+//           print("API Call Error: $e");
+//         }
+//       } else {
+//         // Form is invalid, show error
+//         print("Form is invalid. Please check the inputs.");
+//       }
+//     },
+//     icon: const Icon(Icons.save),
+//     label: const Text("Save"),
+//     style: ElevatedButton.styleFrom(
+//       minimumSize: const Size(double.infinity, 50),
+//       backgroundColor: AppColor.primaryColor,
+//       foregroundColor: Colors.white,
+//     ),
+//   ),
+// ),
+
+
+
+bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton.icon(
-          onPressed: () {
-            // Add Save functionality
+          onPressed: () async {
+            if (_formKey.currentState?.validate() ?? false) {
+              // Collect form data
+              final formData = {
+                "product_id":
+                    _selectedProduct, // Replace with actual product ID
+                "sku": _skuController.text,
+                "active": selectedStatus == "Active" ? 1 : 2,
+                "key_features":
+                    _keyFeatureControllers.map((c) => c.text).toList(),
+                "sale_price": _priceController.text,
+                "stock_quantity": _quantityController.text,
+                "description": _metaDescriptionController.text,
+                "tag_list": _selectedTags,
+                "auction_date": selectedStartDateTime?.toIso8601String(),
+                "registration_last_date":
+                    selectedEndDateTime?.toIso8601String(),
+                "shop_id": 5,    
+              };
+
+              // Convert images to multipart files
+              var request = http.MultipartRequest(
+                'POST',
+                Uri.parse('https://e-commerce.isotopeit.com/api/auctions'),
+              );
+
+              // Add form fields
+              formData.forEach((key, value) {
+                if (value != null) {
+                  if (value is List) {
+                    for (var item in value) {
+                      request.fields['$key[]'] = item.toString();
+                    }
+                  } else {
+                    request.fields[key] = value.toString();
+                  }
+                }
+              });
+
+              // Add images to the request
+              for (int i = 0; i < _imageFiles.length; i++) {
+                final imageFile = File(_imageFiles[i].path);
+                request.files.add(await http.MultipartFile.fromPath(
+                  'bluck_image[]',
+                  imageFile.path,
+                ));
+              }
+
+              final TokenService _tokenService = TokenService();
+
+              // Add headers
+              request.headers.addAll({
+                'Authorization': 'Bearer ${_tokenService.token}',
+                'Content-Type': 'multipart/form-data',
+              });
+
+              try {
+                // Send the request
+                var response = await request.send();
+
+                // Handle the response
+                if (response.statusCode == 200) {
+                  // Parse the response
+                  var responseBody = await response.stream.bytesToString();
+                  print("API Call Successful: $responseBody");
+                } else {
+                  // Print the error details
+                  var errorResponse = await response.stream.bytesToString();
+                  print("API Call Failed: ${response.statusCode}");
+                  print("Error Response: $errorResponse");
+                }
+              } catch (e) {
+                // Catch and print any errors
+                print("API Call Error: $e");
+              }
+            } else {
+              // Form is invalid, show error
+              print("Form is invalid. Please check the inputs.");
+            }
           },
           icon: const Icon(Icons.save),
           label: const Text("Save"),
           style: ElevatedButton.styleFrom(
-            minimumSize:
-                const Size(double.infinity, 50), // Make button full-width
-            backgroundColor:
-                AppColor.primaryColor, // Change this to your desired color
-            // For text color:
-            foregroundColor: Colors.white, // Text and icon color
+            minimumSize: const Size(double.infinity, 50),
+            backgroundColor: AppColor.primaryColor,
+            foregroundColor: Colors.white,
           ),
         ),
       ),
+
     );
   }
 
@@ -451,21 +750,59 @@ class _AddAuctionState extends State<AddAuction> {
   }
 
   // Function to build text fields
-  Widget _buildTextField(String hint, {String? label, int maxLines = 1}) {
+  Widget _buildTextField(
+    String hint, {
+    String? label,
+    int maxLines = 1,
+    TextEditingController? controller,
+    bool isRequired = false,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: TextFormField(
+        controller: controller,
         decoration: InputDecoration(
           labelText: label,
           hintText: hint,
           border: const OutlineInputBorder(),
         ),
         maxLines: maxLines,
+        validator: isRequired
+            ? (value) {
+                if (value == null || value.isEmpty) {
+                  return '$label is required';
+                }
+                return null;
+              }
+            : null,
       ),
     );
   }
 
   // Function to build dropdown fields
+  // Widget _buildDropdown(String? hintText, List<String> options) {
+  //   return Padding(
+  //     padding: const EdgeInsets.only(bottom: 16.0),
+  //     child: DropdownButtonFormField(
+  //       decoration: InputDecoration(
+  //         hintText: hintText,
+  //         border: const OutlineInputBorder(),
+  //       ),
+  //       items: options.map((String value) {
+  //         return DropdownMenuItem<String>(
+  //           value: value,
+  //           child: Text(value),
+  //         );
+  //       }).toList(),
+  //       onChanged: (newValue) {
+  //         setState(() {
+  //           selectedStatus = newValue; // Update the selected value
+  //         });
+  //       },
+  //     ),
+  //   );
+  // }
+
   Widget _buildDropdown(String? hintText, List<String> options) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
@@ -474,33 +811,25 @@ class _AddAuctionState extends State<AddAuction> {
           hintText: hintText,
           border: const OutlineInputBorder(),
         ),
+        value: selectedStatus, // Set the current selected value
         items: options.map((String value) {
           return DropdownMenuItem<String>(
             value: value,
             child: Text(value),
           );
         }).toList(),
-        onChanged: (newValue) {},
-      ),
-    );
-  }
-
-  // Function to build checkbox
-  Widget _buildCheckbox(String label) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
-      child: Row(
-        children: [
-          Checkbox(
-            value: isCertified,
-            onChanged: (bool? value) {
-              setState(() {
-                isCertified = value ?? false; // Toggle checkbox state
-              });
-            },
-          ),
-          Text(label),
-        ],
+        onChanged: (newValue) {
+          setState(() {
+            selectedStatus = newValue; // Update the selected value
+            // Map status to numeric value
+            if (selectedStatus == "Active") {
+              selectedStatusValue = 1;
+            } else if (selectedStatus == "Inactive") {
+              selectedStatusValue = 2;
+            }
+            print("Selected Status: $selectedStatus ($selectedStatusValue)");
+          });
+        },
       ),
     );
   }
@@ -575,22 +904,61 @@ class _AddAuctionState extends State<AddAuction> {
   }
 }
 
-// Function to build file picker fields
-Widget _buildFilePicker(String label, String buttonText) {
-  return Padding(
-    padding: const EdgeInsets.only(bottom: 16.0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label),
-        const SizedBox(height: 8),
-        ElevatedButton(
-          onPressed: () {
-            // File picker logic here
-          },
-          child: Text(buttonText),
-        ),
-      ],
-    ),
-  );
-}
+
+
+
+
+
+
+
+
+
+
+
+
+// if (_imageFiles.isEmpty) {
+            //   print("No images selected.");
+            // } else {
+            //   for (int i = 0; i < _imageFiles.length; i++) {
+            //     print("Image ${i + 1}: ${_imageFiles[i].name}");
+            //     print("Path: ${_imageFiles[i].path}");
+            //   }
+            // }
+            // print(" product ===========>  $_selectedProduct)}");
+
+            // print(" sku============= $_skuController)}");
+
+            // if (selectedStatus != null) {
+            //   print("Selected Status: $selectedStatusValue");
+            // } else {
+            //   print("No status selected");
+            // }
+
+            // print(
+            //     " keyFeatureControllers ===========>  $_keyFeatureControllers)}");
+
+            // print("  $_priceController)}");
+
+            // print("  $_quantityController)}");
+
+            // print("  $_metaDescriptionController)}");
+
+            // print(" tag ===========>  $_selectedTags)}");
+
+
+
+            // if (selectedStartDateTime != null) {
+            //   print(
+            //       "Selected Start Date: ${selectedStartDateTime!.toIso8601String()}");
+            // } else {
+            //   print("No date selected");
+            // }
+
+
+
+            // if (selectedEndDateTime != null) {
+            //   print(
+            //       "Selected Start Date: ${selectedEndDateTime!.toIso8601String()}");
+            // } else {
+            //   print("No date selected");
+            // }

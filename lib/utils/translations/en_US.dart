@@ -1,6 +1,4 @@
 
-
-
 const Map<String, String> enUS = {
   'title': 'Hello',
   'welcome': 'Welcome to the app',
@@ -8,19 +6,19 @@ const Map<String, String> enUS = {
 
   'home':'Home',
   'order': 'Order',
-  'wallet' : 'wallet',
-  'inventory': 'inventory',
-  'profile': 'profile',
+  'wallet' : 'Wallet',
+  'inventory': 'Inventory',
+  'profile': 'Profile',
 
-  'attribute' : 'attribute',
-  'product' : 'product',
+  'attribute' : 'Attribute',
+  'product' : 'Product',
   'categorytag' :'Category and Tag',
-  'courier': 'courier',
-  'suborder': "suborder",
+  'courier': 'Courier',
+  'suborder': "Suborder",
   'shobbanner':'Banner',
-  'auction': 'auction',
-  'shobsettings' : 'shop settings',
-  'orderreport' : 'order Report',
+  'auction': 'Auction',
+  'shobsettings' : 'Shop settings',
+  'orderreport' : 'Order Report',
   'appsettings' : 'App Settings' 
 
 

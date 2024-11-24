@@ -129,7 +129,8 @@ class LoginState extends State<Login> {
 
                         const SizedBox(height: 20),
 
-                        Center(
+                        Align(
+                          alignment: Alignment.centerLeft,
                           child: Text.rich(
                             TextSpan(
                               text: "Forget Password? ",
@@ -191,7 +192,7 @@ class LoginState extends State<Login> {
                                 TextSpan(
                                   text: ' v.0.1',
                                   style: const TextStyle(
-                                    color: Color(0xFF7F56D9),
+                                    color: AppColor.primaryColor,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   recognizer: TapGestureRecognizer()
