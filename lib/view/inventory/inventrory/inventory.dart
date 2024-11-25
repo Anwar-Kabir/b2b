@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
-import 'package:isotopeit_b2b/view/inventory/add_inventory.dart';
+import 'package:isotopeit_b2b/view/inventory/add_inventory/add_inventory.dart';
 import 'package:isotopeit_b2b/view/inventory/inventrory/inventory_controller.dart';
 import 'package:isotopeit_b2b/view/inventory/inventory_details/inventory_product_details.dart';
 import 'package:isotopeit_b2b/view/inventory/inventrory/inventory_model.dart';

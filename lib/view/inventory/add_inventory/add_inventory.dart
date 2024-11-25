@@ -1,9 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:isotopeit_b2b/helper/token_service.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
+import 'package:isotopeit_b2b/view/product/productlist/controller_product_list.dart';
 import 'package:isotopeit_b2b/widget/label_with_asterisk.dart';
+import 'package:http/http.dart' as http;
 
 class AddInventoryPage extends StatefulWidget {
   const AddInventoryPage({super.key});
@@ -15,17 +19,31 @@ class AddInventoryPage extends StatefulWidget {
 class _AddInventoryPageState extends State<AddInventoryPage> {
   bool isCertified = false;
 
-  // Create a TextEditingController to store the selected date and time
+ 
+  final _formKey = GlobalKey<FormState>();
+
   final TextEditingController _startDateTimeController =
       TextEditingController();
-  final TextEditingController _EnddateTimeController = TextEditingController();
+  final TextEditingController _enddateTimeController = TextEditingController();
   final TextEditingController _availabledateTimeController =
       TextEditingController();
-
-  // Controllers for key features
+  //final _formKey = GlobalKey<FormState>();
+  final TextEditingController _skuController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _offerController = TextEditingController();
+  final TextEditingController _quantityController = TextEditingController();
+  final TextEditingController _packingQuantity = TextEditingController();
+  final TextEditingController _metaDescriptionController =
+      TextEditingController();
   final List<TextEditingController> _keyFeatureControllers = [
     TextEditingController()
   ];
+  final TextEditingController _disController = TextEditingController();
+  final TextEditingController _metaTitleController = TextEditingController();
+  final TextEditingController _purchasePriceController =
+      TextEditingController();
+  final TextEditingController _netAmmountController = TextEditingController();
+  final TextEditingController _commissionController = TextEditingController();
 
   // Tags handling
   final List<String> _availableTags = [
@@ -48,15 +66,15 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
     // Add more products as needed
   ];
 
-  // DateTime? selectedDateTime;
-
   DateTime? selectedStartDateTime;
   DateTime? selectedEndDateTime;
   DateTime? selectedAvailableDateTime;
 
-  final _formKey = GlobalKey<FormState>();
-  // GlobalKey for form validation
-  final TextEditingController _zipController = TextEditingController();
+  //status
+  String? selectedStatus; // To store the selected status as a string
+  int? selectedStatusValue; // To store the corresponding numeric value
+
+  // Add a variable to track the checkbox state
 
   final ImagePicker _picker = ImagePicker();
   final List<XFile> _imageFiles = []; // Holds up to 5 images
@@ -91,7 +109,7 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
   @override
   void dispose() {
     _startDateTimeController.dispose();
-    _EnddateTimeController.dispose();
+    _enddateTimeController.dispose();
     _availabledateTimeController
         .dispose(); // Dispose controller when widget is destroyed
     for (var controller in _keyFeatureControllers) {
@@ -99,6 +117,8 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
     }
     super.dispose();
   }
+
+  final ProductController productController = Get.put(ProductController());
 
   @override
   Widget build(BuildContext context) {
@@ -117,6 +137,7 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Form(
+            key: _formKey,
             child: Column(
               children: [
                 Row(
@@ -148,19 +169,70 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                             labelText: "Product",
                             isRequired: true,
                           ),
-                          _buildTextField("Enter Product Name"),
+                          // _buildTextField("Enter Product Name"),
+                          Obx(() {
+                            if (productController.isLoading.value) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            if (productController.productList.isEmpty) {
+                              return const Text(
+                                "No products available.",
+                                style: TextStyle(color: Colors.red),
+                              );
+                            }
+                            return DropdownButtonFormField<String>(
+                              value: _selectedProduct, // Selected product
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                contentPadding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                              ),
+                              hint: const Text("Select a product"),
+                              items:
+                                  productController.productList.map((product) {
+                                return DropdownMenuItem<String>(
+                                  value: product.id
+                                      .toString(), // Assuming `id` is String or can be converted
+                                  child:
+                                      Text(product.name ?? "Unnamed Product"),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedProduct =
+                                      value; // Update selected product
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Please select a product";
+                                }
+                                return null;
+                              },
+                            );
+                          }),
 
                           const LabelWithAsterisk(
                             labelText: "SKU",
                             isRequired: true,
                           ),
-                          _buildTextField("Enter Seller SKU"),
+                          //_buildTextField("Enter Seller SKU"),
+                          _buildTextField("Enter Seller SKU",
+                              controller: _skuController, isRequired: true),
                           const LabelWithAsterisk(
                             labelText: "Status",
                             isRequired: true,
                           ),
+
                           _buildDropdown("Status", ["Active", "Inactive"]),
+
+                          //bsti_certification
                           _buildCheckbox("BSTI Certification"),
+
                           const LabelWithAsterisk(
                             labelText: "Key features",
                           ),
@@ -183,21 +255,29 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                             labelText: "Price",
                             isRequired: true,
                           ),
-                          _buildTextField("Enter Price"),
+
+                          _buildTextField("Enter Price",
+                              isRequired: true, controller: _priceController),
                           const LabelWithAsterisk(
                             labelText: "Offer",
                           ),
-                          _buildTextField("Enter Offer Price"),
+                          _buildTextField("Enter Offer Price",
+                              isRequired: true, controller: _offerController),
                           const LabelWithAsterisk(
                             labelText: "Stock Quantity",
                             isRequired: true,
                           ),
-                          _buildTextField("Enter Stock Quantity"),
+                          _buildTextField("Enter Stock Quantity",
+                              isRequired: true,
+                              controller: _quantityController),
                           const LabelWithAsterisk(
                             labelText: "Packing Quantity",
                             isRequired: true,
                           ),
-                          _buildTextField("Enter Packing Quantity"),
+                          _buildTextField("Enter Packing Quantity",
+                              isRequired: true, controller: _packingQuantity),
+
+                          //date
                           const LabelWithAsterisk(
                             labelText: "Offer Start Date",
                           ),
@@ -211,23 +291,30 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                             });
                           }),
 
+                          //end date
                           const LabelWithAsterisk(
                             labelText: "Offer End Date",
                           ),
                           _buildDatePicker(
-                              "Offer End Date", _EnddateTimeController,
+                              "Offer End Date", _enddateTimeController,
                               (DateTime? selectedDate) {
                             setState(() {
                               selectedEndDateTime = selectedDate;
                             });
                           }),
 
+                          //description
                           const LabelWithAsterisk(
                             labelText: "Description",
                             isRequired: true,
                           ),
-                          _buildTextField("Enter Description", maxLines: 4),
+                          _buildTextField("Enter Description",
+                              maxLines: 4,
+                              isRequired: true,
+                              controller: _disController),
                           // _buildFilePicker("Images", "Choose Files"),
+
+                          ///Available
                           const LabelWithAsterisk(
                             labelText: "Available From",
                           ),
@@ -238,6 +325,8 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                               selectedAvailableDateTime = selectedDate;
                             });
                           }),
+
+                          //tag
                           const LabelWithAsterisk(
                             labelText: "Enter Tags",
                           ),
@@ -249,29 +338,40 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                           // Display selected tags as chips
                           _buildTagChips(),
 
+                          ///commission
                           const LabelWithAsterisk(
                             labelText: "Enter Commission in (%)",
                           ),
-                          _buildTextField("9"),
+                          _buildTextField("9,",
+                              isRequired: true,
+                              controller: _commissionController),
                           const LabelWithAsterisk(
                             labelText: "Enter Net Amount",
                           ),
-                          _buildTextField("0.00"),
+                          _buildTextField("0.00",
+                              isRequired: true,
+                              controller: _netAmmountController),
 
                           const LabelWithAsterisk(
                             labelText: "Purchase Price",
                           ),
-                          _buildTextField("Meta Title"),
+                          _buildTextField("Meta Title",
+                              isRequired: true,
+                              controller: _purchasePriceController),
                           const LabelWithAsterisk(
                             labelText: "Meta Title",
                           ),
-                          _buildTextField("Enter Meta Title"),
+                          _buildTextField("Enter Meta Title",
+                              isRequired: true,
+                              controller: _metaTitleController),
                           const LabelWithAsterisk(
                             labelText: "Meta Description",
                             isRequired: true,
                           ),
                           _buildTextField("Enter Meta Description",
-                              maxLines: 3),
+                              maxLines: 3,
+                              isRequired: true,
+                              controller: _metaDescriptionController),
                         ],
                       ),
                     ),
@@ -287,8 +387,159 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton.icon(
-          onPressed: () {
-            // Add Save functionality
+          onPressed: () async {
+            ///print the data====>
+            if (_formKey.currentState?.validate() ?? false) {
+              if (_imageFiles.isEmpty) {
+                print("No images selected.");
+              } else {
+                for (int i = 0; i < _imageFiles.length; i++) {
+                  print("Image ${i + 1}: ${_imageFiles[i].name}");
+                  print("Path: ${_imageFiles[i].path}");
+                }
+              }
+              print(" product ===========>  $_selectedProduct)}");
+
+              print(" sku============= $_skuController)}");
+
+              if (selectedStatus != null) {
+                print("Selected Status: $selectedStatusValue");
+              } else {
+                print("No status selected");
+              }
+
+              print(
+                  " keyFeatureControllers ===========>  $_keyFeatureControllers)}");
+
+              print("price   $_priceController)}");
+              print("offer   $_offerController)}");
+              print("discription ::===>   $_disController)}");
+
+              print(" quantity $_quantityController)}");
+              print(" package quantity $_packingQuantity)}");
+              print(" commission $_commissionController)}");
+              print(" net amout $_netAmmountController)}");
+              print(" purchage price $_purchasePriceController)}");
+              print(" mete $_metaTitleController)}");
+
+              print(" metaDescription $_metaDescriptionController)}");
+
+              print(" tag ===========>  $_selectedTags)}");
+
+              print(isCertified ? "btis ===> Selected: true" : "bits ===> Unselected: false");
+
+              if (selectedStartDateTime != null) {
+                print(
+                    "Selected Start Date: ${selectedStartDateTime!.toIso8601String()}");
+              } else {
+                print("No date selected");
+              }
+
+              if (selectedEndDateTime != null) {
+                print(
+                    "Selected end Date: ${selectedEndDateTime!.toIso8601String()}");
+              } else {
+                print("No date selected");
+              }
+
+              if (selectedAvailableDateTime != null) {
+                print(
+                    "Selected vailable Date: ${selectedAvailableDateTime!.toIso8601String()}");
+              } else {
+                print("No date selected");
+              }
+
+              // Collect form data
+              final formData = {
+                "product_id":
+                    _selectedProduct, // Replace with actual product ID
+                "sku": _skuController.text,
+                "active": selectedStatus == "Active" ? 1 : 2,
+                'bsti_certification': isCertified,
+                'stock_quantity' : _quantityController,
+                'sale_price' : _priceController, 
+                'offer_price': _offerController,
+                'packing_qty' : _packingQuantity,
+                
+                "key_features":
+                    _keyFeatureControllers.map((c) => c.text).toList(),
+                "description": _disController.text,
+                "tag_list": _selectedTags,
+                "offer_start": selectedStartDateTime?.toIso8601String(),
+                "offer_end":
+                    selectedEndDateTime?.toIso8601String(),
+                "available_from": selectedAvailableDateTime?.toIso8601String(),
+                "purchase_price": _purchasePriceController,
+                "meta_title": _metaTitleController,
+                "meta_description": _metaDescriptionController,
+                "net_amount" : _netAmmountController,
+                "attribute[3]": 4,
+                
+                //'shop_id': 4,
+               
+              };
+
+              // Convert images to multipart files
+              var request = http.MultipartRequest(
+                'POST',
+                //https://e-commerce.isotopeit.com/api/auctions
+                Uri.parse(
+                    'https://e-commerce.isotopeit.com/api/inventory/store'),
+              );
+
+              // Add form fields
+              formData.forEach((key, value) {
+                if (value != null) {
+                  if (value is List) {
+                    for (var item in value) {
+                      request.fields['$key[]'] = item.toString();
+                    }
+                  } else {
+                    request.fields[key] = value.toString();
+                  }
+                }
+              });
+
+              // Add images to the request
+              for (int i = 0; i < _imageFiles.length; i++) {
+                final imageFile = File(_imageFiles[i].path);
+                request.files.add(await http.MultipartFile.fromPath(
+                  'bluck_image[]',
+                  imageFile.path,
+                ));
+              }
+
+              final TokenService _tokenService = TokenService();
+
+              // Add headers
+              request.headers.addAll({
+                'Authorization': 'Bearer ${_tokenService.token}',
+                'Content-Type': 'multipart/form-data',
+              });
+
+              try {
+                // Send the request
+                var response = await request.send();
+
+                // Handle the response
+                if (response.statusCode == 200) {
+                  // Parse the response
+                  var responseBody = await response.stream.bytesToString();
+                  print("API Call Successful: $responseBody");
+                } else {
+                  // Print the error details
+                  var errorResponse = await response.stream.bytesToString();
+                  print("API Call Failed: ${response.statusCode}");
+                  print("Error Response: $errorResponse");
+                }
+              } catch (e) {
+                // Catch and print any errors
+                print("API Call Error: $e");
+              }
+            } else {
+              // Form is invalid, show error
+              print("Form is invalid. Please check the inputs.");
+            }
           },
           icon: const Icon(Icons.save),
           label: const Text("Save"),
@@ -483,21 +734,37 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
   }
 
   // Function to build text fields
-  Widget _buildTextField(String hint, {String? label, int maxLines = 1}) {
+  Widget _buildTextField(
+    String hint, {
+    String? label,
+    int maxLines = 1,
+    TextEditingController? controller,
+    bool isRequired = false,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: TextFormField(
+        controller: controller,
         decoration: InputDecoration(
           labelText: label,
           hintText: hint,
           border: const OutlineInputBorder(),
         ),
         maxLines: maxLines,
+        validator: isRequired
+            ? (value) {
+                if (value == null || value.isEmpty) {
+                  return '$required';
+                }
+                return null;
+              }
+            : null,
       ),
     );
   }
 
-  // Function to build dropdown fields
+
+
   Widget _buildDropdown(String? hintText, List<String> options) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
@@ -506,13 +773,25 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
           hintText: hintText,
           border: const OutlineInputBorder(),
         ),
+        value: selectedStatus, // Set the current selected value
         items: options.map((String value) {
           return DropdownMenuItem<String>(
             value: value,
             child: Text(value),
           );
         }).toList(),
-        onChanged: (newValue) {},
+        onChanged: (newValue) {
+          setState(() {
+            selectedStatus = newValue; // Update the selected value
+            // Map status to numeric value
+            if (selectedStatus == "Active") {
+              selectedStatusValue = 1;
+            } else if (selectedStatus == "Inactive") {
+              selectedStatusValue = 2;
+            }
+            print("Selected Status: $selectedStatus ($selectedStatusValue)");
+          });
+        },
       ),
     );
   }

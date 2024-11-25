@@ -318,165 +318,9 @@ class _AddAuctionState extends State<AddAuction> {
           ),
         ),
       ),
-      // bottomNavigationBar: Padding(
-      //   padding: const EdgeInsets.all(8.0),
-      //   child: ElevatedButton.icon(
-      //     onPressed: () async {
-      //       if (_formKey.currentState?.validate() ?? false) {
-      //         // Form is valid, proceed with the logic
+   
 
-      //         // Check image validation
-      //         if (_imageFiles.isEmpty) {
-      //           print("No images selected.");
-      //         } else {
-      //           for (int i = 0; i < _imageFiles.length; i++) {
-      //             print("Image ${i + 1}: ${_imageFiles[i].name}");
-      //             print("Path: ${_imageFiles[i].path}");
-      //           }
-      //         }
-
-      //         print("Product ===========>  $_selectedProduct");
-
-      //         print("SKU ============== ${_skuController.text}");
-
-      //         if (selectedStatus != null) {
-      //           print("Selected Status: $selectedStatusValue");
-      //         } else {
-      //           print("No status selected");
-      //         }
-
-      //         print("Key Features ===========>  $_keyFeatureControllers");
-
-      //         print("Price ===========>  ${_priceController.text}");
-
-      //         print("Quantity ===========>  ${_quantityController.text}");
-
-      //         print(
-      //             "Meta Description ===========>  ${_metaDescriptionController.text}");
-
-      //         print("Tags ===========>  $_selectedTags");
-
-      //         if (selectedStartDateTime != null) {
-      //           print(
-      //               "Selected Start Date: ${selectedStartDateTime!.toIso8601String()}");
-      //         } else {
-      //           print("No start date selected");
-      //         }
-
-      //         if (selectedEndDateTime != null) {
-      //           print(
-      //               "Selected End Date: ${selectedEndDateTime!.toIso8601String()}");
-      //         } else {
-      //           print("No end date selected");
-      //         }
-      //       } else {
-      //         // Form is invalid, show error
-      //         print("Form is invalid. Please check the inputs.");
-      //       }
-      //     },
-      //     icon: const Icon(Icons.save),
-      //     label: const Text("Save"),
-      //     style: ElevatedButton.styleFrom(
-      //       minimumSize: const Size(double.infinity, 50),
-      //       backgroundColor: AppColor.primaryColor,
-      //       // For text color:
-      //       foregroundColor: Colors.white,
-      //     ),
-      //   ),
-      // ),
-
-
-
-
-//       bottomNavigationBar: Padding(
-//   padding: const EdgeInsets.all(8.0),
-//   child: ElevatedButton.icon(
-//     onPressed: () async {
-//       if (_formKey.currentState?.validate() ?? false) {
-//         // Collect form data
-//         final formData = {
-//           "product_id": _selectedProduct, // Replace with actual product ID
-//           "sku": _skuController.text,
-//           "active": selectedStatus == "Active" ? 1 : 2,
-//           "key_features": _keyFeatureControllers.map((c) => c.text).toList(),
-//           "sale_price": _priceController.text,
-//           "stock_quantity": _quantityController.text,
-//           "description": _metaDescriptionController.text,
-//           "tag_list": _selectedTags,
-//           "auction_date": selectedStartDateTime?.toIso8601String(),
-//           "registration_last_date": selectedEndDateTime?.toIso8601String(),
-//         };
-
-//         // Convert images to multipart files
-//         var request = http.MultipartRequest(
-//           'POST',
-//           Uri.parse('https://e-commerce.isotopeit.com/api/auctions'),
-//         );
-
-//         // Add form fields
-//         formData.forEach((key, value) {
-//           if (value != null) {
-//             if (value is List) {
-//               for (var item in value) {
-//                 request.fields['$key[]'] = item.toString();
-//               }
-//             } else {
-//               request.fields[key] = value.toString();
-//             }
-//           }
-//         });
-
-//         // Add images to the request
-//         for (int i = 0; i < _imageFiles.length; i++) {
-//           final imageFile = File(_imageFiles[i].path);
-//           request.files.add(await http.MultipartFile.fromPath(
-//             'bluck_image[]',
-//             imageFile.path,
-//           ));
-//         }
-
-//         final TokenService _tokenService = TokenService();
-
-//         // Add headers
-//         //const token = "your_access_token_here";
-//         request.headers.addAll({
-//           'Authorization':
-//               'Bearer ${_tokenService.token}',
-//           'Content-Type': 'multipart/form-data',
-//         });
-
-//         try {
-//           // Send the request
-//           var response = await request.send();
-
-//           if (response.statusCode == 200) {
-//             // Parse the response
-//             var responseBody = await response.stream.bytesToString();
-//             print("API Call Successful: $responseBody");
-//           } else {
-//             print("API Call Failed: ${response.statusCode}");
-//           }
-//         } catch (e) {
-//           print("API Call Error: $e");
-//         }
-//       } else {
-//         // Form is invalid, show error
-//         print("Form is invalid. Please check the inputs.");
-//       }
-//     },
-//     icon: const Icon(Icons.save),
-//     label: const Text("Save"),
-//     style: ElevatedButton.styleFrom(
-//       minimumSize: const Size(double.infinity, 50),
-//       backgroundColor: AppColor.primaryColor,
-//       foregroundColor: Colors.white,
-//     ),
-//   ),
-// ),
-
-
-
-bottomNavigationBar: Padding(
+      bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton.icon(
           onPressed: () async {
@@ -496,12 +340,19 @@ bottomNavigationBar: Padding(
                 "auction_date": selectedStartDateTime?.toIso8601String(),
                 "registration_last_date":
                     selectedEndDateTime?.toIso8601String(),
-                "shop_id": 5,    
+                'shop_id': 4,
+                // "id": 15,
+                'slug': 'dfh',
+                'is_auction': 0,
+                 
+                // "inventory_id": 55,
+                 
               };
 
               // Convert images to multipart files
               var request = http.MultipartRequest(
                 'POST',
+                //https://e-commerce.isotopeit.com/api/auctions
                 Uri.parse('https://e-commerce.isotopeit.com/api/auctions'),
               );
 
@@ -568,7 +419,6 @@ bottomNavigationBar: Padding(
           ),
         ),
       ),
-
     );
   }
 
@@ -770,7 +620,7 @@ bottomNavigationBar: Padding(
         validator: isRequired
             ? (value) {
                 if (value == null || value.isEmpty) {
-                  return '$label is required';
+                  return '$required';
                 }
                 return null;
               }
@@ -779,29 +629,7 @@ bottomNavigationBar: Padding(
     );
   }
 
-  // Function to build dropdown fields
-  // Widget _buildDropdown(String? hintText, List<String> options) {
-  //   return Padding(
-  //     padding: const EdgeInsets.only(bottom: 16.0),
-  //     child: DropdownButtonFormField(
-  //       decoration: InputDecoration(
-  //         hintText: hintText,
-  //         border: const OutlineInputBorder(),
-  //       ),
-  //       items: options.map((String value) {
-  //         return DropdownMenuItem<String>(
-  //           value: value,
-  //           child: Text(value),
-  //         );
-  //       }).toList(),
-  //       onChanged: (newValue) {
-  //         setState(() {
-  //           selectedStatus = newValue; // Update the selected value
-  //         });
-  //       },
-  //     ),
-  //   );
-  // }
+
 
   Widget _buildDropdown(String? hintText, List<String> options) {
     return Padding(
@@ -904,61 +732,3 @@ bottomNavigationBar: Padding(
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-// if (_imageFiles.isEmpty) {
-            //   print("No images selected.");
-            // } else {
-            //   for (int i = 0; i < _imageFiles.length; i++) {
-            //     print("Image ${i + 1}: ${_imageFiles[i].name}");
-            //     print("Path: ${_imageFiles[i].path}");
-            //   }
-            // }
-            // print(" product ===========>  $_selectedProduct)}");
-
-            // print(" sku============= $_skuController)}");
-
-            // if (selectedStatus != null) {
-            //   print("Selected Status: $selectedStatusValue");
-            // } else {
-            //   print("No status selected");
-            // }
-
-            // print(
-            //     " keyFeatureControllers ===========>  $_keyFeatureControllers)}");
-
-            // print("  $_priceController)}");
-
-            // print("  $_quantityController)}");
-
-            // print("  $_metaDescriptionController)}");
-
-            // print(" tag ===========>  $_selectedTags)}");
-
-
-
-            // if (selectedStartDateTime != null) {
-            //   print(
-            //       "Selected Start Date: ${selectedStartDateTime!.toIso8601String()}");
-            // } else {
-            //   print("No date selected");
-            // }
-
-
-
-            // if (selectedEndDateTime != null) {
-            //   print(
-            //       "Selected Start Date: ${selectedEndDateTime!.toIso8601String()}");
-            // } else {
-            //   print("No date selected");
-            // }
