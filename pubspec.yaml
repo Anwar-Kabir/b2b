@@ -30,13 +30,23 @@ dependencies:
   url_launcher: ^6.3.1
   font_awesome_flutter: ^10.4.0
   mailer: ^6.2.0
+   
+
 
 dev_dependencies:
+  
+
+ 
+
+ 
+
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^3.0.0
+ 
 
+
+ 
 flutter:
   uses-material-design: true
 
@@ -44,6 +54,7 @@ flutter:
     - assets/
     - assets/svg/
     - assets/logos/
+    - assets/icon/icon.png
   #   - images/a_dot_ham.jpeg
 
   # fonts:

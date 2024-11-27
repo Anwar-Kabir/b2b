@@ -63,7 +63,7 @@ class BottomNavState extends State<BottomNav> {
     loginController.loadUserInfo();
   }
 
-   final LanguageController languageController = Get.find();
+  final LanguageController languageController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -110,29 +110,30 @@ class BottomNavState extends State<BottomNav> {
                       Text(
                         '${loginController.userInfo['name'] ?? 'Unknown Name'}',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontSize: 18,
                         ),
                       ),
                       Text(
                         '${loginController.userInfo['email'] ?? 'Unknown Email'}',
                         style: const TextStyle(
-                          color: Colors.white70,
+                          color: Colors.black87,
                         ),
                       ),
                     ],
                   ),
                 ),
                 ListTile(
-                  leading: const Icon(Icons.home),
-                  title:   Text('home'.tr),
+                  leading: const Icon(Icons.home, color: AppColor.primaryColor),
+                  title: Text('home'.tr),
                   onTap: () {
                     Get.back();
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.account_circle),
-                  title:  Text('attribute'.tr),
+                  leading: const Icon(Icons.account_circle,
+                      color: AppColor.primaryColor),
+                  title: Text('attribute'.tr),
                   onTap: () {
                     Get.to(
                       AttributeListPage(),
@@ -141,7 +142,8 @@ class BottomNavState extends State<BottomNav> {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.settings),
+                  leading:
+                      const Icon(Icons.settings, color: AppColor.primaryColor),
                   title: Text('inventory'.tr),
                   onTap: () {
                     Get.to(
@@ -151,15 +153,16 @@ class BottomNavState extends State<BottomNav> {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.shop),
-                  title:   Text('product'.tr),
+                  leading: const Icon(Icons.shop, color: AppColor.primaryColor),
+                  title: Text('product'.tr),
                   onTap: () {
                     Get.to(ProductListCard(),
                         transition: Transition.rightToLeftWithFade);
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.category),
+                  leading:
+                      const Icon(Icons.category, color: AppColor.primaryColor),
                   title: Text('categorytag'.tr),
                   onTap: () {
                     Get.to(CategoryTagPage(),
@@ -167,7 +170,8 @@ class BottomNavState extends State<BottomNav> {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.accessible),
+                  leading: const Icon(Icons.accessible,
+                      color: AppColor.primaryColor),
                   title: Text('order'.tr),
                   onTap: () {
                     Get.to(OrderListScreen(),
@@ -175,23 +179,25 @@ class BottomNavState extends State<BottomNav> {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.accessible),
+                  leading: const Icon(Icons.accessible,
+                      color: AppColor.primaryColor),
                   title: Text('courier'.tr),
                   onTap: () {
                     Get.to(Courier(),
                         transition: Transition.rightToLeftWithFade);
                   },
                 ),
+                // ListTile(
+                //   leading: const Icon(Icons.send, color: AppColor.primaryColor),
+                //   title: Text('suborder'.tr),
+                //   onTap: () {
+                //     Navigator.of(context).pop(); // Close drawer
+                //     // Add logout functionality here
+                //   },
+                // ),
                 ListTile(
-                  leading: const Icon(Icons.send),
-                  title: Text('suborder'.tr),
-                  onTap: () {
-                    Navigator.of(context).pop(); // Close drawer
-                    // Add logout functionality here
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.image),
+                  leading:
+                      const Icon(Icons.image, color: AppColor.primaryColor),
                   title: Text('shobbanner'.tr),
                   onTap: () {
                     Get.to(BannerManager(),
@@ -199,7 +205,8 @@ class BottomNavState extends State<BottomNav> {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.currency_exchange),
+                  leading: const Icon(Icons.currency_exchange,
+                      color: AppColor.primaryColor),
                   title: Text('wallet'.tr),
                   onTap: () {
                     Get.to(Wallet(),
@@ -207,23 +214,25 @@ class BottomNavState extends State<BottomNav> {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.report),
+                  leading:
+                      const Icon(Icons.report, color: AppColor.primaryColor),
                   title: Text('auction'.tr),
                   onTap: () {
-                    Get.to(  AuctionPage(),
+                    Get.to(AuctionPage(),
                         transition: Transition.rightToLeftWithFade);
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.shop_rounded),
-                  title:  Text('shobsettings'.tr),
+                  leading: const Icon(Icons.shop_rounded,
+                      color: AppColor.primaryColor),
+                  title: Text('shobsettings'.tr),
                   onTap: () {
                     Get.to(const ShopSettingsPage(),
                         transition: Transition.rightToLeftWithFade);
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.note),
+                  leading: const Icon(Icons.note, color: AppColor.primaryColor),
                   title: Text('orderreport'.tr),
                   onTap: () {
                     Get.to(SupplierOrderScreen(),
@@ -231,21 +240,23 @@ class BottomNavState extends State<BottomNav> {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.settings),
-                  title:   Text('appsettings'.tr),
+                  leading:
+                      const Icon(Icons.settings, color: AppColor.primaryColor),
+                  title: Text('appsettings'.tr),
                   onTap: () {
                     Navigator.of(context).pop(); // Close drawer
                     // Add logout functionality here
                   },
                 ),
-                ListTile(
-                  leading: const Icon(Icons.settings),
-                  title: const Text('Contact Us'),
-                  onTap: () {
-                    Get.to(ContactUsPage(),
-                        transition: Transition.rightToLeftWithFade);
-                  },
-                ),
+                // ListTile(
+                //   leading:
+                //       const Icon(Icons.settings, color: AppColor.primaryColor),
+                //   title: const Text('Contact Us'),
+                //   onTap: () {
+                //     Get.to(ContactUsPage(),
+                //         transition: Transition.rightToLeftWithFade);
+                //   },
+                // ),
               ],
             );
           }
@@ -257,8 +268,6 @@ class BottomNavState extends State<BottomNav> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            
-
             label: 'home'.tr,
           ),
           BottomNavigationBarItem(

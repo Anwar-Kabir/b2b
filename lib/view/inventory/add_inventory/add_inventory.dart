@@ -388,158 +388,276 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton.icon(
           onPressed: () async {
-            ///print the data====>
+
+            //  if (_formKey.currentState?.validate() ?? false) {
+            //   if (_imageFiles.isEmpty) {
+            //     print("No images selected.");
+            //     return;
+            //   }
+
+            //   final TokenService _tokenService = TokenService();
+            //   print('token ============>${_tokenService.token}');
+
+            //   final formData = {
+            //     "product_id": _selectedProduct,
+            //     "sku": _skuController.text,
+            //     "active": selectedStatus == "Active" ? 1 : 2,
+            //     'bsti_certification': isCertified,
+            //     'stock_quantity': _quantityController.text,
+            //     'sale_price': _priceController.text,
+            //     'offer_price': _offerController.text,
+            //     'packing_qty': _packingQuantity.text,
+            //     "key_features":
+            //         _keyFeatureControllers.map((c) => c.text).toList(),
+            //     "description": _disController.text,
+            //     "tag_list": _selectedTags,
+            //     "offer_start": selectedStartDateTime?.toIso8601String(),
+            //     "offer_end": selectedEndDateTime?.toIso8601String(),
+            //     "available_from": selectedAvailableDateTime?.toIso8601String(),
+            //     "purchase_price": _purchasePriceController.text,
+            //     "meta_title": _metaTitleController.text,
+            //     "meta_description": _metaDescriptionController.text,
+            //     "net_amount": _netAmmountController.text,
+            //     "attribute[3]": 4,
+            //   };
+
+            //   try {
+            //     var request = http.MultipartRequest(
+            //       'POST',
+            //       Uri.parse(
+            //           'https://e-commerce.isotopeit.com/api/inventory/store'),
+            //     );
+
+            //     // Add form fields
+            //     formData.forEach((key, value) {
+            //       if (value != null) {
+            //         if (value is List) {
+            //           for (var item in value) {
+            //             request.fields['$key[]'] = item.toString();
+            //           }
+            //         } else {
+            //           request.fields[key] = value.toString();
+            //         }
+            //       }
+            //     });
+
+            //     // Add images
+            //     for (var image in _imageFiles) {
+            //       request.files.add(await http.MultipartFile.fromPath(
+            //         'bluck_image[]',
+            //         image.path,
+            //       ));
+            //     }
+
+            //     // Add headers
+            //     request.headers.addAll({
+            //       'Authorization': 'Bearer ${_tokenService.token}',
+            //       'Content-Type': 'multipart/form-data',
+            //     });
+
+            //     print('Request Fields: ${request.fields}');
+            //     print('Request Headers: ${request.headers}');
+
+            //     // Prevent automatic redirection
+            //     request.followRedirects = false;
+
+            //     var response = await request.send();
+
+            //     if (response.statusCode == 200) {
+            //       var responseBody = await response.stream.bytesToString();
+            //       print("API Call Successful: $responseBody");
+            //     } else if (response.statusCode == 302) {
+            //       // Handle Redirect
+            //       final redirectUrl = response.headers['location'];
+            //       if (redirectUrl != null) {
+            //         print("Redirect detected to: $redirectUrl");
+
+            //         var newRequest =
+            //             http.MultipartRequest('POST', Uri.parse(redirectUrl));
+            //         newRequest.headers.addAll(request.headers);
+            //         newRequest.fields.addAll(request.fields);
+
+            //         // Re-add images to avoid "finalized MultipartFile" issue
+            //         for (var image in _imageFiles) {
+            //           newRequest.files.add(await http.MultipartFile.fromPath(
+            //             'bluck_image[]',
+            //             image.path,
+            //           ));
+            //         }
+
+            //         var newResponse = await newRequest.send();
+            //         var newResponseBody =
+            //             await newResponse.stream.bytesToString();
+            //         print(
+            //             "Retry Response: ${newResponse.statusCode} - $newResponseBody");
+            //       } else {
+            //         print("No redirect URL provided.");
+            //       }
+            //     } else if (response.statusCode == 500) {
+            //       var errorResponse = await response.stream.bytesToString();
+            //       print("API Call Failed: 500 Internal Server Error");
+            //       print("Error Response: $errorResponse");
+            //       // Here we might want to alert the user or handle retries
+            //     } else {
+            //       var errorResponse = await response.stream.bytesToString();
+            //       print("API Call Failed: ${response.statusCode}");
+            //       print("Error Response: $errorResponse");
+            //     }
+            //   } catch (e) {
+            //     print("API Call Error: $e");
+            //   }
+            // } else {
+            //   print("Form is invalid. Please check the inputs.");
+            // }
+
+
             if (_formKey.currentState?.validate() ?? false) {
               if (_imageFiles.isEmpty) {
                 print("No images selected.");
-              } else {
-                for (int i = 0; i < _imageFiles.length; i++) {
-                  print("Image ${i + 1}: ${_imageFiles[i].name}");
-                  print("Path: ${_imageFiles[i].path}");
-                }
-              }
-              print(" product ===========>  $_selectedProduct)}");
-
-              print(" sku============= $_skuController)}");
-
-              if (selectedStatus != null) {
-                print("Selected Status: $selectedStatusValue");
-              } else {
-                print("No status selected");
+                return;
               }
 
-              print(
-                  " keyFeatureControllers ===========>  $_keyFeatureControllers)}");
+              final TokenService _tokenService = TokenService();
+              print('Token: ${_tokenService.token}');
 
-              print("price   $_priceController)}");
-              print("offer   $_offerController)}");
-              print("discription ::===>   $_disController)}");
-
-              print(" quantity $_quantityController)}");
-              print(" package quantity $_packingQuantity)}");
-              print(" commission $_commissionController)}");
-              print(" net amout $_netAmmountController)}");
-              print(" purchage price $_purchasePriceController)}");
-              print(" mete $_metaTitleController)}");
-
-              print(" metaDescription $_metaDescriptionController)}");
-
-              print(" tag ===========>  $_selectedTags)}");
-
-              print(isCertified ? "btis ===> Selected: true" : "bits ===> Unselected: false");
-
-              if (selectedStartDateTime != null) {
-                print(
-                    "Selected Start Date: ${selectedStartDateTime!.toIso8601String()}");
-              } else {
-                print("No date selected");
-              }
-
-              if (selectedEndDateTime != null) {
-                print(
-                    "Selected end Date: ${selectedEndDateTime!.toIso8601String()}");
-              } else {
-                print("No date selected");
-              }
-
-              if (selectedAvailableDateTime != null) {
-                print(
-                    "Selected vailable Date: ${selectedAvailableDateTime!.toIso8601String()}");
-              } else {
-                print("No date selected");
-              }
-
-              // Collect form data
               final formData = {
-                "product_id":
-                    _selectedProduct, // Replace with actual product ID
+                "product_id": _selectedProduct,
                 "sku": _skuController.text,
                 "active": selectedStatus == "Active" ? 1 : 2,
                 'bsti_certification': isCertified,
-                'stock_quantity' : _quantityController,
-                'sale_price' : _priceController, 
-                'offer_price': _offerController,
-                'packing_qty' : _packingQuantity,
-                
+                'stock_quantity': _quantityController.text,
+                'sale_price': _priceController.text,
+                'offer_price': _offerController.text,
+                'packing_qty': _packingQuantity.text,
                 "key_features":
                     _keyFeatureControllers.map((c) => c.text).toList(),
                 "description": _disController.text,
                 "tag_list": _selectedTags,
                 "offer_start": selectedStartDateTime?.toIso8601String(),
-                "offer_end":
-                    selectedEndDateTime?.toIso8601String(),
+                "offer_end": selectedEndDateTime?.toIso8601String(),
                 "available_from": selectedAvailableDateTime?.toIso8601String(),
-                "purchase_price": _purchasePriceController,
-                "meta_title": _metaTitleController,
-                "meta_description": _metaDescriptionController,
-                "net_amount" : _netAmmountController,
+                "purchase_price": _purchasePriceController.text,
+                "meta_title": _metaTitleController.text,
+                "meta_description": _metaDescriptionController.text,
+                "net_amount": _netAmmountController.text,
                 "attribute[3]": 4,
-                
-                //'shop_id': 4,
-               
+                "shop_id": 5,
+                "slug": "Apple-9c3c94bd-32d7-4454-a9a9-d9cc09eb7691",
               };
 
-              // Convert images to multipart files
-              var request = http.MultipartRequest(
-                'POST',
-                //https://e-commerce.isotopeit.com/api/auctions
-                Uri.parse(
-                    'https://e-commerce.isotopeit.com/api/inventory/store'),
-              );
-
-              // Add form fields
-              formData.forEach((key, value) {
-                if (value != null) {
-                  if (value is List) {
-                    for (var item in value) {
-                      request.fields['$key[]'] = item.toString();
-                    }
-                  } else {
-                    request.fields[key] = value.toString();
-                  }
-                }
-              });
-
-              // Add images to the request
-              for (int i = 0; i < _imageFiles.length; i++) {
-                final imageFile = File(_imageFiles[i].path);
-                request.files.add(await http.MultipartFile.fromPath(
-                  'bluck_image[]',
-                  imageFile.path,
-                ));
-              }
-
-              final TokenService _tokenService = TokenService();
-
-              // Add headers
-              request.headers.addAll({
-                'Authorization': 'Bearer ${_tokenService.token}',
-                'Content-Type': 'multipart/form-data',
-              });
-
               try {
-                // Send the request
+                var request = http.MultipartRequest(
+                  'POST',
+                  Uri.parse(
+                      'https://e-commerce.isotopeit.com/api/inventory/store'),
+                );
+
+                // Add form fields
+                formData.forEach((key, value) {
+                  if (value != null) {
+                    if (value is List) {
+                      for (var item in value) {
+                        request.fields['$key[]'] = item.toString();
+                      }
+                    } else {
+                      request.fields[key] = value.toString();
+                    }
+                  }
+                });
+
+                // Add images
+                for (var image in _imageFiles) {
+                  request.files.add(await http.MultipartFile.fromPath(
+                    'bluck_image[]',
+                    image.path,
+                  ));
+                }
+
+                // Add headers
+                request.headers.addAll({
+                  'Authorization': 'Bearer ${_tokenService.token}',
+                  'Content-Type': 'multipart/form-data',
+                });
+
+                print('Request Fields: ${request.fields}');
+                print('Request Headers: ${request.headers}');
+
+                // Prevent automatic redirection
+                request.followRedirects = false;
+
                 var response = await request.send();
 
-                // Handle the response
                 if (response.statusCode == 200) {
-                  // Parse the response
                   var responseBody = await response.stream.bytesToString();
                   print("API Call Successful: $responseBody");
+                } else if (response.statusCode == 302) {
+                  // Handle Redirect
+                  final redirectUrl = response.headers['location'];
+                  if (redirectUrl != null) {
+                    print("Redirect detected to: $redirectUrl");
+
+                    var newRequest =
+                        http.MultipartRequest('POST', Uri.parse(redirectUrl));
+                    newRequest.headers.addAll(request.headers);
+                    newRequest.fields.addAll(request.fields);
+
+                    // Re-add images to avoid "finalized MultipartFile" issue
+                    for (var image in _imageFiles) {
+                      newRequest.files.add(await http.MultipartFile.fromPath(
+                        'bluck_image[]',
+                        image.path,
+                      ));
+                    }
+
+                    var newResponse = await newRequest.send();
+                    var newResponseBody =
+                        await newResponse.stream.bytesToString();
+                    print(
+                        "Retry Response: ${newResponse.statusCode} - $newResponseBody");
+                  } else {
+                    print("No redirect URL provided.");
+                  }
+                } else if (response.statusCode == 500) {
+                  var errorResponse = await response.stream.bytesToString();
+                  print("API Call Failed: 500 Internal Server Error");
+                  print("Error Response: $errorResponse");
+                  // Specific Error Handling for 500 Server Error
+                  print("Possible causes for 500 error:");
+                  print("- Invalid data or format being sent to the server.");
+                  print(
+                      "- Server-side issues (e.g., database or server errors).");
+                  print("- Missing required fields.");
+                  // Here you may want to alert the user or handle retries
                 } else {
-                  // Print the error details
                   var errorResponse = await response.stream.bytesToString();
                   print("API Call Failed: ${response.statusCode}");
                   print("Error Response: $errorResponse");
+                  // Print more specific errors based on status code
+                  if (response.statusCode == 400) {
+                    print("Bad Request: Likely missing or invalid fields.");
+                  } else if (response.statusCode == 401) {
+                    print("Unauthorized: Check token validity.");
+                  } else if (response.statusCode == 403) {
+                    print("Forbidden: You do not have permission.");
+                  } else if (response.statusCode == 404) {
+                    print("Not Found: The endpoint may be incorrect.");
+                  } else {
+                    print(
+                        "Unexpected Error: Status code ${response.statusCode}");
+                  }
                 }
               } catch (e) {
-                // Catch and print any errors
                 print("API Call Error: $e");
+                // Log specific error type (e.g., network error, timeout, etc.)
+                print("Possible Causes:");
+                print("- Network issues.");
+                print("- Timeout.");
+                print("- Invalid URL.");
               }
             } else {
-              // Form is invalid, show error
               print("Form is invalid. Please check the inputs.");
             }
+           
           },
           icon: const Icon(Icons.save),
           label: const Text("Save"),
@@ -905,3 +1023,270 @@ Widget _buildFilePicker(String label, String buttonText) {
     ),
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+ ///print the data====>
+            // if (_formKey.currentState?.validate() ?? false) {
+            //   if (_imageFiles.isEmpty) {
+            //     print("No images selected.");
+            //   } else {
+            //     for (int i = 0; i < _imageFiles.length; i++) {
+            //       print("Image ${i + 1}: ${_imageFiles[i].name}");
+            //       print("Path: ${_imageFiles[i].path}");
+            //     }
+            //   }
+            //   print(" product ===========>  $_selectedProduct)}");
+
+            //   print(" sku============= $_skuController)}");
+
+            //   if (selectedStatus != null) {
+            //     print("Selected Status: $selectedStatusValue");
+            //   } else {
+            //     print("No status selected");
+            //   }
+
+            //   print(
+            //       " keyFeatureControllers ===========>  $_keyFeatureControllers)}");
+
+            //   print("price   $_priceController)}");
+            //   print("offer   $_offerController)}");
+            //   print("discription ::===>   $_disController)}");
+
+            //   print(" quantity $_quantityController)}");
+            //   print(" package quantity $_packingQuantity)}");
+            //   print(" commission $_commissionController)}");
+            //   print(" net amout $_netAmmountController)}");
+            //   print(" purchage price $_purchasePriceController)}");
+            //   print(" mete $_metaTitleController)}");
+
+            //   print(" metaDescription $_metaDescriptionController)}");
+
+            //   print(" tag ===========>  $_selectedTags)}");
+
+            //   print(isCertified ? "btis ===> Selected: true" : "bits ===> Unselected: false");
+
+            //   if (selectedStartDateTime != null) {
+            //     print(
+            //         "Selected Start Date: ${selectedStartDateTime!.toIso8601String()}");
+            //   } else {
+            //     print("No date selected");
+            //   }
+
+            //   if (selectedEndDateTime != null) {
+            //     print(
+            //         "Selected end Date: ${selectedEndDateTime!.toIso8601String()}");
+            //   } else {
+            //     print("No date selected");
+            //   }
+
+            //   if (selectedAvailableDateTime != null) {
+            //     print(
+            //         "Selected vailable Date: ${selectedAvailableDateTime!.toIso8601String()}");
+            //   } else {
+            //     print("No date selected");
+            //   }
+               
+            //     final TokenService _tokenService = TokenService();
+            //    print('token ============>${_tokenService.token}}');
+
+            //   // Collect form data
+            //   final formData = {
+            //     "product_id":
+            //         _selectedProduct, // Replace with actual product ID
+            //     "sku": _skuController.text,
+            //     "active": selectedStatus == "Active" ? 1 : 2,
+            //     'bsti_certification': isCertified,
+            //     'stock_quantity' : _quantityController,
+            //     'sale_price' : _priceController, 
+            //     'offer_price': _offerController,
+            //     'packing_qty' : _packingQuantity,
+                
+            //     "key_features":
+            //         _keyFeatureControllers.map((c) => c.text).toList(),
+            //     "description": _disController.text,
+            //     "tag_list": _selectedTags,
+            //     "offer_start": selectedStartDateTime?.toIso8601String(),
+            //     "offer_end":
+            //         selectedEndDateTime?.toIso8601String(),
+            //     "available_from": selectedAvailableDateTime?.toIso8601String(),
+            //     "purchase_price": _purchasePriceController,
+            //     "meta_title": _metaTitleController,
+            //     "meta_description": _metaDescriptionController,
+            //     "net_amount" : _netAmmountController,
+            //     "attribute[3]": 4,
+                
+            //     //'shop_id': 4,
+               
+            //   };
+
+            //   // Convert images to multipart files
+            //   var request = http.MultipartRequest(
+            //     'POST',
+            //     //https://e-commerce.isotopeit.com/api/auctions
+            //     Uri.parse(
+            //         'https://e-commerce.isotopeit.com/api/inventory/store'),
+            //   );
+
+            //   // Add form fields
+            //   formData.forEach((key, value) {
+            //     if (value != null) {
+            //       if (value is List) {
+            //         for (var item in value) {
+            //           request.fields['$key[]'] = item.toString();
+            //         }
+            //       } else {
+            //         request.fields[key] = value.toString();
+            //       }
+            //     }
+            //   });
+
+            //   // Add images to the request
+            //   for (int i = 0; i < _imageFiles.length; i++) {
+            //     final imageFile = File(_imageFiles[i].path);
+            //     request.files.add(await http.MultipartFile.fromPath(
+            //       'bluck_image[]',
+            //       imageFile.path,
+            //     ));
+            //   } 
+
+            //   // Add headers
+            //   request.headers.addAll({
+            //     'Authorization': 'Bearer ${_tokenService.token}',
+            //     'Content-Type': 'multipart/form-data',
+            //   });
+
+            //   // try {
+            //   //   var request = http.MultipartRequest(
+            //   //     'POST',
+            //   //     Uri.parse(
+            //   //         'https://e-commerce.isotopeit.com/api/inventory/store'),
+            //   //   );
+
+            //   //   // Add fields and files...
+            //   //   formData.forEach((key, value) {
+            //   //     if (value != null) {
+            //   //       if (value is List) {
+            //   //         for (var item in value) {
+            //   //           request.fields['$key[]'] = item.toString();
+            //   //         }
+            //   //       } else {
+            //   //         request.fields[key] = value.toString();
+            //   //       }
+            //   //     }
+            //   //   });
+
+            //   //   for (int i = 0; i < _imageFiles.length; i++) {
+            //   //     final imageFile = File(_imageFiles[i].path);
+            //   //     request.files.add(await http.MultipartFile.fromPath(
+            //   //       'bluck_image[]',
+            //   //       imageFile.path,
+            //   //     ));
+            //   //   }
+
+            //   //   final TokenService _tokenService = TokenService();
+            //   //   request.headers.addAll({
+            //   //     'Authorization': 'Bearer ${_tokenService.token}',
+            //   //     'Content-Type': 'multipart/form-data',
+            //   //   });
+
+            //   //   request.followRedirects =
+            //   //       false; // Prevent automatic redirection
+            //   //   print('Request URL: ${request.url}');
+            //   //   print('Request Headers: ${request.headers}');
+            //   //   print('Request Fields: ${request.fields}');
+
+            //   //   var response = await request.send();
+
+            //   //   if (response.statusCode == 200) {
+            //   //     var responseBody = await response.stream.bytesToString();
+            //   //     print("API Call Successful: $responseBody");
+            //   //   } else {
+            //   //     var errorResponse = await response.stream.bytesToString();
+            //   //     print("API Call Failed: ${response.statusCode}");
+            //   //     print("Error Response: $errorResponse");
+            //   //   }
+            //   // } catch (e) {
+            //   //   print("API Call Error: $e");
+            //   // }
+
+
+            //   // try {
+            //   //   request.followRedirects = false; // Prevent auto redirection
+
+            //   //   // Log request details for debugging
+            //   //   print('Request URL: ${request.url}');
+            //   //   print('Request Headers: ${request.headers}');
+            //   //   print('Request Fields: ${request.fields}');
+            //   //   print('Number of Files: ${request.files.length}');
+
+            //   //   var response = await request.send();
+
+            //   //   if (response.statusCode == 200) {
+            //   //     // Success
+            //   //     var responseBody = await response.stream.bytesToString();
+            //   //     print("API Call Successful: $responseBody");
+            //   //   } else if (response.statusCode == 302) {
+            //   //     // Handle redirect
+            //   //     print("Redirect detected. Status: 302");
+            //   //     print("Redirect Location: ${response.headers['location']}");
+            //   //   } else {
+            //   //     // Other errors
+            //   //     var errorResponse = await response.stream.bytesToString();
+            //   //     print("API Call Failed: ${response.statusCode}");
+            //   //     print("Error Response: $errorResponse");
+            //   //   }
+            //   // } catch (e) {
+            //   //   // Catch any other errors
+            //   //   print("API Call Error: $e");
+            //   // }
+
+
+            //   try {
+            //     request.followRedirects = false; // Prevent auto redirection
+
+            //     var response = await request.send();
+
+            //     if (response.statusCode == 200) {
+            //       var responseBody = await response.stream.bytesToString();
+            //       print("API Call Successful: $responseBody");
+            //     } else if (response.statusCode == 302) {
+            //       var redirectUrl = response.headers['location'];
+            //       print("Redirect detected. Redirect Location: $redirectUrl");
+
+            //       if (redirectUrl != null) {
+            //         var newRequest =
+            //             http.MultipartRequest('POST', Uri.parse(redirectUrl));
+            //         newRequest.headers.addAll(request.headers);
+            //         newRequest.fields.addAll(request.fields);
+            //         newRequest.files.addAll(request.files);
+
+            //         var newResponse = await newRequest.send();
+            //         var newResponseBody =
+            //             await newResponse.stream.bytesToString();
+            //         print(
+            //             "Retry Response: ${newResponse.statusCode} - $newResponseBody");
+            //       } else {
+            //         print("No redirect URL provided.");
+            //       }
+            //     } else {
+            //       var errorResponse = await response.stream.bytesToString();
+            //       print("API Call Failed: ${response.statusCode}");
+            //       print("Error Response: $errorResponse");
+            //     }
+            //   } catch (e) {
+            //     print("API Call Error: $e");
+            //   }
+            // } else {
+            //   // Form is invalid, show error
+            //   print("Form is invalid. Please check the inputs.");
+            // }
