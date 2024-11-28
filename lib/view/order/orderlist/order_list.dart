@@ -74,7 +74,7 @@ class OrderListScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                '${order.itemCount} Items, Total ৳ ${double.parse(order.total).toStringAsFixed(2)}',
+                                '${order.itemCount} Items, Grand Total ৳ ${double.parse(order.grandTotal).toStringAsFixed(2)}',
                               ),
                             ],
                           ),

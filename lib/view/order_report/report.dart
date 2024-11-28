@@ -2,7 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
-import 'package:isotopeit_b2b/view/order_report/order_report_controller_dart';
+import 'package:isotopeit_b2b/view/order_report/order_report_controller.dart';
+
 import 'package:isotopeit_b2b/view/order_report/order_report_model.dart';
  
 

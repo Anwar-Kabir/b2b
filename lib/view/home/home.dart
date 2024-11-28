@@ -48,16 +48,16 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Auction Section (Upcoming and Live Auctions)
-              _buildAuctionSection(context),
+              //_buildAuctionSection(context),
 
               const SizedBox(height: 20),
 
               // Inventory Section
-              _buildInventorySection(context),
+              //_buildInventorySection(context),
 
               const SizedBox(height: 20),
-
-              _buildOrderSection(context),
+              //order section
+              //_buildOrderSection(context),
             ],
           ),
         ),

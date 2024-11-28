@@ -10,6 +10,9 @@ class PersonalInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LoginController loginController = Get.put(LoginController());
+    DateTime createdAt = DateTime.parse(loginController.userInfo['created_at']);
+    String formattedDate =
+        DateFormat('MMM dd, yyyy, hh:mm a').format(createdAt);
 
     // Load user info if not already loaded
     if (loginController.userInfo.isEmpty) {
@@ -69,14 +72,16 @@ class PersonalInfo extends StatelessWidget {
                       'Description', loginController.userInfo['description']),
                   _buildTableRow('Active',
                       loginController.userInfo['active'] == 1 ? 'Yes' : 'No'),
-                  _buildTableRow('Email Verified',
-                      loginController.userInfo['email_verified_at']),
-                  _buildTableRow(
-                      'Shop ID', loginController.userInfo['shop_id']),
-                  _buildTableRow(
-                      'Role ID', loginController.userInfo['role_id']),
-                  _buildTableRow(
-                      'Created At', loginController.userInfo['created_at']),
+                  // _buildTableRow('Email Verified',
+                  //     loginController.userInfo['email_verified_at']),
+                  // _buildTableRow(
+                  //     'Shop ID', loginController.userInfo['shop_id']),
+                  // _buildTableRow(
+                  //     'Role ID', loginController.userInfo['role_id']),
+                  // _buildTableRow(
+                  //     'Join Date', loginController.userInfo['created_at']),
+
+                  _buildTableRow('Join Date', formattedDate),
                 ],
               ),
             ],

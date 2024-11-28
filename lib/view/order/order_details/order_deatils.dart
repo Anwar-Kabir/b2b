@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
@@ -42,18 +41,33 @@ class OrderDetails extends StatelessWidget {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
-                _buildDetailRow('Order Number:', order.orderNumber),
-                _buildDetailRow('Customer Email:', order.customerEmail),
-                _buildDetailRow('Customer Phone:', order.customerPhoneNumber),
-                 
+                _buildDetailRow('Order Number:', order.orderNumber ?? 'N/A'),
+                _buildDetailRow('Customer Email:', order.customerEmail ?? 'N/A'),
+                _buildDetailRow('Customer Phone:', order.customerPhoneNumber ??  'N/A'),
+
                 // _buildDetailRow('Total Amount:', '${order.total} tk'),
-                _buildDetailRow('Total Amount:',
-                    '${double.parse(order.total).toStringAsFixed(2)} tk'),
-                _buildDetailRow('Tax:', '${double.parse(order.taxes).toStringAsFixed(2)} tk'),
+                // _buildDetailRow('Total Amount:',
+                //     '${double.parse(order.total).toStringAsFixed(2)} tk'),
+                _buildDetailRow(
+                  'Total Amount:',
+                  '${double.tryParse(order.total!.replaceAll(',', '').trim())?.toStringAsFixed(2) ?? '0.00'} tk',
+                ),
+                // _buildDetailRow('Tax:',
+                //     '${double.parse(order.taxes).toStringAsFixed(2)} tk'),
+                _buildDetailRow(
+                  'Tax:',
+                  '${double.tryParse(order.taxes?.replaceAll(',', '').trim() ?? '0')?.toStringAsFixed(2) ?? '0.00'} tk',
+                ),
                 _buildDetailRow(
                     'Payment Status:', order.paymentStatus ? 'Paid' : 'Unpaid'),
-                _buildDetailRow('Grand Total:', '${double.parse(order.grandTotal).toStringAsFixed(2)} tk',
-                    color: Colors.green),
+                // _buildDetailRow('Grand Total:',
+                //     '${double.parse(order.grandTotal).toStringAsFixed(2)} tk',
+                //     color: Colors.green),
+                _buildDetailRow(
+                  'Grand Total:',
+                  '${double.tryParse(order.grandTotal?.replaceAll(',', '').trim() ?? '0')?.toStringAsFixed(2) ?? '0.00'} tk',
+                  color: Colors.green,
+                ),
                 const SizedBox(height: 20),
                 const Text(
                   'Order Items',
@@ -121,7 +135,9 @@ class OrderDetails extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(value,),
+        Text(
+          value,
+        ),
       ],
     );
   }

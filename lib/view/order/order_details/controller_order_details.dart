@@ -29,17 +29,20 @@ class OrderDetailsController extends GetxController {
       .obs;
   var isLoading = true.obs;
 
-  // Fetch order details using GetX and API
+  
+
   Future<void> fetchOrderDetails(int orderId) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? ''; // Ensure token is retrieved
 
     try {
       isLoading(true);
-      final response = await http.get(
-        // Uri.parse('https://e-commerce.isotopeit.com/api/order/$orderId/show'),
-        Uri.parse('${AppURL.baseURL}api/order/$orderId/show'),
+      final url = '${AppURL.baseURL}api/order/$orderId/show';
+      print('Fetching order details from: $url');
+      print('Authorization Token: $token');
 
+      final response = await http.get(
+        Uri.parse(url),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -47,16 +50,68 @@ class OrderDetailsController extends GetxController {
         },
       );
 
+      print('HTTP Status Code: ${response.statusCode}');
+      print('HTTP Response Body: ${response.body}');
+
       if (response.statusCode == 200) {
         var jsonResponse = json.decode(response.body);
+        print('Parsed Response: $jsonResponse');
         orderDetails.value = OrderModel.fromJson(jsonResponse);
       } else {
         Get.snackbar('Error', 'Failed to fetch order details');
+        print(
+            'Error: Failed to fetch order details. Status Code: ${response.statusCode}');
       }
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch order details');
+      print('Exception: $e');
     } finally {
       isLoading(false);
     }
   }
 }
+
+
+
+
+
+
+
+
+
+
+// Fetch order details using GetX and API
+  // Future<void> fetchOrderDetails(int orderId) async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   final token = prefs.getString('token') ?? ''; // Ensure token is retrieved
+
+  //   try {
+  //     isLoading(true);
+  //     final response = await http.get(
+  //       // Uri.parse('https://e-commerce.isotopeit.com/api/order/$orderId/show'),
+  //       Uri.parse('${AppURL.baseURL}api/order/$orderId/show'),
+
+  //       headers: {
+  //         'Accept': 'application/json',
+  //         'Content-Type': 'application/json',
+  //         'Authorization': 'Bearer $token',
+  //       },
+  //     );
+
+  //     if (response.statusCode == 200) {
+  //       var jsonResponse = json.decode(response.body);
+  //       orderDetails.value = OrderModel.fromJson(jsonResponse);
+  //     } else {
+  //       Get.snackbar('Error', 'Failed to fetch order details');
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar('Error', 'Failed to fetch order details');
+  //   } finally {
+  //     isLoading(false);
+  //   }
+  // }
+
+
+
+
+ 

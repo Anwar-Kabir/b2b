@@ -213,15 +213,15 @@ class BottomNavState extends State<BottomNav> {
                         transition: Transition.rightToLeftWithFade);
                   },
                 ),
-                ListTile(
-                  leading:
-                      const Icon(Icons.report, color: AppColor.primaryColor),
-                  title: Text('auction'.tr),
-                  onTap: () {
-                    Get.to(AuctionPage(),
-                        transition: Transition.rightToLeftWithFade);
-                  },
-                ),
+                // ListTile(
+                //   leading:
+                //       const Icon(Icons.report, color: AppColor.primaryColor),
+                //   title: Text('auction'.tr),
+                //   onTap: () {
+                //     Get.to(AuctionPage(),
+                //         transition: Transition.rightToLeftWithFade);
+                //   },
+                // ),
                 ListTile(
                   leading: const Icon(Icons.shop_rounded,
                       color: AppColor.primaryColor),

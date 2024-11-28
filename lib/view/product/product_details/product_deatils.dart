@@ -47,16 +47,7 @@ class ProductDetailsPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // if (product.featureImage != null)
-                  //   ClipRRect(
-                  //     borderRadius: BorderRadius.circular(12.0),
-                  //     child: Image.network(
-                  //       product.featureImage!,
-                  //       height: 200,
-                  //       width: double.infinity,
-                  //       fit: BoxFit.cover,
-                  //     ),
-                  //   ),
+                
                   if (product.featureImage != null &&
                       product.featureImage!.isNotEmpty)
                     Container(

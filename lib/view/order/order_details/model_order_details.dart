@@ -91,23 +91,23 @@ class OrderModel {
 
 class OrderData {
   int id;
-  String orderNumber;
+  String ? orderNumber;
   int customerId;
   int? billingAddressId;
   int? shippingAddressId;
   int itemCount;
-  String total;
-  String discount;
-  String taxes;
-  String deliveryCharge;
-  String grandTotal;
-  String totalPaymentAmount;
-  String customerEmail;
-  String customerPhoneNumber;
+  String ? total;
+  String ? discount;
+  String ? taxes;
+  String ? deliveryCharge;
+  String ? grandTotal;
+  String ? totalPaymentAmount;
+  String ? customerEmail;
+  String ? customerPhoneNumber;
   bool paymentStatus;
   bool orderStatus;
   String? paymentMethod;
-  String buyerNote;
+  String ? buyerNote;
   List<OrderItem> items;
 
   OrderData({
@@ -136,10 +136,10 @@ class OrderData {
     return OrderData(
       id: json['id'],
       orderNumber: json['order_number'],
-      customerId: json['customer_id'],
+      customerId: json['customer_id'] ?? 0,
       billingAddressId: json['billing_address_id'],
       shippingAddressId: json['shipping_address_id'],
-      itemCount: json['item_count'],
+      itemCount: json['item_count'] ?? 0,
       total: json['total'],
       discount: json['discount'],
       taxes: json['taxes'],

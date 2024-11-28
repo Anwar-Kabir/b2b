@@ -40,14 +40,14 @@ class Settings extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 5.0),
-              Card(
-                child: ListTile(
-                  title: const Text("Notification"),
-                  leading: const Icon(Icons.fact_check),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {},
-                ),
-              ),
+              // Card(
+              //   child: ListTile(
+              //     title: const Text("Notification"),
+              //     leading: const Icon(Icons.fact_check),
+              //     trailing: const Icon(Icons.arrow_forward),
+              //     onTap: () {},
+              //   ),
+              // ),
               const SizedBox(height: 5.0),
 
               // Language Change Button
@@ -64,7 +64,31 @@ class Settings extends StatelessWidget {
 
               const SizedBox(height: 5.0),
 
-              Row(
+             
+
+              Card(
+                child: ListTile(
+                  title: const Text("Log out"),
+                  leading: const Icon(Icons.logout),
+                  trailing: const Icon(Icons.arrow_forward),
+                  onTap: () {
+                    _showLogoutDialog();
+                  },
+                ),
+              ),
+              const SizedBox(height: 5.0),
+              // Card(
+              //   child: ListTile(
+              //     title: const Text("Delete Account"),
+              //     leading: const Icon(Icons.delete),
+              //     trailing: const Icon(Icons.arrow_forward),
+              //     onTap: () async {
+              //       // Show the alert dialog
+              //       _showDeleteDialog();
+              //     },
+              //   ),
+              // ),
+               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
@@ -81,29 +105,6 @@ class Settings extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
-
-              Card(
-                child: ListTile(
-                  title: const Text("Log out"),
-                  leading: const Icon(Icons.logout),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {
-                    _showLogoutDialog();
-                  },
-                ),
-              ),
-              const SizedBox(height: 5.0),
-              Card(
-                child: ListTile(
-                  title: const Text("Delete Account"),
-                  leading: const Icon(Icons.delete),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () async {
-                    // Show the alert dialog
-                    _showDeleteDialog();
-                  },
-                ),
               ),
               const SizedBox(height: 20),
             ],
