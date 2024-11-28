@@ -1,143 +1,10 @@
-// // import 'package:flutter/material.dart';
-// // import 'package:get/get.dart';
-// // import 'package:isotopeit_b2b/utils/color.dart';
-// // import 'package:isotopeit_b2b/view/home/home_controller.dart';
-// // import 'package:isotopeit_b2b/view/login/login_controller.dart';
-// // import 'package:isotopeit_b2b/view/signup/signup_controller.dart';
-// // import 'package:isotopeit_b2b/widget/custom_text_field.dart';
-// // import 'package:isotopeit_b2b/widget/label_with_asterisk.dart';
-
-// // class BalanceRequest extends StatefulWidget {
-// //   const BalanceRequest({super.key});
-
-// //   @override
-// //   State<BalanceRequest> createState() => _BalanceRequestState();
-// // }
-
-// // class _BalanceRequestState extends State<BalanceRequest> {
-// //   final SignUpController _controller = Get.put(SignUpController());
-
-// //   final WalletController balanceController = Get.put(WalletController());
-
-// //   @override
-// //   Widget build(BuildContext context) {
-    
-// //       balanceController.fetchWalletBalance();
-      
-// //     return Scaffold(
-// //       appBar: AppBar(
-// //         title: const Text(
-// //           'Withdraw Request',
-// //           style: TextStyle(color: Colors.white),
-// //         ),
-// //         backgroundColor: AppColor.primaryColor.withOpacity(0.7),
-// //         iconTheme: const IconThemeData(
-// //           color: Colors.white,
-// //         ),
-// //       ),
-// //       body: Padding(
-// //         padding: const EdgeInsets.all(16.0),
-// //         child: Column(
-// //           crossAxisAlignment: CrossAxisAlignment.start,
-// //           children: [
-         
-// //             Obx(() => balanceController.isLoading.value
-// //                 ? CircularProgressIndicator() // Show loading indicator
-// //                 : _buildBalanceCard(balanceController.wallet.value.balance)),
-// //             const SizedBox(height: 20),
-
-// //             const SizedBox(height: 10),
-
-// //             const LabelWithAsterisk(
-// //               labelText: "Request Money",
-// //               isRequired: true,
-// //             ),
-// //             CustomTextField(
-// //               prefixIcon: Icons.monetization_on,
-// //               hintText: '500',
-// //               controller: _controller.appNameValidator,
-// //               keyboardType: TextInputType.emailAddress,
-// //               //validator: _controller.validateName,
-// //               onChanged: (value) {
-// //                 // _controller.onFieldChanged();
-// //               },
-// //             ),
-// //             const SizedBox(height: 20),
-
-// //             // Request Button
-
-// //             const Spacer(),
-
-// //             Padding(
-// //               padding: const EdgeInsets.all(8.0),
-// //               child: ElevatedButton.icon(
-// //                 onPressed: () {
-// //                   // Add Save functionality
-// //                 },
-// //                 icon: const Icon(Icons.send),
-// //                 label: const Text("Request"),
-// //                 style: ElevatedButton.styleFrom(
-// //                   minimumSize:
-// //                       const Size(double.infinity, 50), // Make button full-width
-// //                   backgroundColor: AppColor
-// //                       .primaryColor, // Change this to your desired color
-// //                   // For text color:
-// //                   foregroundColor: Colors.white, // Text and icon color
-// //                 ),
-// //               ),
-// //             ),
-// //           ],
-// //         ),
-// //       ),
-// //     );
-// //   }
-
-// //   // Available Balance Card
-// //   Widget _buildBalanceCard(String balance) {
-// //     return Card(
-// //       elevation: 4.0,
-// //       shape: RoundedRectangleBorder(
-// //         borderRadius: BorderRadius.circular(10.0),
-// //       ),
-// //       child: Padding(
-// //         padding: const EdgeInsets.all(8.0),
-// //         child: Row(
-// //           crossAxisAlignment: CrossAxisAlignment.center,
-// //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-// //           children: [
-// //             const Text(
-// //               'Available Balance',
-// //               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-// //             ),
-// //             const SizedBox(width: 5),
-// //             Text(
-// //               '৳ $balance',
-// //               style: const TextStyle(
-// //                 fontSize: 24,
-// //                 fontWeight: FontWeight.bold,
-// //                 color: Colors.green,
-// //               ),
-// //             ),
-// //           ],
-// //         ),
-// //       ),
-// //     );
-// //   }
-// // }
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/view/home/home_controller.dart';
-import 'package:isotopeit_b2b/view/login/login_controller.dart';
-import 'package:isotopeit_b2b/view/signup/signup_controller.dart';
 import 'package:isotopeit_b2b/view/wallet/withdraw_request/request_money_controller.dart';
 import 'package:isotopeit_b2b/widget/custom_text_field.dart';
 import 'package:isotopeit_b2b/widget/label_with_asterisk.dart';
- 
 
 class BalanceRequest extends StatefulWidget {
   const BalanceRequest({super.key});
@@ -147,7 +14,6 @@ class BalanceRequest extends StatefulWidget {
 }
 
 class _BalanceRequestState extends State<BalanceRequest> {
-  final SignUpController _controller = Get.put(SignUpController());
   final WalletController balanceController = Get.put(WalletController());
   final WalletWithdrawController withdrawController =
       Get.put(WalletWithdrawController());
@@ -175,7 +41,7 @@ class _BalanceRequestState extends State<BalanceRequest> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Balance Section
-           Center(
+            Center(
               child: SizedBox(
                 child: Obx(() {
                   if (balanceController.isLoading.value) {
@@ -218,7 +84,9 @@ class _BalanceRequestState extends State<BalanceRequest> {
                         if (amount != null && amount > 0) {
                           withdrawController.requestWithdraw(amount);
                         } else {
-                          Get.snackbar("Error", "Please enter a valid amount");
+                          Get.snackbar("Error", "Please enter a valid amount",
+                              backgroundColor: Colors.red,
+                              colorText: Colors.white);
                         }
                       },
                       icon: const Icon(Icons.send),

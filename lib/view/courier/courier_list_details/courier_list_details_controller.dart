@@ -19,7 +19,7 @@ class CourierDetailController extends GetxController {
 
     try {
       final response = await http.get(
-          Uri.parse('${AppURL.baseURL}courier-show/$id'),
+          Uri.parse('${AppURL.baseURL}api/courier-show/$id'),
           headers: {
           'Authorization': 'Bearer $token',  
           'Accept': 'application/json',
@@ -31,7 +31,8 @@ class CourierDetailController extends GetxController {
         final data = CourierDetailResponse.fromJson(jsonDecode(response.body));
         courierData.value = data.courier;
       } else {
-        Get.snackbar('Error', 'Failed to load data');
+        Get.snackbar('Error', 'Failed to load data ${response.body} ');
+        print(response.body);
       }
     } catch (e) {
       Get.snackbar('Error', e.toString());

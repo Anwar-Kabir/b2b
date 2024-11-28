@@ -135,10 +135,12 @@ class BottomNavState extends State<BottomNav> {
                       color: AppColor.primaryColor),
                   title: Text('attribute'.tr),
                   onTap: () {
+                    Get.back();
                     Get.to(
                       AttributeListPage(),
                       transition: Transition.rightToLeftWithFade,
                     );
+                    
                   },
                 ),
                 ListTile(
@@ -146,6 +148,7 @@ class BottomNavState extends State<BottomNav> {
                       const Icon(Icons.settings, color: AppColor.primaryColor),
                   title: Text('inventory'.tr),
                   onTap: () {
+                    Get.back();
                     Get.to(
                       Inventory(),
                       transition: Transition.rightToLeftWithFade,
@@ -156,6 +159,7 @@ class BottomNavState extends State<BottomNav> {
                   leading: const Icon(Icons.shop, color: AppColor.primaryColor),
                   title: Text('product'.tr),
                   onTap: () {
+                    Get.back();
                     Get.to(ProductListCard(),
                         transition: Transition.rightToLeftWithFade);
                   },
@@ -165,6 +169,7 @@ class BottomNavState extends State<BottomNav> {
                       const Icon(Icons.category, color: AppColor.primaryColor),
                   title: Text('categorytag'.tr),
                   onTap: () {
+                    Get.back();
                     Get.to(CategoryTagPage(),
                         transition: Transition.rightToLeftWithFade);
                   },
@@ -174,6 +179,7 @@ class BottomNavState extends State<BottomNav> {
                       color: AppColor.primaryColor),
                   title: Text('order'.tr),
                   onTap: () {
+                    Get.back();
                     Get.to(OrderListScreen(),
                         transition: Transition.rightToLeftWithFade);
                   },
@@ -183,6 +189,7 @@ class BottomNavState extends State<BottomNav> {
                       color: AppColor.primaryColor),
                   title: Text('courier'.tr),
                   onTap: () {
+                    Get.back();
                     Get.to(Courier(),
                         transition: Transition.rightToLeftWithFade);
                   },
@@ -200,6 +207,7 @@ class BottomNavState extends State<BottomNav> {
                       const Icon(Icons.image, color: AppColor.primaryColor),
                   title: Text('shobbanner'.tr),
                   onTap: () {
+                    Get.back();
                     Get.to(BannerManager(),
                         transition: Transition.rightToLeftWithFade);
                   },
@@ -209,6 +217,7 @@ class BottomNavState extends State<BottomNav> {
                       color: AppColor.primaryColor),
                   title: Text('wallet'.tr),
                   onTap: () {
+                    Get.back();
                     Get.to(Wallet(),
                         transition: Transition.rightToLeftWithFade);
                   },
@@ -227,6 +236,7 @@ class BottomNavState extends State<BottomNav> {
                       color: AppColor.primaryColor),
                   title: Text('shobsettings'.tr),
                   onTap: () {
+                    Get.back();
                     Get.to(const ShopSettingsPage(),
                         transition: Transition.rightToLeftWithFade);
                   },
@@ -235,6 +245,7 @@ class BottomNavState extends State<BottomNav> {
                   leading: const Icon(Icons.note, color: AppColor.primaryColor),
                   title: Text('orderreport'.tr),
                   onTap: () {
+                    Get.back();
                     Get.to(SupplierOrderScreen(),
                         transition: Transition.rightToLeftWithFade);
                   },
@@ -244,7 +255,8 @@ class BottomNavState extends State<BottomNav> {
                       const Icon(Icons.settings, color: AppColor.primaryColor),
                   title: Text('appsettings'.tr),
                   onTap: () {
-                    Navigator.of(context).pop(); // Close drawer
+                    Get.back();
+                   // Navigator.of(context).pop(); // Close drawer
                     // Add logout functionality here
                   },
                 ),

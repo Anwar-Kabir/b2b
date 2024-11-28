@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
+import 'package:isotopeit_b2b/view/home/home_controller.dart';
 import 'package:isotopeit_b2b/view/wallet/wallet_index/wallet_index_controller.dart';
 import 'package:isotopeit_b2b/view/wallet/withdraw_request/wallet_request_money.dart';
 
 class Wallet extends StatelessWidget {
   final WalletIndexController controller = Get.put(WalletIndexController());
+  final WalletController balanceController = Get.put(WalletController());
 
   @override
   Widget build(BuildContext context) {
@@ -48,34 +50,62 @@ class Wallet extends StatelessWidget {
         } else if (controller.requests.isEmpty) {
           return Center(child: Text("No withdraw requests found"));
         } else {
-          return ListView.builder(
-            itemCount: controller.requests.length,
-            itemBuilder: (context, index) {
-              final request = controller.requests[index];
-              return Card(
-                margin: EdgeInsets.all(8),
-                child: ListTile(
-                  title: Text(
-                    "Requested By: ${request.requestedBy}",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Center(
+                    child: SizedBox(
+                      child: Obx(() {
+                        if (balanceController.isLoading.value) {
+                          return CircularProgressIndicator(); // Show loading indicator
+                        } else if (!balanceController.isWalletAvailable.value) {
+                          return Text(
+                              "No wallet available."); // Show no wallet message
+                        } else {
+                          return _buildBalanceCard(balanceController
+                              .wallet.value.balance); // Show balance card
+                        }
+                      }),
+                    ),
                   ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Requested At: ${DateFormat('dd-MM-yyyy HH:mm').format(DateTime.parse(request.requestedAt))}",
-                      ),
-                      Text("Amount: \$${request.amount}"),
-                    ],
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: controller.requests.length,
+                    itemBuilder: (context, index) {
+                      final request = controller.requests[index];
+                      return Card(
+                        margin: EdgeInsets.all(8),
+                        child: ListTile(
+                          title: Text(
+                            "Requested By: ${request.requestedBy}",
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Requested At: ${DateFormat('dd-MM-yyyy HH:mm').format(DateTime.parse(request.requestedAt))}",
+                              ),
+                              Text("Amount: \$${request.amount}"),
+                            ],
+                          ),
+                          trailing: StatusBadge(status: request.status),
+                          onTap: () {
+                            // Navigate to the details page with the request details
+                            // Get.to(() => WalletRequestDetails(request: request));
+                          },
+                        ),
+                      );
+                    },
                   ),
-                  trailing: StatusBadge(status: request.status),
-                  onTap: () {
-                    // Navigate to the details page with the request details
-                    // Get.to(() => WalletRequestDetails(request: request));
-                  },
-                ),
-              );
-            },
+                   SizedBox(height: 20,)
+                ],
+               
+              ),
+            ),
           );
         }
       }),
@@ -85,6 +115,38 @@ class Wallet extends StatelessWidget {
       // ),
     );
   }
+
+    Widget _buildBalanceCard(String balance) {
+    return Card(
+      elevation: 4.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Available Balance',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(width: 5),
+            Text(
+              '৳ $balance',
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.green,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
 }
 
 class StatusBadge extends StatelessWidget {

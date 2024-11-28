@@ -88,24 +88,25 @@ class Settings extends StatelessWidget {
               //     },
               //   ),
               // ),
-               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Switch Day and Night Mode',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(height: 20),
-                  Obx(
-                    () => Switch(
-                      value: themeController.isDarkMode.value,
-                      onChanged: (value) {
-                        themeController.toggleTheme();
-                      },
-                    ),
-                  ),
-                ],
-              ),
+              
+              //  Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     const Text(
+              //       'Switch Day and Night Mode',
+              //       style: TextStyle(fontSize: 18),
+              //     ),
+              //     const SizedBox(height: 20),
+              //     Obx(
+              //       () => Switch(
+              //         value: themeController.isDarkMode.value,
+              //         onChanged: (value) {
+              //           themeController.toggleTheme();
+              //         },
+              //       ),
+              //     ),
+              //   ],
+              // ),
               const SizedBox(height: 20),
             ],
           ),
