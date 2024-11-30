@@ -45,9 +45,9 @@ class WalletWithdrawController extends GetxController {
 
         controller.fetchWithdrawRequests();
 
-        Get.to(Wallet(), transition: Transition.leftToRightWithFade);
+        Get.offAll(Wallet(), transition: Transition.leftToRightWithFade);
 
-        Get.snackbar("Success", withdrawResponse.message,
+        Get.snackbar("Success", 'Successfully Create Withdraw Request',
             backgroundColor: Colors.green, colorText: Colors.white);
         print(response.body);
       } else {

@@ -69,7 +69,7 @@ class LoginState extends State<Login> {
                         // Email field
                         CustomTextField(
                           prefixIcon: Icons.email,
-                          hintText: 'Enter Your Email',
+                          hintText: 'Enter Your Email or Phone',
                           controller: _loginController.appEmailValidator,
                           keyboardType: TextInputType.emailAddress,
                           validator: (value) => _loginController.appValidator
@@ -129,32 +129,32 @@ class LoginState extends State<Login> {
 
                         const SizedBox(height: 20),
 
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text.rich(
-                            TextSpan(
-                              text: "Forget Password? ",
-                              style: const TextStyle(color: Colors.grey),
-                              children: [
-                                TextSpan(
-                                  text: 'Click here',
-                                  style: const TextStyle(
-                                    color: AppColor.primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      Get.to(
-                                        const ForgetPassword(),
-                                        transition:
-                                            Transition.rightToLeftWithFade,
-                                      );
-                                    },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        // Align(
+                        //   alignment: Alignment.centerLeft,
+                        //   child: Text.rich(
+                        //     TextSpan(
+                        //       text: "Forget Password? ",
+                        //       style: const TextStyle(color: Colors.grey),
+                        //       children: [
+                        //         TextSpan(
+                        //           text: 'Click here',
+                        //           style: const TextStyle(
+                        //             color: AppColor.primaryColor,
+                        //             fontWeight: FontWeight.bold,
+                        //           ),
+                        //           recognizer: TapGestureRecognizer()
+                        //             ..onTap = () {
+                        //               Get.to(
+                        //                 const ForgetPassword(),
+                        //                 transition:
+                        //                     Transition.rightToLeftWithFade,
+                        //               );
+                        //             },
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
                         const SizedBox(height: 20),
                         Center(
                           child: Text.rich(

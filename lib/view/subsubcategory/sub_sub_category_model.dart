@@ -1,37 +1,35 @@
-class Category {
+// models/category_model.dart
+class CategoryModel {
   final int id;
+  final int categorySubGroupId;
   final String name;
   final String slug;
   final String? description;
   final String icon;
-  //final String code;
   final int active;
-  final int order;
-  //final int subGroupsCount;
+  final int productsCount;
 
-  Category({
+  CategoryModel({
     required this.id,
+    required this.categorySubGroupId,
     required this.name,
     required this.slug,
     this.description,
     required this.icon,
-    //required this.code,
     required this.active,
-    required this.order,
-    //required this.subGroupsCount,
+    required this.productsCount,
   });
 
-  factory Category.fromJson(Map<String, dynamic> json) {
-    return Category(
+  factory CategoryModel.fromJson(Map<String, dynamic> json) {
+    return CategoryModel(
       id: json['id'],
+      categorySubGroupId: json['category_sub_group_id'],
       name: json['name'],
       slug: json['slug'],
       description: json['description'],
       icon: json['icon'],
-      //code: json['code'],
       active: json['active'],
-      order: json['order'],
-      //subGroupsCount: json['sub_groups_count'],
+      productsCount: json['products_count'],
     );
   }
 }

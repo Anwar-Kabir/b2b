@@ -42,31 +42,31 @@ class InvenProductDetails extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Image.network(
-                  product.images.isNotEmpty
-                      ? product.images[0].url
-                      : 'https://via.placeholder.com/150',
-                  height: 200,
-                  width: 200,
-                ),
-              ),
+              // Center(
+              //   child: Image.network(
+              //     product.images.isNotEmpty
+              //         ? product.images[0].url
+              //         : 'https://via.placeholder.com/150',
+              //     height: 200,
+              //     width: 200,
+              //   ),
+              // ),
               const SizedBox(height: 10),
-              SizedBox(
-                height: 80,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: product.images.map((image) {
-                    return _buildImageSelection(image.url);
-                  }).toList(),
-                ),
-              ),
+              // SizedBox(
+              //   height: 80,
+              //   child: ListView(
+              //     scrollDirection: Axis.horizontal,
+              //     children: product.images.map((image) {
+              //       return _buildImageSelection(image.url);
+              //     }).toList(),
+              //   ),
+              // ),
               const SizedBox(height: 20),
               Text(product.productName,
                   style: const TextStyle(
                       fontSize: 22, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
-              Text('\$${product.salePrice}',
+              Text('${product.salePrice} tk',
                   style: const TextStyle(
                       fontSize: 22,
                       color: Colors.green,

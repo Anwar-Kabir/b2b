@@ -42,8 +42,8 @@ class OrderDetails extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 _buildDetailRow('Order Number:', order.orderNumber ?? 'N/A'),
-                _buildDetailRow('Customer Email:', order.customerEmail ?? 'N/A'),
-                _buildDetailRow('Customer Phone:', order.customerPhoneNumber ??  'N/A'),
+                // _buildDetailRow('Customer Email:', order.customerEmail ?? 'N/A'),
+                // _buildDetailRow('Customer Phone:', order.customerPhoneNumber ??  'N/A'),
 
                 // _buildDetailRow('Total Amount:', '${order.total} tk'),
                 // _buildDetailRow('Total Amount:',
@@ -54,10 +54,10 @@ class OrderDetails extends StatelessWidget {
                 ),
                 // _buildDetailRow('Tax:',
                 //     '${double.parse(order.taxes).toStringAsFixed(2)} tk'),
-                _buildDetailRow(
-                  'Tax:',
-                  '${double.tryParse(order.taxes?.replaceAll(',', '').trim() ?? '0')?.toStringAsFixed(2) ?? '0.00'} tk',
-                ),
+                // _buildDetailRow(
+                //   'Tax:',
+                //   '${double.tryParse(order.taxes?.replaceAll(',', '').trim() ?? '0')?.toStringAsFixed(2) ?? '0.00'} tk',
+                // ),
                 _buildDetailRow(
                     'Payment Status:', order.paymentStatus ? 'Paid' : 'Unpaid'),
                 // _buildDetailRow('Grand Total:',

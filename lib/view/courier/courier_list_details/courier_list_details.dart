@@ -121,8 +121,18 @@ class CourierDetails extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 6),
-                  Text('Quantity: ${item.quantity}'),
-                  Text('Price: ৳ ${item.unitPrice}'),
+                  Row(
+                    children: [
+                      Text('Quantity: ${item.quantity} '),
+                      Text('${item.uom}'),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text('Price: ${item.unitPrice} Tk '),
+                       Text('${item.uom}'),
+                    ],
+                  ),
                 ],
               ),
             ),

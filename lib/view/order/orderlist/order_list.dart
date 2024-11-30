@@ -74,35 +74,30 @@ class OrderListScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                '${order.itemCount} Items, Grand Total ৳ ${double.parse(order.grandTotal).toStringAsFixed(2)}',
+                                '${order.itemCount} Items',
+                              ),
+                              Text(
+                                'Grand Total ৳ ${double.parse(order.grandTotal).toStringAsFixed(2)}',
                               ),
                             ],
                           ),
-                          // Status Chips
+                          //Status Chips
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               SizedBox(
                                 height: 35,
                                 child: Chip(
-                                  label: Text(order.orderStatus == 1
-                                      ? 'Approved'
-                                      : 'Pending'),
-                                  backgroundColor: order.orderStatus == 1
-                                      ? Colors.green.shade100
-                                      : Colors.orange.shade100,
+                                  label: FittedBox(child: Text('${order.orderStatus}')),
+                                 
                                 ),
                               ),
                               const SizedBox(height: 8),
                               SizedBox(
                                 height: 35,
                                 child: Chip(
-                                  label: Text(order.paymentStatus == 1
-                                      ? 'Paid'
-                                      : 'Unpaid'),
-                                  backgroundColor: order.paymentStatus == 1
-                                      ? Colors.green.shade100
-                                      : Colors.red.shade100,
+                                  label: FittedBox(child: Text('${order.paymentStatus}')),
+                                  
                                 ),
                               ),
                             ],

@@ -65,8 +65,8 @@ class CategoryTagPage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text('Serial Number: ${category.order}'),
-                              Text(
-                                  'Sub Categories: ${category.subGroupsCount}'),
+                              // Text(
+                              //     'Sub Categories: ${category.subGroupsCount}'),
                             ],
                           ),
                           trailing: category.active == 1

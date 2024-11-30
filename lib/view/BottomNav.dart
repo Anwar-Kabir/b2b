@@ -17,6 +17,7 @@ import 'package:isotopeit_b2b/view/product/productlist/product_list.dart';
 import 'package:isotopeit_b2b/view/order_report/report.dart';
 import 'package:isotopeit_b2b/view/settings/settings.dart';
 import 'package:isotopeit_b2b/view/shopsettings/shop_settings.dart';
+import 'package:isotopeit_b2b/view/subsubcategory/sub_sub_category.dart';
 import 'package:isotopeit_b2b/view/wallet/wallet_index/wallet.dart';
 
 class BottomNav extends StatefulWidget {
@@ -131,19 +132,6 @@ class BottomNavState extends State<BottomNav> {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.account_circle,
-                      color: AppColor.primaryColor),
-                  title: Text('attribute'.tr),
-                  onTap: () {
-                    Get.back();
-                    Get.to(
-                      AttributeListPage(),
-                      transition: Transition.rightToLeftWithFade,
-                    );
-                    
-                  },
-                ),
-                ListTile(
                   leading:
                       const Icon(Icons.settings, color: AppColor.primaryColor),
                   title: Text('inventory'.tr),
@@ -155,26 +143,7 @@ class BottomNavState extends State<BottomNav> {
                     );
                   },
                 ),
-                ListTile(
-                  leading: const Icon(Icons.shop, color: AppColor.primaryColor),
-                  title: Text('product'.tr),
-                  onTap: () {
-                    Get.back();
-                    Get.to(ProductListCard(),
-                        transition: Transition.rightToLeftWithFade);
-                  },
-                ),
-                ListTile(
-                  leading:
-                      const Icon(Icons.category, color: AppColor.primaryColor),
-                  title: Text('categorytag'.tr),
-                  onTap: () {
-                    Get.back();
-                    Get.to(CategoryTagPage(),
-                        transition: Transition.rightToLeftWithFade);
-                  },
-                ),
-                ListTile(
+                 ListTile(
                   leading: const Icon(Icons.accessible,
                       color: AppColor.primaryColor),
                   title: Text('order'.tr),
@@ -194,6 +163,54 @@ class BottomNavState extends State<BottomNav> {
                         transition: Transition.rightToLeftWithFade);
                   },
                 ),
+                ListTile(
+                  leading: const Icon(Icons.shop, color: AppColor.primaryColor),
+                  title: Text('product'.tr),
+                  onTap: () {
+                    Get.back();
+                    Get.to(ProductListCard(),
+                        transition: Transition.rightToLeftWithFade);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.account_circle,
+                      color: AppColor.primaryColor),
+                  title: Text('attribute'.tr),
+                  onTap: () {
+                    Get.back();
+                    Get.to(
+                      AttributeListPage(),
+                      transition: Transition.rightToLeftWithFade,
+                    );
+                    
+                  },
+                ),
+                
+                
+                ListTile(
+                  leading:
+                      const Icon(Icons.category, color: AppColor.primaryColor),
+                  title: Text('Sub sub category'),
+                  onTap: () {
+                    Get.back();
+                    Get.to(SubSubCategory(),
+                        transition: Transition.rightToLeftWithFade);
+                  },
+                ),
+
+                ListTile(
+                  leading:
+                      const Icon(Icons.category, color: AppColor.primaryColor),
+                  title: Text('Category & Tag'),
+                  onTap: () {
+                    Get.back();
+                    Get.to(CategoryTagPage(),
+                        transition: Transition.rightToLeftWithFade);
+                  },
+                ),
+               
+               
+                
                 // ListTile(
                 //   leading: const Icon(Icons.send, color: AppColor.primaryColor),
                 //   title: Text('suborder'.tr),
@@ -212,16 +229,16 @@ class BottomNavState extends State<BottomNav> {
                         transition: Transition.rightToLeftWithFade);
                   },
                 ),
-                ListTile(
-                  leading: const Icon(Icons.currency_exchange,
-                      color: AppColor.primaryColor),
-                  title: Text('wallet'.tr),
-                  onTap: () {
-                    Get.back();
-                    Get.to(Wallet(),
-                        transition: Transition.rightToLeftWithFade);
-                  },
-                ),
+                // ListTile(
+                //   leading: const Icon(Icons.currency_exchange,
+                //       color: AppColor.primaryColor),
+                //   title: Text('wallet'.tr),
+                //   onTap: () {
+                //     Get.back();
+                //     Get.to(Wallet(),
+                //         transition: Transition.rightToLeftWithFade);
+                //   },
+               // ),
                 // ListTile(
                 //   leading:
                 //       const Icon(Icons.report, color: AppColor.primaryColor),
@@ -250,16 +267,16 @@ class BottomNavState extends State<BottomNav> {
                         transition: Transition.rightToLeftWithFade);
                   },
                 ),
-                ListTile(
-                  leading:
-                      const Icon(Icons.settings, color: AppColor.primaryColor),
-                  title: Text('appsettings'.tr),
-                  onTap: () {
-                    Get.back();
-                   // Navigator.of(context).pop(); // Close drawer
-                    // Add logout functionality here
-                  },
-                ),
+                // ListTile(
+                //   leading:
+                //       const Icon(Icons.settings, color: AppColor.primaryColor),
+                //   title: Text('appsettings'.tr),
+                //   onTap: () {
+                //     Get.back();
+                //    // Navigator.of(context).pop(); // Close drawer
+                //     // Add logout functionality here
+                //   },
+                // ),
                 // ListTile(
                 //   leading:
                 //       const Icon(Icons.settings, color: AppColor.primaryColor),

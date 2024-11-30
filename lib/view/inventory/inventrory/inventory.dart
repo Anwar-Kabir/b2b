@@ -167,7 +167,7 @@ class ProductCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
                     image: DecorationImage(
-                      image: NetworkImage(product.featureImage),
+                      image: NetworkImage(product.image),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -186,11 +186,21 @@ class ProductCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
                       
-                      Text(
-                        'Price: \$${double.parse(product.salePrice).toStringAsFixed(2) }',
-                        style: const TextStyle(color: AppColor.primaryColor),
+                      Row(
+                        children: [
+                          Text(
+                            'Price: ${double.parse(product.salePrice).toStringAsFixed(2)} Tk ',
+                            style: const TextStyle(color: AppColor.primaryColor),
+                          ),
+                          SizedBox(width: 5,),
+                          Text(
+                            '${product.uom}',
+                            style:
+                                const TextStyle(color: AppColor.primaryColor),
+                          ),
+                        ],
                       ),
-                      Text('Net Price: \$${product.netPrice}'),
+                      Text('Stock Quantity: ${product.stockQuantity}'),
                       
                     ],
                   ),

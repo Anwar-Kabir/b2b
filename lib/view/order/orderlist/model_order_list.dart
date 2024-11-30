@@ -6,8 +6,8 @@ class Order {
   int itemCount;
   String total;
   String grandTotal;
-  int orderStatus;
-  int paymentStatus;
+  String orderStatus;
+  String paymentStatus;
   DateTime createdAt;
 
   Order({

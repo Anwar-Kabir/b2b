@@ -1,55 +1,8 @@
-// Center(
-//   child: Stack(
-//     alignment: Alignment.bottomRight,
-//     children: [
-//       CircleAvatar(
-//         radius: 65,
-//         backgroundColor: Colors.green[100],
-//         child: CircleAvatar(
-//           radius: 60,
-//           backgroundImage: _imageFile != null
-//               ? FileImage(File(_imageFile!.path))
-//               : const AssetImage(AppImages.imagebase)
-//                   as ImageProvider,
-//         ),
-//       ),
-//       Positioned(
-//         bottom: 4,
-//         right: 4,
-//         child: GestureDetector(
-//           onTap: () {
-//             _showImageSourceActionSheet(context);
-//           },
-//           child: Container(
-//             decoration: const BoxDecoration(
-//               shape: BoxShape.circle,
-//               color: Colors.white,
-//             ),
-//             padding: const EdgeInsets.all(6),
-//             child: const Icon(
-//               Icons.camera_alt,
-//               size: 20,
-//               color: Colors.black,
-//             ),
-//           ),
-//         ),
-//       ),
-//     ],
-//   ),
-// ),
-
-import 'dart:io';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
-import 'package:isotopeit_b2b/utils/image.dart';
 import 'package:isotopeit_b2b/view/login/login.dart';
-import 'package:isotopeit_b2b/view/signup/model/district_model.dart';
-import 'package:isotopeit_b2b/view/signup/model/model_division.dart';
-import 'package:isotopeit_b2b/view/signup/model/upazila_model.dart';
 import 'package:isotopeit_b2b/view/signup/signup_controller.dart';
 import 'package:isotopeit_b2b/widget/custom_text_field.dart';
 import 'package:isotopeit_b2b/widget/label_with_asterisk.dart';
@@ -63,20 +16,6 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final SignUpController signupController = Get.put(SignUpController());
-
-  final ImagePicker _picker = ImagePicker();
-
-  XFile? _imageFile;
-
-  Future<void> _pickImage(ImageSource source) async {
-    final XFile? pickedFile = await _picker.pickImage(source: source);
-
-    if (pickedFile != null) {
-      setState(() {
-        _imageFile = pickedFile;
-      });
-    }
-  }
 
   String? selectedValue = 'No';
 
@@ -101,19 +40,14 @@ class _SignUpPageState extends State<SignUpPage> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const SizedBox(height: 40),
-
-                  const LabelWithAsterisk(
-                    labelText: "Company Certification Attachment",
-                    isRequired: true,
-                  ),
+                  const SizedBox(height: 20),
 
                   const SizedBox(height: 20),
 
                   _buildTextField(
-                    "Wholesaler Name",
+                    "Shop Name",
                     Icons.person,
-                    signupController.sellerNameCont,
+                    signupController.shopName,
                     (value) =>
                         signupController.appValidator.validateName(value),
                   ),
@@ -121,48 +55,23 @@ class _SignUpPageState extends State<SignUpPage> {
                   const SizedBox(height: 20),
 
                   _buildTextField(
-                    "Shop Email",
+                    "Merchant Name",
                     Icons.person,
-                    signupController.shopEmailNameCont,
-                    (value) =>
-                        signupController.appValidator.validateEmail(value),
-                  ),
-                  const SizedBox(height: 20),
-
-                  _buildTextField(
-                    "Slug",
-                    Icons.person,
-                    signupController.slug,
+                    signupController.merchantName,
                     (value) =>
                         signupController.appValidator.validateName(value),
                   ),
+
                   const SizedBox(height: 20),
 
                   _buildTextField(
-                    "Trade License Number",
+                    "Merchant Phone",
                     Icons.person,
-                    signupController.tradeLicenseCont,
+                    signupController.merchantPhone,
                     (value) =>
                         signupController.appValidator.validateName(value),
                   ),
-                  const SizedBox(height: 20),
 
-                  _buildTextField(
-                    "City corporation / Pourashova",
-                    Icons.person,
-                    signupController.cityCorporationCont,
-                    (value) =>
-                        signupController.appValidator.validateName(value),
-                  ),
-                  const SizedBox(height: 20),
-
-                  _buildTextField(
-                    "Company Certification",
-                    Icons.person,
-                    signupController.companyCertificationCont,
-                    (value) =>
-                        signupController.appValidator.validateName(value),
-                  ),
                   const SizedBox(height: 20),
 
                   // Division Dropdown
@@ -171,12 +80,13 @@ class _SignUpPageState extends State<SignUpPage> {
                         icon: Icons.map,
                         items: signupController.divisions
                             .map((division) => DropdownMenuItem(
-                                  value: division.name,
-                                  child: Text(division.name),
+                                  value: division.id
+                                      .toString(), // Use ID for selection
+                                  child: Text(division.text),
                                 ))
                             .toList(),
-                        onChanged: (value) =>
-                            signupController.updateSelectedDivision(value!),
+                        onChanged: (value) => signupController
+                            .updateSelectedDivision(value!), // Trigger fetch
                         validator: (value) =>
                             value == null ? 'Please select a division' : null,
                       )),
@@ -191,19 +101,27 @@ class _SignUpPageState extends State<SignUpPage> {
                       icon: Icons.location_city,
                       items: signupController.districts
                           .map((district) => DropdownMenuItem(
-                                value: district.name,
-                                child: Text(district.name),
+                                value: district.id
+                                    .toString(), // Use ID for selection
+                                child: Text(district.text),
                               ))
                           .toList(),
                       onChanged: (value) =>
-                          signupController.updateSelectedDistrict(value!),
+                          signupController.updateSelectedDistrict(
+                              value!), // Update selected district
                       validator: (value) =>
                           value == null ? 'Please select a district' : null,
                     );
                   }),
 
-                  // // Upazila Dropdown
+                  //upzila dropdown
                   Obx(() {
+                    // Check if the user has selected a district
+                    if (signupController.selectedDistrict.value == null) {
+                      return const Text('Please select a district first');
+                    }
+
+                    // Check if upazilas are loading
                     if (signupController.isLoadingUpazilas.value) {
                       return const CircularProgressIndicator();
                     }
@@ -212,338 +130,68 @@ class _SignUpPageState extends State<SignUpPage> {
                       label: "Upazila",
                       icon: Icons.location_city,
                       items: signupController.upazilas
-                          .map((upazila) => DropdownMenuItem(
-                                value: upazila.name,
-                                child: Text(upazila.name),
+                          .map((upazila) => DropdownMenuItem<String>(
+                                value: upazila.id
+                                    .toString(), // Pass the ID here instead of text
+                                child: Text(upazila.text),
                               ))
                           .toList(),
-                      onChanged: (value) =>
-                          signupController.updateSelectedUpazila(value!),
+                      onChanged: (value) {
+                        if (value != null) {
+                          signupController
+                              .updateSelectedUpazila(value); // Update with ID
+                        }
+                      },
                       validator: (value) =>
-                          value == null ? 'Please select a upazila' : null,
+                          value == null ? 'Please select an upazila' : null,
                     );
                   }),
 
-                  
+                  // Postal code dropdown
                   Obx(() {
                     if (signupController.isLoadingZipCodes.value) {
-                      return const CircularProgressIndicator();
+                      return const CircularProgressIndicator(); // Show loading spinner while zip codes are being fetched.
                     }
+
                     return _buildDropdownField(
                       label: "Postal Code",
                       icon: Icons.local_post_office,
                       items: signupController.zipCodes
-                          .map((zipCode) => DropdownMenuItem(
-                                value: zipCode,
-                                child: Text(zipCode),
+                          .map((zipCode) => DropdownMenuItem<String>(
+                                value: zipCode.id
+                                    .toString(), // Pass the ID of the zip code here
+                                child: Text(zipCode.text),
                               ))
                           .toList(),
                       onChanged: (value) {
                         if (value != null) {
                           signupController.updateSelectedZipCode(value);
-                          print('Selected Zip Code: $value');
+                          print('Selected Zip Code ID: $value');
                         }
                       },
                       validator: (value) => (value == null || value.isEmpty) &&
                               signupController.zipCodes.isNotEmpty
-                          ? 'Please select a zip code'
+                          ? 'Please select a postal code'
                           : null,
                     );
                   }),
 
-                  const SizedBox(height: 20),
-
                   _buildTextField(
-                    "Address Line",
+                    "Address",
                     Icons.person,
-                    signupController.addressLineCont,
+                    signupController.address,
                     (value) =>
                         signupController.appValidator.validateName(value),
                   ),
                   const SizedBox(height: 20),
 
                   _buildTextField(
-                    "Merchant Name",
+                    "Interested Area",
                     Icons.person,
-                    signupController.merchantNameCont,
+                    signupController.interestedArea,
                     (value) =>
                         signupController.appValidator.validateName(value),
                   ),
-                  const SizedBox(height: 20),
-
-                  _buildTextField(
-                    "Merchant NID",
-                    Icons.person,
-                    signupController.merchantNIDCont,
-                    (value) =>
-                        signupController.appValidator.validateName(value),
-                  ),
-                  const SizedBox(height: 20),
-
-                  _buildTextField(
-                    "Merchant Phone",
-                    Icons.person,
-                    signupController.merchantPhoneCont,
-                    (value) =>
-                        signupController.appValidator.validateName(value),
-                  ),
-                  const SizedBox(height: 20),
-
-                  _buildTextField(
-                    "Merchant Email",
-                    Icons.person,
-                    signupController.merchantEmailCont,
-                    (value) =>
-                        signupController.appValidator.validateName(value),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  const FittedBox(
-                    child: LabelWithAsterisk(
-                      labelText:
-                          "Is the merchant's address the same as the shop's?",
-                      isRequired: true,
-                    ),
-                  ),
-
-                    Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              // Radio button for "Yes"
-              Obx(() => Radio<String>(
-                    value: 'Yes',
-                    groupValue: signupController.sameAddress.value,  
-                    onChanged: (String? value) {
-                      signupController.updateSameAddress(value);
-                    },
-                  )),
-              const Text('Yes'),
-              const SizedBox(width: 20),
-              // Radio button for "No"
-              Obx(() => Radio<String>(
-                    value: 'No',
-                    groupValue: signupController.sameAddress.value,
-                    onChanged: (String? value) {
-                      signupController.updateSameAddress(value);
-                    },
-                  )),
-              const Text('No'),
-            ],
-          ),
-        
-      
-                  const SizedBox(height: 20),
-
-                  const LabelWithAsterisk(
-                    labelText: "Merchant Division",
-                    isRequired: true,
-                  ),
-
-                  //// Division
-                  Obx(() {
-                    return DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.map),
-                        hintText: 'Select Division',
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Colors.grey, width: 1.0),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: AppColor.primaryColor, width: 2.0),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                      dropdownColor: Colors.grey,
-                      items: signupController.divisions
-                          .map<DropdownMenuItem<String>>((Division division) {
-                        return DropdownMenuItem<String>(
-                          value: division.name,
-                          child: Text(division.name),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        if (value != null) {
-                          signupController.updateSelectedDivision(
-                              value); // Trigger district fetching
-                        }
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return 'Please select a division';
-                        }
-                        return null;
-                      },
-                    );
-                  }),
-
-                  const SizedBox(height: 20),
-
-                  const LabelWithAsterisk(
-                    labelText: "Merchant District",
-                    isRequired: true,
-                  ),
-
-                  //district TextField
-                  Obx(() {
-                    if (signupController.isLoadingDistricts.value) {
-                      return const CircularProgressIndicator();
-                    }
-
-                    return DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.location_city),
-                        hintText: 'Select District',
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Colors.grey, width: 1.0),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: AppColor.primaryColor, width: 2.0),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                      dropdownColor: Colors.grey,
-                      items: signupController.districts
-                          .map<DropdownMenuItem<String>>((District district) {
-                        return DropdownMenuItem<String>(
-                          value: district.name,
-                          child: Text(district.name),
-                        );
-                      }).toList(),
-                      onChanged: signupController.districts.isNotEmpty
-                          ? (value) {
-                              print('Selected District: $value');
-                              signupController.updateSelectedDistrict(
-                                  value!); // Trigger Upazila fetching here
-                            }
-                          : null, // Disable if districts are empty
-                      validator: (value) {
-                        if (value == null &&
-                            signupController.districts.isNotEmpty) {
-                          return 'Please select a district';
-                        }
-                        return null;
-                      },
-                    );
-                  }),
-
-                  const SizedBox(height: 20),
-
-                  const LabelWithAsterisk(
-                    labelText: "Merchant Upazila",
-                    isRequired: true,
-                  ),
-
-                  // Upazila Dropdown
-                  Obx(() {
-                    if (signupController.isLoadingUpazilas.value) {
-                      return const CircularProgressIndicator();
-                    }
-
-                    return DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.location_on),
-                        hintText: 'Select Upazila',
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Colors.grey, width: 1.0),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: AppColor.primaryColor, width: 2.0),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                      dropdownColor: Colors.grey,
-                      items: signupController.upazilas
-                          .map<DropdownMenuItem<String>>((Upazila upazila) {
-                        return DropdownMenuItem<String>(
-                          value: upazila.name,
-                          child: Text(upazila.name),
-                        );
-                      }).toList(),
-                      onChanged: signupController.upazilas.isNotEmpty
-                          ? (value) {
-                              signupController.updateSelectedUpazila(
-                                  value!); // Trigger zip code fetching
-                            }
-                          : null, // Disable if upazilas are empty
-                      validator: (value) {
-                        if (value == null &&
-                            signupController.upazilas.isNotEmpty) {
-                          return 'Please select an upazila';
-                        }
-                        return null;
-                      },
-                    );
-                  }),
-
-                  const SizedBox(height: 20),
-
-                  const LabelWithAsterisk(
-                    labelText: "Merchant Postal Code",
-                    isRequired: true,
-                  ),
-
-                  Obx(() {
-                    if (signupController.isLoadingZipCodes.value) {
-                      return const CircularProgressIndicator();
-                    }
-
-                    return DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.local_post_office),
-                        hintText: 'Select Zip Code',
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Colors.grey, width: 1.0),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: AppColor.primaryColor, width: 2.0),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                      dropdownColor: Colors.grey,
-                      items: signupController.zipCodes
-                          .map<DropdownMenuItem<String>>((String zipCode) {
-                        return DropdownMenuItem<String>(
-                          value: zipCode,
-                          child: Text(zipCode),
-                        );
-                      }).toList(),
-                      onChanged: signupController.zipCodes.isNotEmpty
-                          ? (value) {
-                              print('Selected Zip Code: $value');
-                            }
-                          : null, // Disable if zip codes are empty
-                      validator: (value) {
-                        if (value == null &&
-                            signupController.zipCodes.isNotEmpty) {
-                          return 'Please select a zip code';
-                        }
-                        return null;
-                      },
-                    );
-                  }),
-                  const SizedBox(height: 20),
-
-                   _buildTextField(
-                    "Merchant Address Line",
-                    Icons.person,
-                    signupController.merchantAddressCont,
-                    (value) =>
-                        signupController.appValidator.validateName(value),
-                  ),
-                  const SizedBox(height: 20),
 
                   //password
                   const LabelWithAsterisk(
@@ -585,12 +233,14 @@ class _SignUpPageState extends State<SignUpPage> {
                         maxLines: 1,
                         controller:
                             signupController.merchantConfirmPasswordCont,
-                        isObscure: signupController.obscurePassword.value,
-                        suffixIcon: signupController.obscurePassword.value
-                            ? Icons.visibility_off
-                            : Icons.visibility,
+                        isObscure:
+                            signupController.obscureComformPassword.value,
+                        suffixIcon:
+                            signupController.obscureComformPassword.value
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                         onSuffixTap: () {
-                          signupController.togglePasswordVisibility();
+                          signupController.toggleConformPasswordVisibility();
                         },
                         validator: signupController.validateConfirmPassword,
                         onChanged: (value) {
@@ -599,85 +249,62 @@ class _SignUpPageState extends State<SignUpPage> {
                       )),
                   const SizedBox(height: 20),
 
-                  // Terms and Conditions checkbox
-                  Obx(() => Row(
-                        children: [
-                          Checkbox(
-                            value: signupController.isAgreed.value,
-                            onChanged: (bool? value) {
-                              signupController.updateAgreement(value);
-                            },
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            activeColor: AppColor.primaryColor,
-                          ),
-                          const Expanded(
-                            child: Text.rich(
-                              TextSpan(
-                                text: 'By signing up, you agree to the ',
-                                style: TextStyle(color: Colors.grey),
-                                children: [
-                                  TextSpan(
-                                    text: 'Terms of Service ',
-                                    style: TextStyle(
-                                      color: AppColor.primaryColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: 'and ',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                  TextSpan(
-                                    text: 'Privacy Policy',
-                                    style: TextStyle(
-                                      color: AppColor.primaryColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      )),
                   const SizedBox(height: 20),
 
-                  
-                  Obx(() => SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: signupController.isButtonEnabled.value &&
-                                  !signupController.isLoading.value
-                              ? () {
-                                  signupController.handleSignup();
-                                }
-                              : null,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                signupController.isButtonEnabled.value &&
-                                        !signupController.isLoading.value
-                                    ? AppColor.primaryColor
-                                    : Colors.grey,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+                 
+
+                  Obx(
+                    () => SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (signupController.formKey.currentState
+                                  ?.validate() ??
+                              false) {
+                            signupController.registerSupplier({
+                              'shop_name': signupController.shopName.text,
+                              'merchant_name': signupController
+                                  .merchantName.text, // Fixed here
+                              'merchant_phone':
+                                  signupController.merchantPhone.text,
+                              'address_line1': signupController.address.text,
+                              'interested_area':
+                                  signupController.interestedArea.text,
+                              'division': signupController.selectedDivision
+                                  .value, // Ensure correct values
+                              'district':
+                                  signupController.selectedDistrict.value,
+                              'upazila': signupController.selectedUpazila.value,
+                              'postal_code':
+                                  signupController.selectedZipCode.value,
+                              'password':
+                                  signupController.merchantPasswordCont.text,
+                              'password_confirmation': signupController
+                                  .merchantConfirmPasswordCont.text,
+                            });
+                          } else {
+                            print("Form is invalid");
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColor.primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          child: signupController.isLoading.value
-                              ? const Center(
-                                  child: CircularProgressIndicator(
-                                      color: Colors.white))
-                              : const Text(
-                                  'Register',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                  ),
-                                ),
                         ),
-                      )),
+                        child: signupController.isLoading.value
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                    color: Colors.white))
+                            : const Text(
+                                'Register',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 20),
 
                   // Already have an account? Login
@@ -709,36 +336,6 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         ),
       ),
-    );
-  }
-
-  void _showImageSourceActionSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return SafeArea(
-          child: Wrap(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('Gallery'),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  _pickImage(ImageSource.gallery);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.photo_camera),
-                title: const Text('Camera'),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  _pickImage(ImageSource.camera);
-                },
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 
@@ -790,6 +387,16 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: AppColor.primaryColor, width: 2.0),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: Colors.red, width: 2.0), // Error border color
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: Colors.red, width: 2.0), // Error border when focused
               borderRadius: BorderRadius.circular(10.0),
             ),
           ),

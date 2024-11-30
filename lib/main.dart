@@ -10,6 +10,7 @@ import 'package:isotopeit_b2b/helper/token_service.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/utils/translations/translations.dart';
 import 'package:isotopeit_b2b/view/BottomNav.dart';
+import 'package:isotopeit_b2b/view/signup/signup.dart';
 import 'package:isotopeit_b2b/view/splash/splash.dart';
 import 'package:isotopeit_b2b/widget/no_internet_page.dart';
 
@@ -91,8 +92,9 @@ class MyApp extends StatelessWidget {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasData && snapshot.data!) {
-               // return const Splash();
-                return   BottomNav();  
+               return const Splash();
+                //return   BottomNav();  
+                //return SignUpPage();
               } else {
                 return const NoInternetPage(); // Show no internet page if not connected
               }

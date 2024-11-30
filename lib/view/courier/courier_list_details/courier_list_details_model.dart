@@ -85,6 +85,8 @@ class OrderItem {
   final String unitPrice;
   final String totalPrice;
   final String imageUrl;
+  final String uom;
+
 
   OrderItem({
     required this.itemDescription,
@@ -92,6 +94,7 @@ class OrderItem {
     required this.unitPrice,
     required this.totalPrice,
     required this.imageUrl,
+    required this.uom,
   });
 
   factory OrderItem.fromJson(Map<String, dynamic> json) {
@@ -101,6 +104,7 @@ class OrderItem {
       unitPrice: json['unit_price'],
       totalPrice: json['total_price'],
       imageUrl: json['image_url'],
+      uom: json['uom'],
     );
   }
 }
