@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
+import 'package:isotopeit_b2b/view/attributes/create_attribute/category_group_controller.dart';
 import 'package:isotopeit_b2b/view/signup/signup_controller.dart';
 import 'package:isotopeit_b2b/widget/custom_text_field.dart';
 import 'package:isotopeit_b2b/widget/label_with_asterisk.dart';
@@ -15,6 +16,9 @@ class AddAttributeValueForm extends StatefulWidget {
 
 class _AddAttributeValueFormState extends State<AddAttributeValueForm> {
   final SignUpController _controller = Get.put(SignUpController());
+   final CategoryGroupController categoryController = Get.put(
+    CategoryGroupController(),
+  );
 
   final TextEditingController attributeValueController =
       TextEditingController();
@@ -22,8 +26,7 @@ class _AddAttributeValueFormState extends State<AddAttributeValueForm> {
   Color selectedColor = Colors.black;
   String? selectedAttribute;
 
-  // Dummy data for the dropdown
-  final List<String> attributes = ['Size', 'Color', 'Material'];
+  
 
   // Function to show the color picker dialog
   void pickColor(BuildContext context) {
@@ -78,27 +81,34 @@ class _AddAttributeValueFormState extends State<AddAttributeValueForm> {
               isRequired: true,
             ),
 
-            // Attribute Dropdown
-            DropdownButtonFormField<String>(
+           
+           DropdownButtonFormField<String>(
               decoration: InputDecoration(
-                //labelText: 'Attribute *',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              hint: const Text('Select'),
-              items: attributes
-                  .map((attribute) => DropdownMenuItem<String>(
-                        value: attribute,
-                        child: Text(attribute),
+              hint: const Text('Select Category'),
+              items: categoryController.categories
+                  .map((category) => DropdownMenuItem<String>(
+                        value: category, // Assuming 'category' is a string
+                        child: Text(
+                          category.replaceAll(
+                              '<br>', ', '), // Handle <br> replacement
+                          overflow: TextOverflow
+                              .ellipsis, // Handle long text gracefully
+                          maxLines: 1, // Limit to one line
+                        ),
                       ))
                   .toList(),
               onChanged: (value) {
                 setState(() {
-                  selectedAttribute = value;
+                  selectedAttribute = value; // Update selected attribute
                 });
               },
             ),
+
+
             const SizedBox(height: 16.0),
 
             // Attribute Value TextField
@@ -157,7 +167,7 @@ class _AddAttributeValueFormState extends State<AddAttributeValueForm> {
             ElevatedButton.icon(
               onPressed: () {},
               icon: const Icon(Icons.add),
-              label: const Text("Add Attribute value"),
+              label: const Text("Save Attribute value"),
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),
                 backgroundColor: AppColor.primaryColor,
@@ -171,3 +181,9 @@ class _AddAttributeValueFormState extends State<AddAttributeValueForm> {
     );
   }
 }
+
+
+
+
+
+ 

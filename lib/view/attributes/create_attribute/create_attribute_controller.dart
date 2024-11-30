@@ -55,10 +55,12 @@ class CreateAttributeController extends GetxController {
         }),
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         var data = json.decode(response.body);
         if (data['status'] == 'success') {
           Get.snackbar("Success", "Attribute created successfully");
+          print(data);
+          print(response.body);
         } else {
           errorMessage.value = 'Failed to create attribute';
         }

@@ -8,6 +8,7 @@ import 'package:isotopeit_b2b/utils/translations/language_data.dart';
 import 'package:isotopeit_b2b/view/login/login.dart';
 import 'package:isotopeit_b2b/view/personal_info/personal_info.dart';
 import 'package:isotopeit_b2b/view/splash/splash.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final ThemeController themeController = Get.find();
 
@@ -259,6 +260,14 @@ void _showLogoutDialog() {
                   onPressed: () async {
                     // Start showing the progress indicator
                     isDeleting.value = true;
+
+                     // Remove the token from SharedPreferences
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    await prefs.remove('token');
+
+                    // Wait for 2 seconds to simulate processing
+                    await Future.delayed(const Duration(seconds: 2));
 
                     // Wait for 2 seconds to simulate processing
                     await Future.delayed(const Duration(seconds: 2));

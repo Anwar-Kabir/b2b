@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/color.dart';
@@ -25,40 +26,6 @@ class AttributeListPage extends StatelessWidget {
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
-        actions: [
-          TextButton.icon(
-            onPressed: () {
-              Get.to(
-                const AddAttributeValueForm(),
-                transition: Transition.rightToLeftWithFade,
-              );
-            },
-            label: const Text(
-              "AAV",
-              style: TextStyle(color: Colors.white),
-            ),
-            icon: const Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
-          ),
-          TextButton.icon(
-            onPressed: () {
-              Get.to(
-                const CreateAttributePage(),
-                transition: Transition.rightToLeftWithFade,
-              );
-            },
-            label: const Text(
-              "AV",
-              style: TextStyle(color: Colors.white),
-            ),
-            icon: const Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
-          )
-        ],
       ),
       body: Obx(
         () {
@@ -74,66 +41,134 @@ class AttributeListPage extends StatelessWidget {
             return const Center(child: Text('No attributes available'));
           }
 
-          return ListView.builder(
-            itemCount: attributesController.attributes.length,
-            itemBuilder: (context, index) {
-              final attribute = attributesController.attributes[index];
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment
+                        .spaceBetween, // Spreads buttons across the row
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Get.to(
+                              const AddAttributeValueForm(),
+                              transition: Transition.rightToLeftWithFade,
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Colors.blueGrey, // Custom button color
+                          ),
+                          child: const Text(
+                            'Add Attribute Value',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Get.to(
+                              const CreateAttributePage(),
+                              transition: Transition.rightToLeftWithFade,
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.teal, // Custom button color
+                          ),
+                          child: const Text(
+                            'Add Attribute',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: attributesController.attributes.length,
+                    itemBuilder: (context, index) {
+                      final attribute = attributesController.attributes[index];
 
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                child: SizedBox(
-                  height: 95,
-                  child: GestureDetector(
-                    onTap: () {
-                      Get.to(
-                        AttributeDetailPage(attribute: attribute),
-                        transition: Transition.rightToLeftWithFade,
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
+                        child: SizedBox(
+                          height: 115,
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.to(
+                                AttributeDetailPage(attribute: attribute),
+                                transition: Transition.rightToLeftWithFade,
+                              );
+                            },
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide(
+                                  color: Colors.grey.withOpacity(0.4),
+                                ),
+                              ),
+                              elevation: 4,
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Attribute: ${attribute.name}',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                      
+
+                                        Text(
+                                          'Categories: ${attribute.categories}',
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+
+                                          
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          'Entities: ${attribute.attributeValueCount}',
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       );
                     },
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(
-                          color: Colors.grey.withOpacity(0.4),
-                        ),
-                      ),
-                      elevation: 4,
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Attribute: ${attribute.name}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  'Entities: ${attribute.attributeValueCount}',
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                   ),
-                ),
-              );
-            },
+                ],
+              ),
+            ),
           );
         },
       ),

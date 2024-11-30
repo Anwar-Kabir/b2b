@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
+import 'package:isotopeit_b2b/utils/image.dart';
 import 'package:isotopeit_b2b/view/inventory/inventory_details/inventory_details_controller.dart';
 import 'package:isotopeit_b2b/view/inventory/inventory_details/inventory_product_details_model.dart';
 import 'package:isotopeit_b2b/view/inventory/inventrory/inventory_controller.dart';
@@ -42,6 +43,35 @@ class InvenProductDetails extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              //  Center(
+              //   child: Container(
+              //     decoration: BoxDecoration(
+              //       border: Border.all(
+              //         color: Colors.grey, // Border color
+              //         width: 2.0, // Border width
+              //       ),
+              //       borderRadius: BorderRadius.circular(12.0),
+              //     ),
+              //     child: ClipRRect(
+              //       borderRadius: BorderRadius.circular(12.0),
+              //       child: product.images != null && product.images!.isNotEmpty
+              //           ? Image.network(
+              //               product
+              //                   .images![0].url, // Access the first image's URL
+              //               height: 200,
+              //               width: double.infinity,
+              //               fit: BoxFit.fitHeight,
+              //             )
+              //           : Image.asset(
+              //               AppImages.splashLogo, // Default asset image
+              //               height: 200,
+              //               width: double.infinity,
+              //               fit: BoxFit.cover,
+              //             ),
+              //     ),
+              //   ),
+              // ),
+
               // Center(
               //   child: Image.network(
               //     product.images.isNotEmpty
@@ -120,8 +150,7 @@ class InvenProductDetails extends StatelessWidget {
     );
   }
 
-
-void _showDeleteConfirmationDialog(BuildContext context) {
+  void _showDeleteConfirmationDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -151,17 +180,28 @@ void _showDeleteConfirmationDialog(BuildContext context) {
 
                 if (success) {
                   Get.back(); // Navigate back to the inventory list
-                  Get.snackbar(
-                      'Success', 'Inventory item deleted successfully.');
+                  
+
+                 Get.snackbar(
+                    "Success",
+                    'Inventory item deleted successfully.',
+                    backgroundColor: Colors.green,
+                    colorText: Colors.white,
+                    snackPosition: SnackPosition.BOTTOM,
+                    margin: const EdgeInsets.all(10),
+                    borderRadius: 8,
+                    duration: const Duration(seconds: 3),
+                  );     
 
                   // Notify the inventory list to refresh
                   // Assuming you're using GetX, you can do this by calling a method in the inventory list controller
                   // For example:
                   Get.find<InventoryActiveController>()
                       .fetchActiveProducts(); // Adjust this line based on your controller setup
-                  Get.find<InventoryActiveController>().fetchInactiveProducts(); 
-                  Get.find<InventoryActiveController>().fetchInStockProducts();  
-                  Get.find<InventoryActiveController>().fetchOutOfStockProducts();    
+                  Get.find<InventoryActiveController>().fetchInactiveProducts();
+                  Get.find<InventoryActiveController>().fetchInStockProducts();
+                  Get.find<InventoryActiveController>()
+                      .fetchOutOfStockProducts();
                 } else {
                   Get.snackbar('Error', 'Failed to delete inventory item.');
                 }
@@ -173,9 +213,6 @@ void _showDeleteConfirmationDialog(BuildContext context) {
       },
     );
   }
-
- 
-
 
   Widget _buildImageSelection(String imageUrl) {
     return Padding(

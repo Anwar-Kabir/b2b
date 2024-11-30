@@ -70,10 +70,10 @@ class LoginState extends State<Login> {
                         CustomTextField(
                           prefixIcon: Icons.email,
                           hintText: 'Enter Your Email or Phone',
-                          controller: _loginController.appEmailValidator,
+                          controller: _loginController.appEmailValidator ,
                           keyboardType: TextInputType.emailAddress,
                           validator: (value) => _loginController.appValidator
-                              .validateEmail(value),
+                              .validateEmailOrPhone(value),
                         ),
                         const SizedBox(height: 20),
 

@@ -96,9 +96,15 @@ class OrderDetails extends StatelessWidget {
                               ),
                             ],
                           ),
-                          trailing: Chip(
-                            label: const Text('Approved'),
-                            backgroundColor: Colors.green.shade100,
+                          trailing: InkWell(
+                            onTap: (){
+                              _showBottomSheet(context);
+                            },
+                            child: Chip(
+                              label: const Text('Action'),
+                              backgroundColor: Colors.green.shade100,
+                               //onDeleted: () => _showBottomSheet(context),
+                            ),
                           ),
                         ),
                       );
@@ -141,4 +147,92 @@ class OrderDetails extends StatelessWidget {
       ],
     );
   }
+
+  void _showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        String? selectedAddress;
+        final List<String> pickupAddresses = [
+          '123 Main Street',
+          '456 Elm Avenue',
+          '789 Oak Lane'
+        ];
+
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Take Action',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                  'Select Pick-Up Address',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 5),
+              DropdownButtonFormField<String>(
+                decoration: const InputDecoration(
+                  labelText: 'Select Pick-Up Address',
+                  border: OutlineInputBorder(),
+                ),
+                value: selectedAddress,
+                items: pickupAddresses
+                    .map((address) => DropdownMenuItem(
+                          value: address,
+                          child: Text(address),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  selectedAddress = value;
+                },
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                   Expanded(
+                     child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                        ),
+                        onPressed: () {
+                          // Handle Reject action
+                          Navigator.pop(context);
+                          
+                        },
+                        child: const Text('Reject',
+                            style: TextStyle(
+                              color: Colors.white,
+                            )),
+                      ),
+                   ),
+                   SizedBox(width: 10,),
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                      ),
+                      onPressed: () {
+                        // Handle Approve action
+                        Navigator.pop(context);
+                        
+                      },
+                      child: const Text('Approve', style: TextStyle(color: Colors.white),),
+                    ),
+                  ),
+                 
+                ],
+              ),
+            ],
+          ),
+        );});}
 }

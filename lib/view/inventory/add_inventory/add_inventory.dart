@@ -487,7 +487,7 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                   Get.snackbar("Success", 'Inventory Create Successful',
                       backgroundColor: Colors.green, colorText: Colors.white);
 
-                       Get.offAll(Inventory(),
+                       Get.to(Inventory(),
                       transition: Transition.leftToRightWithFade);
 
                   // Navigate after a short delay

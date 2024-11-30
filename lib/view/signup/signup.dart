@@ -46,7 +46,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
                   _buildTextField(
                     "Shop Name",
-                    Icons.person,
+                    'Shop Name',
+                    Icons.storefront,
                     signupController.shopName,
                     (value) =>
                         signupController.appValidator.validateName(value),
@@ -56,6 +57,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
                   _buildTextField(
                     "Merchant Name",
+                    'Merchant Name',
                     Icons.person,
                     signupController.merchantName,
                     (value) =>
@@ -66,7 +68,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
                   _buildTextField(
                     "Merchant Phone",
-                    Icons.person,
+                    'Merchant Phone',
+                    Icons.phone,
                     signupController.merchantPhone,
                     (value) =>
                         signupController.appValidator.validateName(value),
@@ -77,7 +80,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   // Division Dropdown
                   Obx(() => _buildDropdownField(
                         label: "Division",
-                        icon: Icons.map,
+                        icon: Icons.location_on,
                         items: signupController.divisions
                             .map((division) => DropdownMenuItem(
                                   value: division.id
@@ -98,7 +101,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     }
                     return _buildDropdownField(
                       label: "District",
-                      icon: Icons.location_city,
+                      icon: Icons.location_on,
                       items: signupController.districts
                           .map((district) => DropdownMenuItem(
                                 value: district.id
@@ -128,7 +131,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
                     return _buildDropdownField(
                       label: "Upazila",
-                      icon: Icons.location_city,
+                      icon: Icons.location_on,
                       items: signupController.upazilas
                           .map((upazila) => DropdownMenuItem<String>(
                                 value: upazila.id
@@ -155,7 +158,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
                     return _buildDropdownField(
                       label: "Postal Code",
-                      icon: Icons.local_post_office,
+                      icon: Icons.location_on,
                       items: signupController.zipCodes
                           .map((zipCode) => DropdownMenuItem<String>(
                                 value: zipCode.id
@@ -178,7 +181,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
                   _buildTextField(
                     "Address",
-                    Icons.person,
+                    'Address',
+                    Icons.my_location,
                     signupController.address,
                     (value) =>
                         signupController.appValidator.validateName(value),
@@ -186,7 +190,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   const SizedBox(height: 20),
 
                   _buildTextField(
-                    "Interested Area",
+                    "What Do You Want to Sell",
+                    'Electronics, Clothing, Books',
                     Icons.person,
                     signupController.interestedArea,
                     (value) =>
@@ -341,6 +346,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _buildTextField(
     String label,
+    String ?label2,
     IconData icon,
     TextEditingController controller,
     String? Function(String?)? validator, // Ensure return type is `String?`
@@ -352,7 +358,7 @@ class _SignUpPageState extends State<SignUpPage> {
         const SizedBox(height: 8),
         CustomTextField(
           prefixIcon: icon,
-          hintText: label,
+          hintText: label2,
           controller: controller,
           validator: validator,
           onChanged: (value) {

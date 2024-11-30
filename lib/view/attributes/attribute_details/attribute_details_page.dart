@@ -48,7 +48,7 @@ class AttributeDetailPage extends StatelessWidget {
                 value: attribute.attributeValueCount.toString(),
               ),
               DetailsDataRow(
-                title: 'ub Sub Category:',
+                title: 'Sub Sub Category:',
                 value: attribute.categories ?? '',
               ),
               const SizedBox(height: 25),

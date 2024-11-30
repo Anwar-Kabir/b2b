@@ -20,96 +20,48 @@ class CategoryTagPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'Category & Tag',
+            'Tag',
             style: TextStyle(color: Colors.white),
           ),
           backgroundColor: AppColor.primaryColor.withOpacity(0.7),
           iconTheme: const IconThemeData(
             color: Colors.white,
           ),
-          bottom: const TabBar(
-            labelColor: Colors.white, // Color for selected tab
-            unselectedLabelColor: Colors.grey, // Color for unselected tabs
-            indicatorColor: AppColor.primaryColor,
-            tabs: [
-              Tab(text: 'Category'),
-              Tab(text: 'Tag'),
-            ],
-          ),
+          // bottom: const TabBar(
+          //   labelColor: Colors.white, // Color for selected tab
+          //   unselectedLabelColor: Colors.grey, // Color for unselected tabs
+          //   indicatorColor: AppColor.primaryColor,
+          //   tabs: [
+          //     Tab(text: 'Category'),
+          //     Tab(text: 'Tag'),
+          //   ],
+          // ),
         ),
-        body: TabBarView(
-          children: [
-            // Category Tab
-            Obx(() {
-              if (categoryController.isLoading.value) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (categoryController.errorMessage.isNotEmpty) {
-                return Center(
-                    child: 
-                    
-                    Text('No Category found.'));
-              } else {
-                return ListView.builder(
-                  itemCount: categoryController.categories.length,
-                  itemBuilder: (context, index) {
-                    final category = categoryController.categories[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Card(
-                        child: ListTile(
-                          title: Text(
-                            category.name,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Serial Number: ${category.order}'),
-                              // Text(
-                              //     'Sub Categories: ${category.subGroupsCount}'),
-                            ],
-                          ),
-                          trailing: category.active == 1
-                              ? const Text('Active',
-                                  style: TextStyle(color: Colors.green))
-                              : const Text('Inactive',
-                                  style: TextStyle(color: Colors.red)),
-                        ),
+        body: Obx(() {
+          if (tagController.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (tagController.errorMessage.isNotEmpty) {
+            return Center(child: Text(tagController.errorMessage.value));
+          } else {
+            return ListView.builder(
+              itemCount: tagController.tags.length,
+              itemBuilder: (context, index) {
+                final tag = tagController.tags[index];
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    child: ListTile(
+                      title: Text(
+                        tag.name,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                    );
-                  },
+                    ),
+                  ),
                 );
-              }
-            }),
-
-            // Tag Tab
-            Obx(() {
-              if (tagController.isLoading.value) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (tagController.errorMessage.isNotEmpty) {
-                return Center(child: Text(tagController.errorMessage.value));
-              } else {
-                return ListView.builder(
-                  itemCount: tagController.tags.length,
-                  itemBuilder: (context, index) {
-                    final tag = tagController.tags[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Card(
-                        child: ListTile(
-                          title: Text(
-                            tag.name,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                );
-              }
-            }),
-          ],
-        ),
+              },
+            );
+          }
+        }),
       ),
     );
   }

@@ -61,5 +61,24 @@ class AppValidation {
     return null;
   }
 
+  String? validateEmailOrPhone(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'This field cannot be empty';
+    }
+
+    // Regular expression for email validation
+    final emailRegex =
+        RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+
+    // Regular expression for phone number validation
+    final phoneRegex = RegExp(r'^\d{11}$'); // Adjust to your requirements
+
+    if (!emailRegex.hasMatch(value) && !phoneRegex.hasMatch(value)) {
+      return 'Please enter a valid email or phone number';
+    }
+
+    return null;
+  }
+
   
 }

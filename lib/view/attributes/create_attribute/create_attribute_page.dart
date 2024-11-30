@@ -36,7 +36,7 @@ class _CreateAttributePageState extends State<CreateAttributePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Attribute Value',
+          'Attribute',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: AppColor.primaryColor.withOpacity(0.7),
@@ -52,10 +52,11 @@ class _CreateAttributePageState extends State<CreateAttributePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const _LabelWithRequirement(
-                labelText: "Categories",
+                labelText: "Sub Sub Categories",
                 isRequired: true,
               ),
-              Obx(() {
+            
+               Obx(() {
                 if (categoryController.isLoading.value) {
                   return const Center(child: CircularProgressIndicator());
                 }
@@ -69,7 +70,7 @@ class _CreateAttributePageState extends State<CreateAttributePage> {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
-                  hint: const Text('Select'),
+                  hint: const Text('Select Category'),
                   items: categoryController.categories
                       .map(
                         (category) => DropdownMenuItem<String>(
@@ -134,7 +135,7 @@ class _CreateAttributePageState extends State<CreateAttributePage> {
                                 "Attribute created successfully",
                                 backgroundColor: Colors.green.withOpacity(0.4),
                               );
-
+                              print(_controller.isLoading.value);
                               Get.to(() => AttributeListPage());
                             } else {
                               Get.snackbar(
@@ -151,7 +152,7 @@ class _CreateAttributePageState extends State<CreateAttributePage> {
                       ? const CircularProgressIndicator(
                           color: Colors.white,
                         )
-                      : const Text("Save Attribute value"),
+                      : const Text("Save Attribute"),
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 50),
                     backgroundColor: AppColor.primaryColor.withOpacity(0.7),

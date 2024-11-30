@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
@@ -47,7 +48,6 @@ class ProductDetailsPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                
                   if (product.featureImage != null &&
                       product.featureImage!.isNotEmpty)
                     Container(
@@ -64,7 +64,7 @@ class ProductDetailsPage extends StatelessWidget {
                           product.featureImage!,
                           height: 200,
                           width: double.infinity,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.fitHeight,
                         ),
                       ),
                     )
@@ -144,19 +144,25 @@ class ProductDetailsPage extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.all(16.0),
                                 child: Container(
-                                  padding: const EdgeInsets.all(12.0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[200],
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
-                                  child: Text(
-                                    product.description,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey[600],
+                                    padding: const EdgeInsets.all(12.0),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[200],
+                                      borderRadius: BorderRadius.circular(8.0),
                                     ),
-                                  ),
-                                ),
+                                    // child: Text(
+                                    //   product.description,
+                                    //   style: TextStyle(
+                                    //     fontSize: 16,
+                                    //     color: Colors.grey[600],
+                                    //   ),
+                                    // ),
+                                    child:
+                                        Html(data: product.description, style: {
+                                      "body": Style(
+                                       // fontSize: const FontSize(16.0),
+                                        color: Colors.grey[600],
+                                      ),
+                                    })),
                               ),
                             ],
                           ),

@@ -201,7 +201,7 @@ class BottomNavState extends State<BottomNav> {
                 ListTile(
                   leading:
                       const Icon(Icons.category, color: AppColor.primaryColor),
-                  title: Text('Category & Tag'),
+                  title: Text('Tag'),
                   onTap: () {
                     Get.back();
                     Get.to(CategoryTagPage(),
