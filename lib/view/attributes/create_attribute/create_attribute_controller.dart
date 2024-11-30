@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/url.dart';
+import 'package:isotopeit_b2b/view/attributes/attribute_list/attribute.dart';
+import 'package:isotopeit_b2b/view/attributes/attribute_list/attribute_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -30,17 +32,30 @@ class CreateAttributeController extends GetxController {
     return null;
   }
 
-  Future<void> createAttribute(List<String> categories) async {
+  Future<void> createAttribute({
+    required String name,
+    required int order,
+    required List<String> categories,
+  }) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
 
-    // const url = 'https://e-commerce.isotopeit.com/api/attribute';
+    // Define API URL
     const url = '${AppURL.baseURL}api/attribute';
-
 
     try {
       isLoading(true);
-      
+      print('API Call Started: $url');
+
+      // Construct the request body
+      final requestBody = {
+        'name': name,
+        'order': order,
+        'categories': categories,
+      };
+      print('Request Body: ${jsonEncode(requestBody)}');
+
+      // API Call
       final response = await http.post(
         Uri.parse(url),
         headers: {
@@ -48,29 +63,46 @@ class CreateAttributeController extends GetxController {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
-        body: jsonEncode({
-          'name': nameController.text,
-          'order': int.tryParse(orderController.text),
-          'categories': categories,
-        }),
+        body: jsonEncode(requestBody),
       );
+
+      print('Response Status Code: ${response.statusCode}');
+      print('Response Body: ${response.body}');
 
       if (response.statusCode == 201) {
         var data = json.decode(response.body);
-        if (data['status'] == 'success') {
-          Get.snackbar("Success", "Attribute created successfully");
-          print(data);
-          print(response.body);
+        if (response.statusCode == 201) {
+          //Get.snackbar("Success", "Attribute created successfully");
+          print('Attribute Created Successfully: $data');
+
+          Get.snackbar(
+            'Success',
+            'Attribute value created successfully!',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.green,
+          );
+
+          final AttributesController attributesController =
+              Get.put(AttributesController());
+
+          attributesController.fetchAttributes();
+
+          Get.to(AttributeListPage(),
+              transition: Transition.rightToLeftWithFade);
         } else {
-          errorMessage.value = 'Failed to create attribute';
+          errorMessage.value = data['message'] ?? 'Failed to create attribute';
         }
       } else {
-        errorMessage.value = 'Failed to create attribute';
+        var errorData = json.decode(response.body);
+        errorMessage.value =
+            errorData['message'] ?? 'Failed to create attribute';
       }
     } catch (e) {
       errorMessage.value = 'An error occurred: $e';
+      print('Error: $e');
     } finally {
       isLoading(false);
+      print('API Call Ended');
     }
   }
 

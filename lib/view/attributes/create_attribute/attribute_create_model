@@ -1,0 +1,19 @@
+ class Attribute {
+  final String name;
+  final int order;
+  final List<int> categories;
+
+  Attribute({
+    required this.name,
+    required this.order,
+    required this.categories,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      "name": name,
+      "order": order,
+      "categories": categories,
+    };
+  }
+}

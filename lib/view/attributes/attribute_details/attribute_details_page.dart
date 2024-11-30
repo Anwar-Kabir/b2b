@@ -52,62 +52,62 @@ class AttributeDetailPage extends StatelessWidget {
                 value: attribute.categories ?? '',
               ),
               const SizedBox(height: 25),
-              DottedLine(
-                dashColor: Colors.black.withOpacity(0.2),
-              ),
-              const SizedBox(height: 25),
-              const Text(
-                'Attribute Values',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              Card(
-                elevation: 2,
-                margin: const EdgeInsets.symmetric(vertical: 16),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('White',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold)),
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: Colors.green.withOpacity(0.2),
-                                child: IconButton(
-                                  icon: const Icon(Icons.edit,
-                                      color: Colors.green),
-                                  onPressed: () {
-                                    // Implement your edit functionality here
-                                  },
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              CircleAvatar(
-                                backgroundColor: Colors.red.withOpacity(0.2),
-                                child: IconButton(
-                                  icon: const Icon(Icons.delete,
-                                      color: Colors.red),
-                                  onPressed: () {
-                                    // Implement your delete functionality here
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const Text('#fffff', style: TextStyle(fontSize: 16)),
-                    ],
-                  ),
-                ),
-              ),
+              // DottedLine(
+              //   dashColor: Colors.black.withOpacity(0.2),
+              // ),
+              // const SizedBox(height: 25),
+              // const Text(
+              //   'Attribute Values',
+              //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              // ),
+              // Card(
+              //   elevation: 2,
+              //   margin: const EdgeInsets.symmetric(vertical: 16),
+              //   child: Padding(
+              //     padding: const EdgeInsets.all(16.0),
+              //     child: Column(
+              //       crossAxisAlignment: CrossAxisAlignment.start,
+              //       children: [
+              //         Row(
+              //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //           children: [
+              //             const Text('White',
+              //                 style: TextStyle(
+              //                     fontSize: 16, fontWeight: FontWeight.bold)),
+              //             Row(
+              //               children: [
+              //                 CircleAvatar(
+              //                   backgroundColor: Colors.green.withOpacity(0.2),
+              //                   child: IconButton(
+              //                     icon: const Icon(Icons.edit,
+              //                         color: Colors.green),
+              //                     onPressed: () {
+              //                       // Implement your edit functionality here
+              //                     },
+              //                   ),
+              //                 ),
+              //                 const SizedBox(
+              //                   width: 10,
+              //                 ),
+              //                 CircleAvatar(
+              //                   backgroundColor: Colors.red.withOpacity(0.2),
+              //                   child: IconButton(
+              //                     icon: const Icon(Icons.delete,
+              //                         color: Colors.red),
+              //                     onPressed: () {
+              //                       // Implement your delete functionality here
+              //                     },
+              //                   ),
+              //                 ),
+              //               ],
+              //             ),
+              //           ],
+              //         ),
+              //         const Text('#fffff', style: TextStyle(fontSize: 16)),
+              //       ],
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

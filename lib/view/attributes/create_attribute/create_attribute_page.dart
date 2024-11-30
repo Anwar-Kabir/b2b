@@ -24,6 +24,7 @@ class _CreateAttributePageState extends State<CreateAttributePage> {
   );
 
   String? selectedCategory;
+  String? selectedCategoryID;
 
   @override
   void initState() {
@@ -55,8 +56,7 @@ class _CreateAttributePageState extends State<CreateAttributePage> {
                 labelText: "Sub Sub Categories",
                 isRequired: true,
               ),
-            
-               Obx(() {
+              Obx(() {
                 if (categoryController.isLoading.value) {
                   return const Center(child: CircularProgressIndicator());
                 }
@@ -64,24 +64,28 @@ class _CreateAttributePageState extends State<CreateAttributePage> {
                   return Center(
                       child: Text(categoryController.errorMessage.value));
                 }
-                return DropdownButtonFormField<String>(
+                return DropdownButtonFormField<int>(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
                   hint: const Text('Select Category'),
-                  items: categoryController.categories
-                      .map(
-                        (category) => DropdownMenuItem<String>(
-                          value: category,
-                          child: Text(category),
-                        ),
-                      )
-                      .toList(),
+                  items: categoryController.categories.map((category) {
+                    return DropdownMenuItem<int>(
+                      value: category.id, // Store ID as the value
+                      child: Text(category.name), // Display the name
+                    );
+                  }).toList(),
                   onChanged: (value) {
                     setState(() {
-                      selectedCategory = value;
+                      selectedCategoryID =
+                          value.toString(); // Store selected ID
+                      selectedCategory = categoryController.categories
+                          .firstWhere((category) => category.id == value)
+                          .name; // Store selected name
+                      print("Selected Category ID: $selectedCategoryID");
+                      print("Selected Category Name: $selectedCategory");
                     });
                   },
                 );
@@ -122,21 +126,26 @@ class _CreateAttributePageState extends State<CreateAttributePage> {
               const Spacer(),
               Obx(() {
                 return ElevatedButton.icon(
-                  onPressed: _controller.isLoading.value
+                   onPressed: _controller.isLoading.value
                       ? null
                       : () async {
                           if (_controller.validateForm()) {
-                            if (selectedCategory != null) {
-                              await _controller.createAttribute(
-                                  [selectedCategory.toString()]);
+                            if (selectedCategoryID != null) {
+                              print("Category ID: $selectedCategoryID");
+                              print(
+                                  "Attribute Name: ${_controller.nameController.text}");
+                              print(
+                                  "Order: ${_controller.orderController.text}");
 
-                              Get.snackbar(
-                                "Success",
-                                "Attribute created successfully",
-                                backgroundColor: Colors.green.withOpacity(0.4),
+                              // Call the API with required parameters
+                              await _controller.createAttribute(
+                                name: _controller.nameController.text,
+                                order:
+                                    int.parse(_controller.orderController.text),
+                                categories: [
+                                  selectedCategoryID!
+                                ], // Pass the category ID list
                               );
-                              print(_controller.isLoading.value);
-                              Get.to(() => AttributeListPage());
                             } else {
                               Get.snackbar(
                                 "Error",
@@ -147,6 +156,7 @@ class _CreateAttributePageState extends State<CreateAttributePage> {
                             }
                           }
                         },
+
                   icon: const Icon(Icons.add),
                   label: _controller.isLoading.value
                       ? const CircularProgressIndicator(

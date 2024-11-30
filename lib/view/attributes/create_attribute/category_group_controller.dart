@@ -4,21 +4,19 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:isotopeit_b2b/utils/url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+ 
 
 // class CategoryGroupController extends GetxController {
 //   var isLoading = false.obs;
 //   var errorMessage = ''.obs;
-//   var categories = <String>[].obs;
+//   var categories = <String>[].obs; // List to store category names
 
 //   Future<void> fetchCategories() async {
 //     final SharedPreferences prefs = await SharedPreferences.getInstance();
 //     final token = prefs.getString('token') ?? '';
 
-//     //const url = 'https://e-commerce.isotopeit.com/api/select/category-groups';
-//     // const url = '${AppURL.baseURL}api/select/category-groups';
 //     const url = '${AppURL.baseURL}api/category/';
-
-
 
 //     try {
 //       isLoading(true);
@@ -35,12 +33,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 //       if (response.statusCode == 200) {
 //         var data = json.decode(response.body) as Map<String, dynamic>;
 
+//         // Clear existing categories
 //         categories.clear();
-//         data.forEach((_, subCategories) {
-//           (subCategories as Map<String, dynamic>).values.forEach((value) {
-//             categories.add(value);
-//           });
-//         });
+
+//         // Extract category names from the API response
+//         var categoryGroups = data['data']['categoryGroups'] as List;
+//         for (var categoryGroup in categoryGroups) {
+//           categories.add(
+            
+//             categoryGroup['name']);
+//         }
 //       } else {
 //         errorMessage.value = 'Failed to load categories';
 //       }
@@ -54,10 +56,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 
+
+class Category {
+  final int id;
+  final String name;
+
+  Category({required this.id, required this.name});
+}
+
 class CategoryGroupController extends GetxController {
   var isLoading = false.obs;
   var errorMessage = ''.obs;
-  var categories = <String>[].obs; // List to store category names
+  var categories = <Category>[].obs; // Store categories as objects
 
   Future<void> fetchCategories() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -79,14 +89,14 @@ class CategoryGroupController extends GetxController {
 
       if (response.statusCode == 200) {
         var data = json.decode(response.body) as Map<String, dynamic>;
+        categories.clear(); // Clear existing categories
 
-        // Clear existing categories
-        categories.clear();
-
-        // Extract category names from the API response
         var categoryGroups = data['data']['categoryGroups'] as List;
         for (var categoryGroup in categoryGroups) {
-          categories.add(categoryGroup['name']);
+          categories.add(Category(
+            id: categoryGroup['id'],
+            name: categoryGroup['name'],
+          ));
         }
       } else {
         errorMessage.value = 'Failed to load categories';
