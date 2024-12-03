@@ -27,15 +27,7 @@ class CategoryTagPage extends StatelessWidget {
           iconTheme: const IconThemeData(
             color: Colors.white,
           ),
-          // bottom: const TabBar(
-          //   labelColor: Colors.white, // Color for selected tab
-          //   unselectedLabelColor: Colors.grey, // Color for unselected tabs
-          //   indicatorColor: AppColor.primaryColor,
-          //   tabs: [
-          //     Tab(text: 'Category'),
-          //     Tab(text: 'Tag'),
-          //   ],
-          // ),
+           
         ),
         body: Obx(() {
           if (tagController.isLoading.value) {

@@ -43,34 +43,34 @@ class InvenProductDetails extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //  Center(
-              //   child: Container(
-              //     decoration: BoxDecoration(
-              //       border: Border.all(
-              //         color: Colors.grey, // Border color
-              //         width: 2.0, // Border width
-              //       ),
-              //       borderRadius: BorderRadius.circular(12.0),
-              //     ),
-              //     child: ClipRRect(
-              //       borderRadius: BorderRadius.circular(12.0),
-              //       child: product.images != null && product.images!.isNotEmpty
-              //           ? Image.network(
-              //               product
-              //                   .images![0].url, // Access the first image's URL
-              //               height: 200,
-              //               width: double.infinity,
-              //               fit: BoxFit.fitHeight,
-              //             )
-              //           : Image.asset(
-              //               AppImages.splashLogo, // Default asset image
-              //               height: 200,
-              //               width: double.infinity,
-              //               fit: BoxFit.cover,
-              //             ),
-              //     ),
-              //   ),
-              // ),
+               Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey, // Border color
+                      width: 2.0, // Border width
+                    ),
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12.0),
+                    child: product.images != null && product.images!.isNotEmpty
+                        ? Image.network(
+                            product
+                                .images![0].url, // Access the first image's URL
+                            height: 200,
+                            width: double.infinity,
+                            fit: BoxFit.fitHeight,
+                          )
+                        : Image.asset(
+                            AppImages.splashLogo, // Default asset image
+                            height: 200,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                  ),
+                ),
+              ),
 
               // Center(
               //   child: Image.network(
@@ -107,7 +107,8 @@ class InvenProductDetails extends StatelessWidget {
               const SizedBox(height: 20),
               _buildDetailRow('SKU', product.sku),
               _buildDetailRow(
-                  'Stock Quantity', product.stockQuantity.toString()),
+              'Stock Quantity', '${product.stockQuantity.toString()}  '),
+             
               ...product.attributes
                   .map((attr) => _buildDetailRow(attr.name,
                       attr.values.map((val) => val.value).join(', ')))

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
+import 'package:isotopeit_b2b/view/order/order_details/approve_order/approved_order_controller.dart';
 import 'package:isotopeit_b2b/view/order/order_details/controller_order_details.dart';
+import 'package:isotopeit_b2b/view/order/order_details/pickup_address/pickup_address_controller.dart';
 
 class OrderDetails extends StatelessWidget {
   final int orderId;
@@ -97,13 +99,13 @@ class OrderDetails extends StatelessWidget {
                             ],
                           ),
                           trailing: InkWell(
-                            onTap: (){
+                            onTap: () {
                               _showBottomSheet(context);
                             },
                             child: Chip(
                               label: const Text('Action'),
                               backgroundColor: Colors.green.shade100,
-                               //onDeleted: () => _showBottomSheet(context),
+                              //onDeleted: () => _showBottomSheet(context),
                             ),
                           ),
                         ),
@@ -148,7 +150,111 @@ class OrderDetails extends StatelessWidget {
     );
   }
 
+ 
+
+  // void _showBottomSheet(BuildContext context) {
+  //   final PickupAddressController addressController =
+  //       Get.put(PickupAddressController());
+  //   addressController.fetchPickupAddresses();
+
+  //   showModalBottomSheet(
+  //     context: context,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+  //     ),
+  //     builder: (BuildContext context) {
+  //       String? selectedAddress;
+
+  //       return Padding(
+  //         padding: const EdgeInsets.all(16.0),
+  //         child: Obx(() {
+  //           if (addressController.isLoading.value) {
+  //             return const Center(child: CircularProgressIndicator());
+  //           }
+  //           if (addressController.addresses.isEmpty) {
+  //             return const Text("No pick-up addresses available.");
+  //           }
+  //           return Column(
+  //             mainAxisAlignment: MainAxisAlignment.start,
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               const Text(
+  //                 'Take Action',
+  //                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+  //               ),
+  //               const SizedBox(height: 16),
+  //               const Text(
+  //                 'Select Pick-Up Address',
+  //                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+  //               ),
+  //               const SizedBox(height: 5),
+  //               DropdownButtonFormField<String>(
+  //                 decoration: const InputDecoration(
+  //                   labelText: 'Select Pick-Up Address',
+  //                   border: OutlineInputBorder(),
+  //                 ),
+  //                 value: selectedAddress,
+  //                 items: addressController.addresses
+  //                     .map((address) => DropdownMenuItem(
+  //                           value: address.text,
+  //                           child: Text(address.text),
+  //                         ))
+  //                     .toList(),
+  //                 onChanged: (value) {
+  //                   selectedAddress = value;
+  //                 },
+  //               ),
+  //               const SizedBox(height: 20),
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                 children: [
+  //                   Expanded(
+  //                     child: ElevatedButton(
+  //                       style: ElevatedButton.styleFrom(
+  //                         backgroundColor: Colors.red,
+  //                       ),
+  //                       onPressed: () {
+  //                         Navigator.pop(context);
+  //                       },
+  //                       child: const Text(
+  //                         'Reject',
+  //                         style: TextStyle(color: Colors.white),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                   const SizedBox(width: 10),
+  //                   Expanded(
+  //                     child: ElevatedButton(
+  //                       style: ElevatedButton.styleFrom(
+  //                         backgroundColor: Colors.green,
+  //                       ),
+  //                       onPressed: () {
+  //                         Navigator.pop(context);
+  //                       },
+  //                       child: const Text(
+  //                         'Approve',
+  //                         style: TextStyle(color: Colors.white),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ],
+  //           );
+  //         }),
+  //       );
+  //     },
+  //   );
+  // }
+
+
   void _showBottomSheet(BuildContext context) {
+    final ApproveController approveController = Get.put(ApproveController());
+    final PickupAddressController addressController =
+        Get.put(PickupAddressController());
+    addressController.fetchPickupAddresses();
+
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -156,83 +262,101 @@ class OrderDetails extends StatelessWidget {
       ),
       builder: (BuildContext context) {
         String? selectedAddress;
-        final List<String> pickupAddresses = [
-          '123 Main Street',
-          '456 Elm Avenue',
-          '789 Oak Lane'
-        ];
 
         return Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'Take Action',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              const Text(
+          child: Obx(() {
+            if (addressController.isLoading.value) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (addressController.addresses.isEmpty) {
+              return const Text("No pick-up addresses available.");
+            }
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Take Action',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16),
+                const Text(
                   'Select Pick-Up Address',
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 5),
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  labelText: 'Select Pick-Up Address',
-                  border: OutlineInputBorder(),
+                DropdownButtonFormField<String>(
+                  decoration: const InputDecoration(
+                    labelText: 'Select Pick-Up Address',
+                    border: OutlineInputBorder(),
+                  ),
+                  value: selectedAddress,
+                  items: addressController.addresses
+                      .map((address) => DropdownMenuItem(
+                            value: address.text,
+                            child: Text(address.text),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    selectedAddress = value;
+                  },
                 ),
-                value: selectedAddress,
-                items: pickupAddresses
-                    .map((address) => DropdownMenuItem(
-                          value: address,
-                          child: Text(address),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  selectedAddress = value;
-                },
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                   Expanded(
-                     child: ElevatedButton(
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
                         ),
                         onPressed: () {
-                          // Handle Reject action
                           Navigator.pop(context);
-                          
                         },
-                        child: const Text('Reject',
-                            style: TextStyle(
-                              color: Colors.white,
-                            )),
+                        child: const Text(
+                          'Reject',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
-                   ),
-                   SizedBox(width: 10,),
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                      ),
-                      onPressed: () {
-                        // Handle Approve action
-                        Navigator.pop(context);
-                        
-                      },
-                      child: const Text('Approve', style: TextStyle(color: Colors.white),),
                     ),
-                  ),
-                 
-                ],
-              ),
-            ],
-          ),
-        );});}
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Obx(() {
+                        return ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: approveController.isApproved.value
+                                ? Colors.grey
+                                : Colors.green,
+                          ),
+                          onPressed: approveController.isApproved.value
+                              ? null // Disable button if already approved
+                              : () async {
+                                  await approveController
+                                      .approveOrder(5); // Order ID
+                                  if (approveController.isApproved.value) {
+                                    Navigator.pop(context);
+                                  }
+                                },
+                          child: Text(
+                            approveController.isApproved.value
+                                ? 'Approved'
+                                : 'Approve',
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        );
+                      }),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          }),
+        );
+      },
+    );
+  }
+
+
 }

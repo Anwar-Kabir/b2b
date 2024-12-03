@@ -18,6 +18,7 @@ import 'package:isotopeit_b2b/view/order_report/report.dart';
 import 'package:isotopeit_b2b/view/settings/settings.dart';
 import 'package:isotopeit_b2b/view/shopsettings/shop_settings.dart';
 import 'package:isotopeit_b2b/view/subsubcategory/sub_sub_category.dart';
+import 'package:isotopeit_b2b/view/uom/uom_view.dart';
 import 'package:isotopeit_b2b/view/wallet/wallet_index/wallet.dart';
 
 class BottomNav extends StatefulWidget {
@@ -208,6 +209,18 @@ class BottomNavState extends State<BottomNav> {
                         transition: Transition.rightToLeftWithFade);
                   },
                 ),
+
+                ListTile(
+                  leading:
+                      const Icon(Icons.category, color: AppColor.primaryColor),
+                  title: Text('UOM'),
+                  onTap: () {
+                    Get.back();
+                    Get.to(UomPage(),
+                        transition: Transition.rightToLeftWithFade);
+                  },
+                ),
+               
                
                
                 

@@ -6,6 +6,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:isotopeit_b2b/helper/token_service.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/utils/url.dart';
+import 'package:isotopeit_b2b/view/category&tag/controller_category_tag.dart';
+import 'package:isotopeit_b2b/view/category&tag/tag/controller_tag.dart';
+import 'package:isotopeit_b2b/view/inventory/add_inventory/attribute/attribute_inventory_controller.dart';
 import 'package:isotopeit_b2b/view/inventory/inventrory/inventory.dart';
 import 'package:isotopeit_b2b/view/inventory/inventrory/inventory_controller.dart';
 import 'package:isotopeit_b2b/view/product/productlist/controller_product_list.dart';
@@ -22,7 +25,6 @@ class AddInventoryPage extends StatefulWidget {
 class _AddInventoryPageState extends State<AddInventoryPage> {
   bool isCertified = false;
 
- 
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _startDateTimeController =
@@ -48,39 +50,26 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
   final TextEditingController _netAmmountController = TextEditingController();
   final TextEditingController _commissionController = TextEditingController();
 
-  // Tags handling
-  final List<String> _availableTags = [
-    "Stock Limited",
-    "Top Trending",
-    "Best Seller",
-    "New Arrival"
-  ];
   final List<String> _selectedTags = [];
 
   //product
   String? _selectedProduct;
 
-  final List<String> _productList = [
-    "Product 1",
-    "Product 2",
-    "Product 3",
-    "Product 4",
-    "Product 5",
-    // Add more products as needed
-  ];
-
   DateTime? selectedStartDateTime;
   DateTime? selectedEndDateTime;
   DateTime? selectedAvailableDateTime;
 
-  //status
-  String? selectedStatus; // To store the selected status as a string
-  int? selectedStatusValue; // To store the corresponding numeric value
+  // //status
+  // String? selectedStatus; // To store the selected status as a string
+  // int? selectedStatusValue; // To store the corresponding numeric value
+
+  String? selectedStatus = "Active";
+  int selectedStatusValue = 1; //
 
   // Add a variable to track the checkbox state
 
   final ImagePicker _picker = ImagePicker();
-  final List<XFile> _imageFiles = []; // Holds up to 5 images
+  final List<XFile> _imageFiles = [];
 
   // Image picking logic for gallery (allow multiple) and camera (single)
   Future<void> _pickImage(ImageSource source, {bool multiple = false}) async {
@@ -122,6 +111,9 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
   }
 
   final ProductController productController = Get.put(ProductController());
+  final AttributeController attributeController =
+      Get.put(AttributeController());
+  final TagController tagController = Get.put(TagController());
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +164,8 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                             labelText: "Product",
                             isRequired: true,
                           ),
-                          // _buildTextField("Enter Product Name"),
+
+                          ////product
                           Obx(() {
                             if (productController.isLoading.value) {
                               return const Center(
@@ -199,7 +192,7 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                                   productController.productList.map((product) {
                                 return DropdownMenuItem<String>(
                                   value: product.id
-                                      .toString(), // Assuming `id` is String or can be converted
+                                      .toString(), // Assuming `id` is a string or convertible
                                   child:
                                       Text(product.name ?? "Unnamed Product"),
                                 );
@@ -209,6 +202,11 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                                   _selectedProduct =
                                       value; // Update selected product
                                 });
+                                if (value != null) {
+                                  // Fetch attributes based on the selected product
+                                  attributeController
+                                      .fetchAttributes(int.parse(value));
+                                }
                               },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -219,13 +217,167 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                             );
                           }),
 
+                          ///attribute
+
+                          // Obx(() {
+                          //   if (attributeController.isLoading.value) {
+                          //     return const Center(
+                          //         child: CircularProgressIndicator());
+                          //   }
+
+                          //   if (attributeController.attributes.isEmpty) {
+                          //     return const Center(
+                          //         child: Text("No attributes found."));
+                          //   }
+
+                          //   return ListView.builder(
+                          //     shrinkWrap:
+                          //         true, // Ensure it works inside a scrollable view
+                          //     physics: const NeverScrollableScrollPhysics(),
+                          //     itemCount: attributeController.attributes.length,
+                          //     itemBuilder: (context, index) {
+                          //       final attribute =
+                          //           attributeController.attributes[index];
+                          //       String? selectedValue;
+
+                          //       return Padding(
+                          //         padding: const EdgeInsets.all(8.0),
+                          //         child: Column(
+                          //           crossAxisAlignment:
+                          //               CrossAxisAlignment.start,
+                          //           children: [
+                          //             Text(
+                          //               attribute.name,
+                          //               style: const TextStyle(
+                          //                 fontSize: 16,
+                          //                 fontWeight: FontWeight.bold,
+                          //               ),
+                          //             ),
+                          //             const SizedBox(height: 8),
+                          //             DropdownButtonFormField<String>(
+                          //               decoration: InputDecoration(
+                          //                 border: OutlineInputBorder(),
+                          //                 labelText: 'Select ${attribute.name}',
+                          //               ),
+                          //               value: selectedValue,
+                          //               items: attribute.values.map((value) {
+                          //                 return DropdownMenuItem<String>(
+                          //                   value: value.text,
+                          //                   child: Text(value.text),
+                          //                 );
+                          //               }).toList(),
+                          //               onChanged: (value) {
+                          //                 selectedValue = value;
+                          //                 print(
+                          //                     "Selected ${attribute.name}: $selectedValue");
+                          //               },
+                          //             ),
+                          //             const SizedBox(height: 16),
+                          //           ],
+                          //         ),
+                          //       );
+                          //     },
+                          //   );
+                          // }),
+
+
+
+                           Obx(() {
+                            if (attributeController.isLoading.value) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+
+                            if (attributeController.attributes.isEmpty) {
+                              return const Center(
+                                  child: Text("No attributes found."));
+                            }
+
+                            return ListView.builder(
+                              shrinkWrap:
+                                  true, // Ensure it works inside a scrollable view
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: attributeController.attributes.length,
+                              itemBuilder: (context, attributeIndex) {
+                                final attribute = attributeController
+                                    .attributes[attributeIndex];
+                                String?
+                                    selectedValue; // Local variable to store the selected value
+
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        attribute.name,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      DropdownButtonFormField<String>(
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          labelText: 'Select ${attribute.name}',
+                                        ),
+                                        value: selectedValue,
+                                        items: List.generate(
+                                          attribute.values.length,
+                                          (valueIndex) {
+                                            final value =
+                                                attribute.values[valueIndex];
+                                            return DropdownMenuItem<String>(
+                                              value:
+                                                  "${valueIndex}:${value.text}", // Include value index
+                                              child: Text(value.text),
+                                            );
+                                          },
+                                        ),
+                                        onChanged: (value) {
+                                          if (value != null) {
+                                            // Parse the value index and text
+                                            final parts = value.split(':');
+                                            final valueIndex = parts[0];
+                                            final valueText = parts[1];
+
+                                            selectedValue =
+                                                valueText; // Store the value
+                                            print(
+                                                "attribute[$attributeIndex]: value[$valueIndex] ($valueText)");
+                                          }
+                                        },
+                                      ),
+                                      const SizedBox(height: 16),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          }),
+
+
+
+
+
+
+
+
+
+
+
+
+
                           const LabelWithAsterisk(
                             labelText: "SKU",
-                            isRequired: true,
                           ),
                           //_buildTextField("Enter Seller SKU"),
-                          _buildTextField("Enter Seller SKU",
-                              controller: _skuController, isRequired: true),
+                          _buildTextField(
+                            "Enter Seller SKU",
+                            controller: _skuController,
+                          ),
                           const LabelWithAsterisk(
                             labelText: "Status",
                             isRequired: true,
@@ -234,7 +386,7 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                           _buildDropdown("Status", ["Active", "Inactive"]),
 
                           //bsti_certification
-                          _buildCheckbox("BSTI Certification"),
+                          //_buildCheckbox("BSTI Certification"),
 
                           const LabelWithAsterisk(
                             labelText: "Key features",
@@ -261,11 +413,34 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
 
                           _buildTextField("Enter Price",
                               isRequired: true, controller: _priceController),
+                          // const LabelWithAsterisk(
+                          //   labelText: "Offer",
+                          // ),
+                          // _buildTextField("Enter Offer Price",
+                          //     isRequired: true, controller: _offerController),
+                          ///commission
                           const LabelWithAsterisk(
-                            labelText: "Offer",
+                            labelText: "Commission (%)",
                           ),
-                          _buildTextField("Enter Offer Price",
-                              isRequired: true, controller: _offerController),
+                          _buildTextField("2",
+                              isRequired: true,
+                              controller: _commissionController,
+                              readOnly: true),
+
+                          const LabelWithAsterisk(
+                            labelText: "Net Amount",
+                          ),
+                          _buildTextField("0.00",
+                              readOnly: true,
+                              isRequired: true,
+                              controller: _priceController),
+
+                          const LabelWithAsterisk(
+                            labelText: "Purchase Price",
+                          ),
+                          _buildTextField("Purchase Price",
+                              isRequired: true,
+                              controller: _purchasePriceController),
                           const LabelWithAsterisk(
                             labelText: "Stock Quantity",
                             isRequired: true,
@@ -281,30 +456,30 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                               isRequired: true, controller: _packingQuantity),
 
                           //date
-                          const LabelWithAsterisk(
-                            labelText: "Offer Start Date",
-                          ),
-                          // _buildDatePicker("Offer End Date"),
+                          // const LabelWithAsterisk(
+                          //   labelText: "Offer Start Date",
+                          // ),
+                          // // _buildDatePicker("Offer End Date"),
 
-                          _buildDatePicker(
-                              "Offer Start Date", _startDateTimeController,
-                              (DateTime? selectedDate) {
-                            setState(() {
-                              selectedStartDateTime = selectedDate;
-                            });
-                          }),
+                          // _buildDatePicker(
+                          //     "Offer Start Date", _startDateTimeController,
+                          //     (DateTime? selectedDate) {
+                          //   setState(() {
+                          //     selectedStartDateTime = selectedDate;
+                          //   });
+                          // }),
 
-                          //end date
-                          const LabelWithAsterisk(
-                            labelText: "Offer End Date",
-                          ),
-                          _buildDatePicker(
-                              "Offer End Date", _enddateTimeController,
-                              (DateTime? selectedDate) {
-                            setState(() {
-                              selectedEndDateTime = selectedDate;
-                            });
-                          }),
+                          // //end date
+                          // const LabelWithAsterisk(
+                          //   labelText: "Offer End Date",
+                          // ),
+                          // _buildDatePicker(
+                          //     "Offer End Date", _enddateTimeController,
+                          //     (DateTime? selectedDate) {
+                          //   setState(() {
+                          //     selectedEndDateTime = selectedDate;
+                          //   });
+                          // }),
 
                           //description
                           const LabelWithAsterisk(
@@ -341,40 +516,20 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                           // Display selected tags as chips
                           _buildTagChips(),
 
-                          ///commission
-                          const LabelWithAsterisk(
-                            labelText: "Enter Commission in (%)",
-                          ),
-                          _buildTextField("9",
-                              isRequired: true,
-                              controller: _commissionController),
-                          const LabelWithAsterisk(
-                            labelText: "Enter Net Amount",
-                          ),
-                          _buildTextField("0.00",
-                              isRequired: true,
-                              controller: _netAmmountController),
-
-                          const LabelWithAsterisk(
-                            labelText: "Purchase Price",
-                          ),
-                          _buildTextField("Meta Title",
-                              isRequired: true,
-                              controller: _purchasePriceController),
-                          const LabelWithAsterisk(
-                            labelText: "Meta Title",
-                          ),
-                          _buildTextField("Enter Meta Title",
-                              isRequired: true,
-                              controller: _metaTitleController),
-                          const LabelWithAsterisk(
-                            labelText: "Meta Description",
-                            isRequired: true,
-                          ),
-                          _buildTextField("Enter Meta Description",
-                              maxLines: 3,
-                              isRequired: true,
-                              controller: _metaDescriptionController),
+                          // const LabelWithAsterisk(
+                          //   labelText: "Meta Title",
+                          // ),
+                          // _buildTextField("Enter Meta Title",
+                          //     isRequired: true,
+                          //     controller: _metaTitleController),
+                          // const LabelWithAsterisk(
+                          //   labelText: "Meta Description",
+                          //   isRequired: true,
+                          // ),
+                          // _buildTextField("Enter Meta Description",
+                          //     maxLines: 3,
+                          //     isRequired: true,
+                          //     controller: _metaDescriptionController),
                         ],
                       ),
                     ),
@@ -391,9 +546,6 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton.icon(
           onPressed: () async {
-
-          
-
             if (_formKey.currentState?.validate() ?? false) {
               if (_imageFiles.isEmpty) {
                 print("No images selected.");
@@ -431,8 +583,7 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
               try {
                 var request = http.MultipartRequest(
                   'POST',
-                  Uri.parse(
-                      '${AppURL.baseURL}api/inventory/store'),
+                  Uri.parse('${AppURL.baseURL}api/inventory/store'),
                 );
 
                 // Add form fields
@@ -475,10 +626,10 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                   print("API Call Successful: $responseBody");
                   final InventoryActiveController _controller =
                       Get.put(InventoryActiveController());
-                      _controller.fetchActiveProducts();
-                      _controller.fetchInactiveProducts();
-                      _controller.fetchOutOfStockProducts();
-                      _controller.fetchOutOfStockProducts();
+                  _controller.fetchActiveProducts();
+                  _controller.fetchInactiveProducts();
+                  _controller.fetchOutOfStockProducts();
+                  _controller.fetchOutOfStockProducts();
                   // Get.offAll(Inventory(), transition: Transition.leftToRightWithFade);
                   // Get.snackbar(
                   //     "Success", 'Inventory Create Successful',
@@ -487,14 +638,13 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                   Get.snackbar("Success", 'Inventory Create Successful',
                       backgroundColor: Colors.green, colorText: Colors.white);
 
-                       Get.to(Inventory(),
+                  Get.to(Inventory(),
                       transition: Transition.leftToRightWithFade);
 
                   // Navigate after a short delay
                   // Future.delayed(Duration(seconds: 2), () {
-                   
-                  // });
 
+                  // });
                 } else if (response.statusCode == 302) {
                   // Handle Redirect
                   final redirectUrl = response.headers['location'];
@@ -562,7 +712,6 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
             } else {
               print("Form is invalid. Please check the inputs.");
             }
-           
           },
           icon: const Icon(Icons.save),
           label: const Text("Save"),
@@ -661,30 +810,40 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
     );
   }
 
-  // Function to build dropdown for selecting tags
+
+
   Widget _buildTagDropdown() {
-    return DropdownButtonFormField<String>(
-      decoration: const InputDecoration(
-        border: OutlineInputBorder(),
-        hintText: "Select a tag",
-      ),
-      items: _availableTags.map((String tag) {
-        return DropdownMenuItem<String>(
-          value: tag,
-          child: Text(tag),
-        );
-      }).toList(),
-      onChanged: (String? selectedTag) {
-        if (selectedTag != null && !_selectedTags.contains(selectedTag)) {
-          setState(() {
-            _selectedTags.add(selectedTag);
-          });
-        }
-      },
-    );
+    return Obx(() {
+      if (tagController.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      if (tagController.errorMessage.isNotEmpty) {
+        return Center(child: Text(tagController.errorMessage.value));
+      }
+      return DropdownButtonFormField<String>(
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: "Select a category",
+        ),
+        items: tagController.tags.map((category) {
+          return DropdownMenuItem<String>(
+            value: category.name, // Assuming `name` is the field to display
+            child: Text(category.name),
+          );
+        }).toList(),
+        onChanged: (String? selectedCategory) {
+          if (selectedCategory != null &&
+              !_selectedTags.contains(selectedCategory)) {
+            setState(() {
+              _selectedTags.add(selectedCategory);
+            });
+          }
+        },
+      );
+    });
   }
 
-  // Function to display selected tags as chips
+
   Widget _buildTagChips() {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
@@ -757,17 +916,17 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
   }
 
   // Function to build text fields
-  Widget _buildTextField(
-    String hint, {
-    String? label,
-    int maxLines = 1,
-    TextEditingController? controller,
-    bool isRequired = false,
-  }) {
+  Widget _buildTextField(String hint,
+      {String? label,
+      int maxLines = 1,
+      TextEditingController? controller,
+      bool isRequired = false,
+      bool readOnly = false}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: TextFormField(
         controller: controller,
+        readOnly: readOnly,
         decoration: InputDecoration(
           labelText: label,
           hintText: hint,
@@ -786,8 +945,7 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
     );
   }
 
-
-
+ 
   Widget _buildDropdown(String? hintText, List<String> options) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),

@@ -65,7 +65,7 @@ class _BalanceRequestState extends State<BalanceRequest> {
 
             // Amount Input Field
             CustomTextField(
-              prefixIcon: Icons.monetization_on,
+              prefixIcon: Icons.wallet,
               hintText: 'Enter amount',
               controller: amountController,
               keyboardType: TextInputType.number,
@@ -74,27 +74,58 @@ class _BalanceRequestState extends State<BalanceRequest> {
 
             // Request Button
             const Spacer(),
+            // Obx(() => withdrawController.isLoading.value
+            //     ? const Center(child: CircularProgressIndicator())
+            //     : Padding(
+            //         padding: const EdgeInsets.all(8.0),
+            //         child: ElevatedButton.icon(
+            //           onPressed: () {
+            //             int? amount = int.tryParse(amountController.text);
+            //             if (amount != null && amount > 0) {
+            //               withdrawController.requestWithdraw(amount);
+            //             } else {
+            //               Get.snackbar("Error", "Please enter a valid amount",
+            //                   backgroundColor: Colors.red,
+            //                   colorText: Colors.white);
+            //             }
+            //           },
+            //           icon: const Icon(Icons.send),
+            //           label: const Text("Request"),
+            //           style: ElevatedButton.styleFrom(
+            //             minimumSize: const Size(
+            //                 double.infinity, 50), // Make button full-width
+            //             backgroundColor: AppColor.primaryColor,
+            //             foregroundColor: Colors.white,
+            //           ),
+            //         ),
+            //       )),
+
             Obx(() => withdrawController.isLoading.value
                 ? const Center(child: CircularProgressIndicator())
                 : Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton.icon(
-                      onPressed: () {
-                        int? amount = int.tryParse(amountController.text);
-                        if (amount != null && amount > 0) {
-                          withdrawController.requestWithdraw(amount);
-                        } else {
-                          Get.snackbar("Error", "Please enter a valid amount",
-                              backgroundColor: Colors.red,
-                              colorText: Colors.white);
-                        }
-                      },
+                      onPressed: _isRequestButtonEnabled()
+                          ? () {
+                              int? amount = int.tryParse(amountController.text);
+                              if (amount != null && amount > 0) {
+                                withdrawController.requestWithdraw(amount);
+                              } else {
+                                Get.snackbar(
+                                    "Error", "Please enter a valid amount",
+                                    backgroundColor: Colors.red,
+                                    colorText: Colors.white);
+                              }
+                            }
+                          : null,
                       icon: const Icon(Icons.send),
                       label: const Text("Request"),
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size(
                             double.infinity, 50), // Make button full-width
-                        backgroundColor: AppColor.primaryColor,
+                        backgroundColor: _isRequestButtonEnabled()
+                            ? AppColor.primaryColor
+                            : Colors.grey,
                         foregroundColor: Colors.white,
                       ),
                     ),
@@ -136,4 +167,15 @@ class _BalanceRequestState extends State<BalanceRequest> {
       ),
     );
   }
+
+    bool _isRequestButtonEnabled() {
+    final balance = double.tryParse(balanceController.wallet.value.balance) ?? 0;
+    final requestedAmount = double.tryParse(amountController.text) ?? 0;
+
+    if (balance == 0 || requestedAmount > balance) {
+      return false;
+    }
+    return true;
+  }
 }
+ 

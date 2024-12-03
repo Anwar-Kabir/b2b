@@ -200,7 +200,15 @@ class ProductCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Text('Stock Quantity: ${product.stockQuantity}'),
+
+                      Row(
+                        children: [
+                         Text('Stock Quantity: ${product.stockQuantity}'),
+                         SizedBox(width: 5,),
+                          Text('${product.uom}'),
+                        ],
+                      ),
+                     
                       
                     ],
                   ),

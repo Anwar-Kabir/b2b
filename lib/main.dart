@@ -9,8 +9,6 @@ import 'package:isotopeit_b2b/helper/theme_controller.dart';
 import 'package:isotopeit_b2b/helper/token_service.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/utils/translations/translations.dart';
-import 'package:isotopeit_b2b/view/BottomNav.dart';
-import 'package:isotopeit_b2b/view/signup/signup.dart';
 import 'package:isotopeit_b2b/view/splash/splash.dart';
 import 'package:isotopeit_b2b/widget/no_internet_page.dart';
 

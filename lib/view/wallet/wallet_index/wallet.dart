@@ -89,7 +89,7 @@ class Wallet extends StatelessWidget {
                               Text(
                                 "Requested At: ${DateFormat('dd-MM-yyyy HH:mm').format(DateTime.parse(request.requestedAt))}",
                               ),
-                              Text("Amount: \$${request.amount}"),
+                              Text("Amount: ৳ ${request.amount}"),
                             ],
                           ),
                           trailing: StatusBadge(status: request.status),
