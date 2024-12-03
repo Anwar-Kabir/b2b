@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/view/inventory/add_inventory/add_inventory.dart';
 import 'package:isotopeit_b2b/view/inventory/inventrory/inventory_controller.dart';
@@ -36,56 +35,62 @@ class _InventoryState extends State<Inventory> {
         ),
         backgroundColor: AppColor.primaryColor.withOpacity(0.7),
         iconTheme: const IconThemeData(color: Colors.white),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Get.to(const AddInventoryPage(),
-                  transition: Transition.rightToLeftWithFade);
-            },
-            icon: const Icon(Icons.add, color: Colors.white),
-          ),
-        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColor.primaryColor,
+        foregroundColor: Colors.white,
+        onPressed: () {
+          Get.to(const AddInventoryPage(),
+              transition: Transition.rightToLeftWithFade);
+        },
+        child: const Icon(
+          Icons.add,
+          size: 30,
+        ),
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: List.generate(tabs.length, (index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _selectedIndex == index
-                          ? AppColor.primaryColor
-                          : Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      side: BorderSide(
-                        color: _selectedIndex == index
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: List.generate(tabs.length, (index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _selectedIndex == index
                             ? AppColor.primaryColor
-                            : Colors.grey,
+                            : Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        side: BorderSide(
+                          color: _selectedIndex == index
+                              ? AppColor.primaryColor
+                              : Colors.grey,
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _selectedIndex = index;
-                      });
-                    },
-                    child: Text(
-                      tabs[index],
-                      style: TextStyle(
-                        color: _selectedIndex == index
-                            ? Colors.white
-                            : Colors.black,
+                      onPressed: () {
+                        setState(() {
+                          _selectedIndex = index;
+                        });
+                      },
+                      child: Text(
+                        tabs[index],
+                        style: TextStyle(
+                          color: _selectedIndex == index
+                              ? Colors.white
+                              : Colors.black,
+                        ),
                       ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                }),
+              ),
             ),
           ),
           Expanded(
@@ -149,7 +154,7 @@ class ProductCard extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
         onTap: () {
-          Get.to( InvenProductDetails(inventoryId: id),
+          Get.to(InvenProductDetails(inventoryId: id),
               transition: Transition.rightToLeftWithFade);
         },
         child: Card(
@@ -185,14 +190,16 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 6),
-                      
                       Row(
                         children: [
                           Text(
                             'Price: ${double.parse(product.salePrice).toStringAsFixed(2)} Tk ',
-                            style: const TextStyle(color: AppColor.primaryColor),
+                            style:
+                                const TextStyle(color: AppColor.primaryColor),
                           ),
-                          SizedBox(width: 5,),
+                          SizedBox(
+                            width: 5,
+                          ),
                           Text(
                             '${product.uom}',
                             style:
@@ -200,16 +207,15 @@ class ProductCard extends StatelessWidget {
                           ),
                         ],
                       ),
-
                       Row(
                         children: [
-                         Text('Stock Quantity: ${product.stockQuantity}'),
-                         SizedBox(width: 5,),
+                          Text('Stock Quantity: ${product.stockQuantity}'),
+                          SizedBox(
+                            width: 5,
+                          ),
                           Text('${product.uom}'),
                         ],
                       ),
-                     
-                      
                     ],
                   ),
                 ),

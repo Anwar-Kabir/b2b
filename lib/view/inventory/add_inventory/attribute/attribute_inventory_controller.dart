@@ -6,18 +6,17 @@ import 'package:isotopeit_b2b/view/inventory/add_inventory/attribute/attribute_i
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
- class AttributeController extends GetxController {
+class AttributeController extends GetxController {
   var isLoading = false.obs;
   var attributes = <AttributeModel>[].obs;
-  var commission = 0.obs; // Observable to hold the commission value
-
-  late TextEditingController commissionController;
+  RxString   commission                 = ''.obs;
+  RxString   uom                        = ''.obs;
+  RxString   moq                        = ''.obs;
+  Map<String, dynamic>?    selectedAttr = {};
 
   @override
   void onInit() {
     super.onInit();
-    commissionController = TextEditingController(); // Initialize the controller
   }
 
   Future<void> fetchAttributes(int productId) async {
@@ -39,19 +38,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-
-        // Parse the response into the new model
         final attributeResponse = AttributeResponse.fromJson(data);
 
-        // Update attributes and commission
         attributes.value = attributeResponse.formattedAttributes;
-        commission.value = attributeResponse.commission;
+        uom.value = "${data['uom']}";
+        moq.value = "${data['moq']}";
+        commission.value =
+            data['commission'] > 0 ? "${data['commission']}" : '';
 
-        // Update the commission in the controller
-        commissionController.text = attributeResponse.commission.toString();
+        if (data['commission'] < 1) {
+          Get.snackbar('Error', 'Commissions need to be set on the product.',
+              backgroundColor: Colors.red, colorText: Colors.white);
+        }
       } else {
-        Get.snackbar('Error', 'Failed to fetch attributes',
-            backgroundColor: Colors.red, colorText: Colors.white);
+        Get.snackbar('Error', 'Failed to fetch attributes', backgroundColor: Colors.red, colorText: Colors.white);
       }
     } catch (e) {
       Get.snackbar('Error', 'Something went wrong: $e',

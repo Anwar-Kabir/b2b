@@ -1,12 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:isotopeit_b2b/helper/token_service.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/utils/url.dart';
-import 'package:isotopeit_b2b/view/category&tag/controller_category_tag.dart';
 import 'package:isotopeit_b2b/view/category&tag/tag/controller_tag.dart';
 import 'package:isotopeit_b2b/view/inventory/add_inventory/attribute/attribute_inventory_controller.dart';
 import 'package:isotopeit_b2b/view/inventory/inventrory/inventory.dart';
@@ -23,32 +24,23 @@ class AddInventoryPage extends StatefulWidget {
 }
 
 class _AddInventoryPageState extends State<AddInventoryPage> {
-  bool isCertified = false;
-
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _startDateTimeController =
-      TextEditingController();
-  final TextEditingController _enddateTimeController = TextEditingController();
   final TextEditingController _availabledateTimeController =
       TextEditingController();
   //final _formKey = GlobalKey<FormState>();
   final TextEditingController _skuController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
-  final TextEditingController _offerController = TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
   final TextEditingController _packingQuantity = TextEditingController();
-  final TextEditingController _metaDescriptionController =
-      TextEditingController();
   final List<TextEditingController> _keyFeatureControllers = [
     TextEditingController()
   ];
   final TextEditingController _disController = TextEditingController();
-  final TextEditingController _metaTitleController = TextEditingController();
   final TextEditingController _purchasePriceController =
       TextEditingController();
   final TextEditingController _netAmmountController = TextEditingController();
-  final TextEditingController _commissionController = TextEditingController();
+  final TextEditingController _calcNetPrice = TextEditingController(text: '0');
 
   final List<String> _selectedTags = [];
 
@@ -100,8 +92,6 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
 
   @override
   void dispose() {
-    _startDateTimeController.dispose();
-    _enddateTimeController.dispose();
     _availabledateTimeController
         .dispose(); // Dispose controller when widget is destroyed
     for (var controller in _keyFeatureControllers) {
@@ -178,6 +168,7 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                                 style: TextStyle(color: Colors.red),
                               );
                             }
+
                             return DropdownButtonFormField<String>(
                               value: _selectedProduct, // Selected product
                               decoration: InputDecoration(
@@ -219,10 +210,7 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
 
                           ///attribute
 
-                          
-
-
-                           Obx(() {
+                          Obx(() {
                             if (attributeController.isLoading.value) {
                               return const Center(
                                   child: CircularProgressIndicator());
@@ -234,16 +222,12 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                             }
 
                             return ListView.builder(
-                              shrinkWrap:
-                                  true, // Ensure it works inside a scrollable view
+                              shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: attributeController.attributes.length,
                               itemBuilder: (context, attributeIndex) {
                                 final attribute = attributeController
                                     .attributes[attributeIndex];
-                                String?
-                                    selectedValue; // Local variable to store the selected value
-
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
@@ -263,30 +247,25 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                                           border: OutlineInputBorder(),
                                           labelText: 'Select ${attribute.name}',
                                         ),
-                                        value: selectedValue,
                                         items: List.generate(
                                           attribute.values.length,
                                           (valueIndex) {
-                                            final value =
+                                            final attvalue =
                                                 attribute.values[valueIndex];
                                             return DropdownMenuItem<String>(
-                                              value:
-                                                  "${valueIndex}:${value.text}", // Include value index
-                                              child: Text(value.text),
+                                              value: "${attvalue.id}",
+                                              child: Text(attvalue.text),
                                             );
                                           },
                                         ),
                                         onChanged: (value) {
                                           if (value != null) {
-                                            // Parse the value index and text
-                                            final parts = value.split(':');
-                                            final valueIndex = parts[0];
-                                            final valueText = parts[1];
-
-                                            selectedValue =
-                                                valueText; // Store the value
-                                            print(
-                                                "attribute[$attributeIndex]: value[$valueIndex] ($valueText)");
+                                            Map<String, dynamic>? oldAttr =
+                                                attributeController
+                                                    .selectedAttr;
+                                            oldAttr!["${attribute.id}"] = value;
+                                            attributeController.selectedAttr =
+                                                oldAttr;
                                           }
                                         },
                                       ),
@@ -297,12 +276,6 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                               },
                             );
                           }),
-
-                          // Attribute Values (UOM, MOQ, Commission)
-                           
-
- 
-
 
                           const LabelWithAsterisk(
                             labelText: "SKU",
@@ -318,9 +291,6 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                           ),
 
                           _buildDropdown("Status", ["Active", "Inactive"]),
-
-                          //bsti_certification
-                          //_buildCheckbox("BSTI Certification"),
 
                           const LabelWithAsterisk(
                             labelText: "Key features",
@@ -344,30 +314,66 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                             labelText: "Price",
                             isRequired: true,
                           ),
-
-                          _buildTextField("Enter Price",
-                              isRequired: true, controller: _priceController),
-                          // const LabelWithAsterisk(
-                          //   labelText: "Offer",
-                          // ),
-                          // _buildTextField("Enter Offer Price",
-                          //     isRequired: true, controller: _offerController),
-                          ///commission
-                          const LabelWithAsterisk(
-                            labelText: "Commission (%)",
+                          SizedBox(
+                            height: 40,
+                            child: TextFormField(
+                              controller: _priceController,
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return '$required';
+                                }
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 12),
+                              ),
+                              onChanged: (value) {
+                                final commission =
+                                    attributeController.commission.value;
+                                final calc = double.parse("$value") +
+                                    double.parse("$value") /
+                                        double.parse("$commission");
+                                _calcNetPrice.text = "$calc";
+                                //  _calcNetPrice
+                              },
+                            ),
                           ),
-                          _buildTextField("Commission",
-                              isRequired: true,
-                              controller: _commissionController,
-                              readOnly: true),
-
+                          const Text(
+                            'Commission (%)',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          Obx(() {
+                            return SizedBox(
+                              height: 40,
+                              child: TextFormField(
+                                readOnly: true,
+                                controller: TextEditingController(
+                                  text:
+                                      "${attributeController.commission.value}",
+                                ),
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    vertical: 8,
+                                    horizontal: 12,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
                           const LabelWithAsterisk(
                             labelText: "Net Amount",
                           ),
-                          _buildTextField("0.00",
-                              readOnly: true,
-                              isRequired: true,
-                              controller: _priceController),
+                          _buildTextField(
+                            "0.00",
+                            readOnly: true,
+                            isRequired: true,
+                            controller: _calcNetPrice,
+                          ),
 
                           const LabelWithAsterisk(
                             labelText: "Purchase Price",
@@ -375,6 +381,74 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                           _buildTextField("Purchase Price",
                               isRequired: true,
                               controller: _purchasePriceController),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'MOQ',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Obx(() {
+                                      return SizedBox(
+                                        height: 40,
+                                        child: TextFormField(
+                                          readOnly: true,
+                                          controller: TextEditingController(
+                                              text: attributeController
+                                                  .moq.value),
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 8,
+                                                    horizontal: 12),
+                                          ),
+                                        ),
+                                      );
+                                    })
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 2.h),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'UOM',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Obx(() {
+                                      return SizedBox(
+                                        height: 40,
+                                        child: TextFormField(
+                                          readOnly: true,
+                                          controller: TextEditingController(
+                                              text: attributeController
+                                                  .uom.value),
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 8,
+                                                    horizontal: 12),
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10.h),
                           const LabelWithAsterisk(
                             labelText: "Stock Quantity",
                             isRequired: true,
@@ -388,32 +462,6 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                           ),
                           _buildTextField("Enter Packing Quantity",
                               isRequired: true, controller: _packingQuantity),
-
-                          //date
-                          // const LabelWithAsterisk(
-                          //   labelText: "Offer Start Date",
-                          // ),
-                          // // _buildDatePicker("Offer End Date"),
-
-                          // _buildDatePicker(
-                          //     "Offer Start Date", _startDateTimeController,
-                          //     (DateTime? selectedDate) {
-                          //   setState(() {
-                          //     selectedStartDateTime = selectedDate;
-                          //   });
-                          // }),
-
-                          // //end date
-                          // const LabelWithAsterisk(
-                          //   labelText: "Offer End Date",
-                          // ),
-                          // _buildDatePicker(
-                          //     "Offer End Date", _enddateTimeController,
-                          //     (DateTime? selectedDate) {
-                          //   setState(() {
-                          //     selectedEndDateTime = selectedDate;
-                          //   });
-                          // }),
 
                           //description
                           const LabelWithAsterisk(
@@ -449,21 +497,6 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
 
                           // Display selected tags as chips
                           _buildTagChips(),
-
-                          // const LabelWithAsterisk(
-                          //   labelText: "Meta Title",
-                          // ),
-                          // _buildTextField("Enter Meta Title",
-                          //     isRequired: true,
-                          //     controller: _metaTitleController),
-                          // const LabelWithAsterisk(
-                          //   labelText: "Meta Description",
-                          //   isRequired: true,
-                          // ),
-                          // _buildTextField("Enter Meta Description",
-                          //     maxLines: 3,
-                          //     isRequired: true,
-                          //     controller: _metaDescriptionController),
                         ],
                       ),
                     ),
@@ -478,186 +511,209 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ElevatedButton.icon(
-          onPressed: () async {
-            if (_formKey.currentState?.validate() ?? false) {
-              if (_imageFiles.isEmpty) {
-                print("No images selected.");
-                return;
-              }
+        child: Obx(() {
+          return ElevatedButton.icon(
+            onPressed: attributeController.commission.value.length < 1
+                ? null
+                : () async {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      if (_imageFiles.isEmpty) {
+                        Get.snackbar(
+                          "Error",
+                          'No images selected',
+                          backgroundColor: Colors.red,
+                          colorText: Colors.white,
+                        );
+                        return;
+                      }
 
-              final TokenService _tokenService = TokenService();
-              print('Token: ${_tokenService.token}');
+                      final TokenService _tokenService = TokenService();
+                      print('Token: ${_tokenService.token}');
 
-              final formData = {
-                "product_id": _selectedProduct,
-                "sku": _skuController.text,
-                "active": selectedStatus == "Active" ? 1 : 2,
-                'bsti_certification': isCertified,
-                'stock_quantity': _quantityController.text,
-                'sale_price': _priceController.text,
-                'offer_price': _offerController.text,
-                'packing_qty': _packingQuantity.text,
-                "key_features":
-                    _keyFeatureControllers.map((c) => c.text).toList(),
-                "description": _disController.text,
-                "tag_list": _selectedTags,
-                "offer_start": selectedStartDateTime?.toIso8601String(),
-                "offer_end": selectedEndDateTime?.toIso8601String(),
-                "available_from": selectedAvailableDateTime?.toIso8601String(),
-                "purchase_price": _purchasePriceController.text,
-                "meta_title": _metaTitleController.text,
-                "meta_description": _metaDescriptionController.text,
-                "net_amount": _netAmmountController.text,
-                "attribute[3]": 4,
-                "shop_id": 5,
-                "slug": "Apple-9c3c94bd-32d7-4454-a9a9-d9cc09eb7691",
-              };
+                      Map<String, dynamic> arr = {};
 
-              try {
-                var request = http.MultipartRequest(
-                  'POST',
-                  Uri.parse('${AppURL.baseURL}api/inventory/store'),
-                );
+                      for (var attr
+                          in attributeController.selectedAttr!.entries) {
+                        arr[attr.key] = attr.value;
+                      }
 
-                // Add form fields
-                formData.forEach((key, value) {
-                  if (value != null) {
-                    if (value is List) {
-                      for (var item in value) {
-                        request.fields['$key[]'] = item.toString();
+                      final formData = {
+                        "product_id": _selectedProduct,
+                        "sku": _skuController.text,
+                        "active": selectedStatus == "Active" ? true : false,
+                        'stock_quantity': _quantityController.text,
+                        'sale_price': _priceController.text,
+                        'packing_qty': _packingQuantity.text,
+                        "key_features":
+                            _keyFeatureControllers.map((c) => c.text).toList(),
+                        "description": _disController.text,
+                        "tag_list": _selectedTags,
+                        "available_from":
+                            selectedAvailableDateTime?.toIso8601String(),
+                        "purchase_price": _purchasePriceController.text,
+                        "net_amount": _netAmmountController.text,
+                        "attribute": arr
+                      };
+
+                      try {
+                        var request = http.MultipartRequest(
+                          'POST',
+                          Uri.parse('${AppURL.baseURL}api/inventory/store'),
+                        );
+
+                        // Add form fieldsF
+                        formData.forEach((key, value) {
+                          if (value != null) {
+                            if (value is List) {
+                              for (var item in value) {
+                                request.fields['$key[]'] = item.toString();
+                              }
+                            } else if (value is Map) {
+                              for (var item in value.entries) {
+                                request.fields['$key[${item.key}]'] =
+                                    item.value.toString();
+                              }
+                            } else {
+                              request.fields[key] = value.toString();
+                            }
+                          }
+                        });
+                        // // Add images
+                        for (var image in _imageFiles) {
+                          request.files.add(await http.MultipartFile.fromPath(
+                            'bluck_image[]',
+                            image.path,
+                          ));
+                        }
+
+                        // Add headers
+                        request.headers.addAll({
+                          'Authorization': 'Bearer ${_tokenService.token}',
+                          'Accept': 'application/json',
+                          'Content-Type': 'multipart/form-data',
+                        });
+
+                        print('Request Fields: ${request.fields}');
+                        print('Request Headers: ${request.headers}');
+
+                        // Prevent automatic redirection
+                        request.followRedirects = false;
+
+                        var response = await request.send();
+
+                        print(response);
+
+                        if (response.statusCode == 201) {
+                          var responseBody =
+                              await response.stream.bytesToString();
+                          print("API Call Successful: $responseBody");
+                          final InventoryActiveController _controller =
+                              Get.put(InventoryActiveController());
+                          _controller.fetchActiveProducts();
+                          _controller.fetchInactiveProducts();
+                          _controller.fetchOutOfStockProducts();
+                          _controller.fetchOutOfStockProducts();
+                          // Get.offAll(Inventory(), transition: Transition.leftToRightWithFade);
+                          // Get.snackbar(
+                          //     "Success", 'Inventory Create Successful',
+                          //     backgroundColor: Colors.green, colorText: Colors.white);
+
+                          Get.snackbar("Success", 'Inventory Create Successful',
+                              backgroundColor: Colors.green,
+                              colorText: Colors.white);
+
+                          Get.to(Inventory(),
+                              transition: Transition.leftToRightWithFade);
+
+                          // Navigate after a short delay
+                          // Future.delayed(Duration(seconds: 2), () {
+
+                          // });
+                        } else if (response.statusCode == 302) {
+                          // Handle Redirect
+                          final redirectUrl = response.headers['location'];
+                          if (redirectUrl != null) {
+                            print("Redirect detected to: $redirectUrl");
+
+                            var newRequest = http.MultipartRequest(
+                                'POST', Uri.parse(redirectUrl));
+                            newRequest.headers.addAll(request.headers);
+                            newRequest.fields.addAll(request.fields);
+
+                            // Re-add images to avoid "finalized MultipartFile" issue
+                            for (var image in _imageFiles) {
+                              newRequest.files
+                                  .add(await http.MultipartFile.fromPath(
+                                'bluck_image[]',
+                                image.path,
+                              ));
+                            }
+
+                            var newResponse = await newRequest.send();
+                            var newResponseBody =
+                                await newResponse.stream.bytesToString();
+                            print(
+                                "Retry Response: ${newResponse.statusCode} - $newResponseBody");
+                          } else {
+                            print("No redirect URL provided.");
+                          }
+                        } else if (response.statusCode == 500) {
+                          var errorResponse =
+                              await response.stream.bytesToString();
+                          print("API Call Failed: 500 Internal Server Error");
+                          print("Error Response: $errorResponse");
+                          // Specific Error Handling for 500 Server Error
+                          print("Possible causes for 500 error:");
+                          print(
+                              "- Invalid data or format being sent to the server.");
+                          print(
+                              "- Server-side issues (e.g., database or server errors).");
+                          print("- Missing required fields.");
+                          // Here you may want to alert the user or handle retries
+                        } else {
+                          var errorResponse =
+                              await response.stream.bytesToString();
+                          print("API Call Failed: ${response.statusCode}");
+                          print("Error Response: $errorResponse");
+                          // Print more specific errors based on status code
+                          if (response.statusCode == 400) {
+                            print(
+                                "Bad Request: Likely missing or invalid fields.");
+                          } else if (response.statusCode == 401) {
+                            print("Unauthorized: Check token validity.");
+                          } else if (response.statusCode == 403) {
+                            print("Forbidden: You do not have permission.");
+                          } else if (response.statusCode == 404) {
+                            print("Not Found: The endpoint may be incorrect.");
+                          } else {
+                            print(
+                                "Unexpected Error: Status code ${response.statusCode}");
+                          }
+                        }
+                      } catch (e) {
+                        print("API Call Error: $e");
+                        // Log specific error type (e.g., network error, timeout, etc.)
+                        print("Possible Causes:");
+                        print("- Network issues.");
+                        print("- Timeout.");
+                        print("- Invalid URL.");
                       }
                     } else {
-                      request.fields[key] = value.toString();
+                      print("Form is invalid. Please check the inputs.");
                     }
-                  }
-                });
-
-                // Add images
-                for (var image in _imageFiles) {
-                  request.files.add(await http.MultipartFile.fromPath(
-                    'bluck_image[]',
-                    image.path,
-                  ));
-                }
-
-                // Add headers
-                request.headers.addAll({
-                  'Authorization': 'Bearer ${_tokenService.token}',
-                  'Content-Type': 'multipart/form-data',
-                });
-
-                print('Request Fields: ${request.fields}');
-                print('Request Headers: ${request.headers}');
-
-                // Prevent automatic redirection
-                request.followRedirects = false;
-
-                var response = await request.send();
-
-                if (response.statusCode == 201) {
-                  var responseBody = await response.stream.bytesToString();
-                  print("API Call Successful: $responseBody");
-                  final InventoryActiveController _controller =
-                      Get.put(InventoryActiveController());
-                  _controller.fetchActiveProducts();
-                  _controller.fetchInactiveProducts();
-                  _controller.fetchOutOfStockProducts();
-                  _controller.fetchOutOfStockProducts();
-                  // Get.offAll(Inventory(), transition: Transition.leftToRightWithFade);
-                  // Get.snackbar(
-                  //     "Success", 'Inventory Create Successful',
-                  //     backgroundColor: Colors.green, colorText: Colors.white);
-
-                  Get.snackbar("Success", 'Inventory Create Successful',
-                      backgroundColor: Colors.green, colorText: Colors.white);
-
-                  Get.to(Inventory(),
-                      transition: Transition.leftToRightWithFade);
-
-                  // Navigate after a short delay
-                  // Future.delayed(Duration(seconds: 2), () {
-
-                  // });
-                } else if (response.statusCode == 302) {
-                  // Handle Redirect
-                  final redirectUrl = response.headers['location'];
-                  if (redirectUrl != null) {
-                    print("Redirect detected to: $redirectUrl");
-
-                    var newRequest =
-                        http.MultipartRequest('POST', Uri.parse(redirectUrl));
-                    newRequest.headers.addAll(request.headers);
-                    newRequest.fields.addAll(request.fields);
-
-                    // Re-add images to avoid "finalized MultipartFile" issue
-                    for (var image in _imageFiles) {
-                      newRequest.files.add(await http.MultipartFile.fromPath(
-                        'bluck_image[]',
-                        image.path,
-                      ));
-                    }
-
-                    var newResponse = await newRequest.send();
-                    var newResponseBody =
-                        await newResponse.stream.bytesToString();
-                    print(
-                        "Retry Response: ${newResponse.statusCode} - $newResponseBody");
-                  } else {
-                    print("No redirect URL provided.");
-                  }
-                } else if (response.statusCode == 500) {
-                  var errorResponse = await response.stream.bytesToString();
-                  print("API Call Failed: 500 Internal Server Error");
-                  print("Error Response: $errorResponse");
-                  // Specific Error Handling for 500 Server Error
-                  print("Possible causes for 500 error:");
-                  print("- Invalid data or format being sent to the server.");
-                  print(
-                      "- Server-side issues (e.g., database or server errors).");
-                  print("- Missing required fields.");
-                  // Here you may want to alert the user or handle retries
-                } else {
-                  var errorResponse = await response.stream.bytesToString();
-                  print("API Call Failed: ${response.statusCode}");
-                  print("Error Response: $errorResponse");
-                  // Print more specific errors based on status code
-                  if (response.statusCode == 400) {
-                    print("Bad Request: Likely missing or invalid fields.");
-                  } else if (response.statusCode == 401) {
-                    print("Unauthorized: Check token validity.");
-                  } else if (response.statusCode == 403) {
-                    print("Forbidden: You do not have permission.");
-                  } else if (response.statusCode == 404) {
-                    print("Not Found: The endpoint may be incorrect.");
-                  } else {
-                    print(
-                        "Unexpected Error: Status code ${response.statusCode}");
-                  }
-                }
-              } catch (e) {
-                print("API Call Error: $e");
-                // Log specific error type (e.g., network error, timeout, etc.)
-                print("Possible Causes:");
-                print("- Network issues.");
-                print("- Timeout.");
-                print("- Invalid URL.");
-              }
-            } else {
-              print("Form is invalid. Please check the inputs.");
-            }
-          },
-          icon: const Icon(Icons.save),
-          label: const Text("Save"),
-          style: ElevatedButton.styleFrom(
-            minimumSize:
-                const Size(double.infinity, 50), // Make button full-width
-            backgroundColor:
-                AppColor.primaryColor, // Change this to your desired color
-            // For text color:
-            foregroundColor: Colors.white, // Text and icon color
-          ),
-        ),
+                  },
+            icon: const Icon(Icons.save),
+            label: const Text("Save"),
+            style: ElevatedButton.styleFrom(
+              minimumSize:
+                  const Size(double.infinity, 50), // Make button full-width
+              backgroundColor:
+                  AppColor.primaryColor, // Change this to your desired color
+              // For text color:
+              foregroundColor: Colors.white, // Text and icon color
+            ),
+          );
+        }),
       ),
     );
   }
@@ -744,8 +800,6 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
     );
   }
 
-
-
   Widget _buildTagDropdown() {
     return Obx(() {
       if (tagController.isLoading.value) {
@@ -757,11 +811,11 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
       return DropdownButtonFormField<String>(
         decoration: const InputDecoration(
           border: OutlineInputBorder(),
-          hintText: "Select a category",
+          hintText: "Select a tag",
         ),
         items: tagController.tags.map((category) {
           return DropdownMenuItem<String>(
-            value: category.name, // Assuming `name` is the field to display
+            value: category.name,
             child: Text(category.name),
           );
         }).toList(),
@@ -776,7 +830,6 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
       );
     });
   }
-
 
   Widget _buildTagChips() {
     return Padding(
@@ -879,7 +932,6 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
     );
   }
 
- 
   Widget _buildDropdown(String? hintText, List<String> options) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
@@ -907,26 +959,6 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
             print("Selected Status: $selectedStatus ($selectedStatusValue)");
           });
         },
-      ),
-    );
-  }
-
-  // Function to build checkbox
-  Widget _buildCheckbox(String label) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
-      child: Row(
-        children: [
-          Checkbox(
-            value: isCertified,
-            onChanged: (bool? value) {
-              setState(() {
-                isCertified = value ?? false; // Toggle checkbox state
-              });
-            },
-          ),
-          Text(label),
-        ],
       ),
     );
   }
@@ -1021,391 +1053,377 @@ Widget _buildFilePicker(String label, String buttonText) {
   );
 }
 
+//  if (_formKey.currentState?.validate() ?? false) {
+//   if (_imageFiles.isEmpty) {
+//     print("No images selected.");
+//     return;
+//   }
 
+//   final TokenService _tokenService = TokenService();
+//   print('token ============>${_tokenService.token}');
 
+//   final formData = {
+//     "product_id": _selectedProduct,
+//     "sku": _skuController.text,
+//     "active": selectedStatus == "Active" ? 1 : 2,
+//     'bsti_certification': isCertified,
+//     'stock_quantity': _quantityController.text,
+//     'sale_price': _priceController.text,
+//     'offer_price': _offerController.text,
+//     'packing_qty': _packingQuantity.text,
+//     "key_features":
+//         _keyFeatureControllers.map((c) => c.text).toList(),
+//     "description": _disController.text,
+//     "tag_list": _selectedTags,
+//     "offer_start": selectedStartDateTime?.toIso8601String(),
+//     "offer_end": selectedEndDateTime?.toIso8601String(),
+//     "available_from": selectedAvailableDateTime?.toIso8601String(),
+//     "purchase_price": _purchasePriceController.text,
+//     "meta_title": _metaTitleController.text,
+//     "meta_description": _metaDescriptionController.text,
+//     "net_amount": _netAmmountController.text,
+//     "attribute[3]": 4,
+//   };
 
+//   try {
+//     var request = http.MultipartRequest(
+//       'POST',
+//       Uri.parse(
+//           'https://e-commerce.isotopeit.com/api/inventory/store'),
+//     );
 
-  //  if (_formKey.currentState?.validate() ?? false) {
-            //   if (_imageFiles.isEmpty) {
-            //     print("No images selected.");
-            //     return;
-            //   }
+//     // Add form fields
+//     formData.forEach((key, value) {
+//       if (value != null) {
+//         if (value is List) {
+//           for (var item in value) {
+//             request.fields['$key[]'] = item.toString();
+//           }
+//         } else {
+//           request.fields[key] = value.toString();
+//         }
+//       }
+//     });
 
-            //   final TokenService _tokenService = TokenService();
-            //   print('token ============>${_tokenService.token}');
+//     // Add images
+//     for (var image in _imageFiles) {
+//       request.files.add(await http.MultipartFile.fromPath(
+//         'bluck_image[]',
+//         image.path,
+//       ));
+//     }
 
-            //   final formData = {
-            //     "product_id": _selectedProduct,
-            //     "sku": _skuController.text,
-            //     "active": selectedStatus == "Active" ? 1 : 2,
-            //     'bsti_certification': isCertified,
-            //     'stock_quantity': _quantityController.text,
-            //     'sale_price': _priceController.text,
-            //     'offer_price': _offerController.text,
-            //     'packing_qty': _packingQuantity.text,
-            //     "key_features":
-            //         _keyFeatureControllers.map((c) => c.text).toList(),
-            //     "description": _disController.text,
-            //     "tag_list": _selectedTags,
-            //     "offer_start": selectedStartDateTime?.toIso8601String(),
-            //     "offer_end": selectedEndDateTime?.toIso8601String(),
-            //     "available_from": selectedAvailableDateTime?.toIso8601String(),
-            //     "purchase_price": _purchasePriceController.text,
-            //     "meta_title": _metaTitleController.text,
-            //     "meta_description": _metaDescriptionController.text,
-            //     "net_amount": _netAmmountController.text,
-            //     "attribute[3]": 4,
-            //   };
+//     // Add headers
+//     request.headers.addAll({
+//       'Authorization': 'Bearer ${_tokenService.token}',
+//       'Content-Type': 'multipart/form-data',
+//     });
 
-            //   try {
-            //     var request = http.MultipartRequest(
-            //       'POST',
-            //       Uri.parse(
-            //           'https://e-commerce.isotopeit.com/api/inventory/store'),
-            //     );
+//     print('Request Fields: ${request.fields}');
+//     print('Request Headers: ${request.headers}');
 
-            //     // Add form fields
-            //     formData.forEach((key, value) {
-            //       if (value != null) {
-            //         if (value is List) {
-            //           for (var item in value) {
-            //             request.fields['$key[]'] = item.toString();
-            //           }
-            //         } else {
-            //           request.fields[key] = value.toString();
-            //         }
-            //       }
-            //     });
+//     // Prevent automatic redirection
+//     request.followRedirects = false;
 
-            //     // Add images
-            //     for (var image in _imageFiles) {
-            //       request.files.add(await http.MultipartFile.fromPath(
-            //         'bluck_image[]',
-            //         image.path,
-            //       ));
-            //     }
+//     var response = await request.send();
 
-            //     // Add headers
-            //     request.headers.addAll({
-            //       'Authorization': 'Bearer ${_tokenService.token}',
-            //       'Content-Type': 'multipart/form-data',
-            //     });
+//     if (response.statusCode == 200) {
+//       var responseBody = await response.stream.bytesToString();
+//       print("API Call Successful: $responseBody");
+//     } else if (response.statusCode == 302) {
+//       // Handle Redirect
+//       final redirectUrl = response.headers['location'];
+//       if (redirectUrl != null) {
+//         print("Redirect detected to: $redirectUrl");
 
-            //     print('Request Fields: ${request.fields}');
-            //     print('Request Headers: ${request.headers}');
+//         var newRequest =
+//             http.MultipartRequest('POST', Uri.parse(redirectUrl));
+//         newRequest.headers.addAll(request.headers);
+//         newRequest.fields.addAll(request.fields);
 
-            //     // Prevent automatic redirection
-            //     request.followRedirects = false;
+//         // Re-add images to avoid "finalized MultipartFile" issue
+//         for (var image in _imageFiles) {
+//           newRequest.files.add(await http.MultipartFile.fromPath(
+//             'bluck_image[]',
+//             image.path,
+//           ));
+//         }
 
-            //     var response = await request.send();
+//         var newResponse = await newRequest.send();
+//         var newResponseBody =
+//             await newResponse.stream.bytesToString();
+//         print(
+//             "Retry Response: ${newResponse.statusCode} - $newResponseBody");
+//       } else {
+//         print("No redirect URL provided.");
+//       }
+//     } else if (response.statusCode == 500) {
+//       var errorResponse = await response.stream.bytesToString();
+//       print("API Call Failed: 500 Internal Server Error");
+//       print("Error Response: $errorResponse");
+//       // Here we might want to alert the user or handle retries
+//     } else {
+//       var errorResponse = await response.stream.bytesToString();
+//       print("API Call Failed: ${response.statusCode}");
+//       print("Error Response: $errorResponse");
+//     }
+//   } catch (e) {
+//     print("API Call Error: $e");
+//   }
+// } else {
+//   print("Form is invalid. Please check the inputs.");
+// }
 
-            //     if (response.statusCode == 200) {
-            //       var responseBody = await response.stream.bytesToString();
-            //       print("API Call Successful: $responseBody");
-            //     } else if (response.statusCode == 302) {
-            //       // Handle Redirect
-            //       final redirectUrl = response.headers['location'];
-            //       if (redirectUrl != null) {
-            //         print("Redirect detected to: $redirectUrl");
+///print the data====>
+// if (_formKey.currentState?.validate() ?? false) {
+//   if (_imageFiles.isEmpty) {
+//     print("No images selected.");
+//   } else {
+//     for (int i = 0; i < _imageFiles.length; i++) {
+//       print("Image ${i + 1}: ${_imageFiles[i].name}");
+//       print("Path: ${_imageFiles[i].path}");
+//     }
+//   }
+//   print(" product ===========>  $_selectedProduct)}");
 
-            //         var newRequest =
-            //             http.MultipartRequest('POST', Uri.parse(redirectUrl));
-            //         newRequest.headers.addAll(request.headers);
-            //         newRequest.fields.addAll(request.fields);
+//   print(" sku============= $_skuController)}");
 
-            //         // Re-add images to avoid "finalized MultipartFile" issue
-            //         for (var image in _imageFiles) {
-            //           newRequest.files.add(await http.MultipartFile.fromPath(
-            //             'bluck_image[]',
-            //             image.path,
-            //           ));
-            //         }
+//   if (selectedStatus != null) {
+//     print("Selected Status: $selectedStatusValue");
+//   } else {
+//     print("No status selected");
+//   }
 
-            //         var newResponse = await newRequest.send();
-            //         var newResponseBody =
-            //             await newResponse.stream.bytesToString();
-            //         print(
-            //             "Retry Response: ${newResponse.statusCode} - $newResponseBody");
-            //       } else {
-            //         print("No redirect URL provided.");
-            //       }
-            //     } else if (response.statusCode == 500) {
-            //       var errorResponse = await response.stream.bytesToString();
-            //       print("API Call Failed: 500 Internal Server Error");
-            //       print("Error Response: $errorResponse");
-            //       // Here we might want to alert the user or handle retries
-            //     } else {
-            //       var errorResponse = await response.stream.bytesToString();
-            //       print("API Call Failed: ${response.statusCode}");
-            //       print("Error Response: $errorResponse");
-            //     }
-            //   } catch (e) {
-            //     print("API Call Error: $e");
-            //   }
-            // } else {
-            //   print("Form is invalid. Please check the inputs.");
-            // }
+//   print(
+//       " keyFeatureControllers ===========>  $_keyFeatureControllers)}");
 
+//   print("price   $_priceController)}");
+//   print("offer   $_offerController)}");
+//   print("discription ::===>   $_disController)}");
 
+//   print(" quantity $_quantityController)}");
+//   print(" package quantity $_packingQuantity)}");
+//   print(" commission $_commissionController)}");
+//   print(" net amout $_netAmmountController)}");
+//   print(" purchage price $_purchasePriceController)}");
+//   print(" mete $_metaTitleController)}");
 
+//   print(" metaDescription $_metaDescriptionController)}");
 
+//   print(" tag ===========>  $_selectedTags)}");
 
+//   print(isCertified ? "btis ===> Selected: true" : "bits ===> Unselected: false");
 
+//   if (selectedStartDateTime != null) {
+//     print(
+//         "Selected Start Date: ${selectedStartDateTime!.toIso8601String()}");
+//   } else {
+//     print("No date selected");
+//   }
 
+//   if (selectedEndDateTime != null) {
+//     print(
+//         "Selected end Date: ${selectedEndDateTime!.toIso8601String()}");
+//   } else {
+//     print("No date selected");
+//   }
 
+//   if (selectedAvailableDateTime != null) {
+//     print(
+//         "Selected vailable Date: ${selectedAvailableDateTime!.toIso8601String()}");
+//   } else {
+//     print("No date selected");
+//   }
 
- ///print the data====>
-            // if (_formKey.currentState?.validate() ?? false) {
-            //   if (_imageFiles.isEmpty) {
-            //     print("No images selected.");
-            //   } else {
-            //     for (int i = 0; i < _imageFiles.length; i++) {
-            //       print("Image ${i + 1}: ${_imageFiles[i].name}");
-            //       print("Path: ${_imageFiles[i].path}");
-            //     }
-            //   }
-            //   print(" product ===========>  $_selectedProduct)}");
+//     final TokenService _tokenService = TokenService();
+//    print('token ============>${_tokenService.token}}');
 
-            //   print(" sku============= $_skuController)}");
+//   // Collect form data
+//   final formData = {
+//     "product_id":
+//         _selectedProduct, // Replace with actual product ID
+//     "sku": _skuController.text,
+//     "active": selectedStatus == "Active" ? 1 : 2,
+//     'bsti_certification': isCertified,
+//     'stock_quantity' : _quantityController,
+//     'sale_price' : _priceController,
+//     'offer_price': _offerController,
+//     'packing_qty' : _packingQuantity,
 
-            //   if (selectedStatus != null) {
-            //     print("Selected Status: $selectedStatusValue");
-            //   } else {
-            //     print("No status selected");
-            //   }
+//     "key_features":
+//         _keyFeatureControllers.map((c) => c.text).toList(),
+//     "description": _disController.text,
+//     "tag_list": _selectedTags,
+//     "offer_start": selectedStartDateTime?.toIso8601String(),
+//     "offer_end":
+//         selectedEndDateTime?.toIso8601String(),
+//     "available_from": selectedAvailableDateTime?.toIso8601String(),
+//     "purchase_price": _purchasePriceController,
+//     "meta_title": _metaTitleController,
+//     "meta_description": _metaDescriptionController,
+//     "net_amount" : _netAmmountController,
+//     "attribute[3]": 4,
 
-            //   print(
-            //       " keyFeatureControllers ===========>  $_keyFeatureControllers)}");
+//     //'shop_id': 4,
 
-            //   print("price   $_priceController)}");
-            //   print("offer   $_offerController)}");
-            //   print("discription ::===>   $_disController)}");
+//   };
 
-            //   print(" quantity $_quantityController)}");
-            //   print(" package quantity $_packingQuantity)}");
-            //   print(" commission $_commissionController)}");
-            //   print(" net amout $_netAmmountController)}");
-            //   print(" purchage price $_purchasePriceController)}");
-            //   print(" mete $_metaTitleController)}");
+//   // Convert images to multipart files
+//   var request = http.MultipartRequest(
+//     'POST',
+//     //https://e-commerce.isotopeit.com/api/auctions
+//     Uri.parse(
+//         'https://e-commerce.isotopeit.com/api/inventory/store'),
+//   );
 
-            //   print(" metaDescription $_metaDescriptionController)}");
+//   // Add form fields
+//   formData.forEach((key, value) {
+//     if (value != null) {
+//       if (value is List) {
+//         for (var item in value) {
+//           request.fields['$key[]'] = item.toString();
+//         }
+//       } else {
+//         request.fields[key] = value.toString();
+//       }
+//     }
+//   });
 
-            //   print(" tag ===========>  $_selectedTags)}");
+//   // Add images to the request
+//   for (int i = 0; i < _imageFiles.length; i++) {
+//     final imageFile = File(_imageFiles[i].path);
+//     request.files.add(await http.MultipartFile.fromPath(
+//       'bluck_image[]',
+//       imageFile.path,
+//     ));
+//   }
 
-            //   print(isCertified ? "btis ===> Selected: true" : "bits ===> Unselected: false");
+//   // Add headers
+//   request.headers.addAll({
+//     'Authorization': 'Bearer ${_tokenService.token}',
+//     'Content-Type': 'multipart/form-data',
+//   });
 
-            //   if (selectedStartDateTime != null) {
-            //     print(
-            //         "Selected Start Date: ${selectedStartDateTime!.toIso8601String()}");
-            //   } else {
-            //     print("No date selected");
-            //   }
+//   // try {
+//   //   var request = http.MultipartRequest(
+//   //     'POST',
+//   //     Uri.parse(
+//   //         'https://e-commerce.isotopeit.com/api/inventory/store'),
+//   //   );
 
-            //   if (selectedEndDateTime != null) {
-            //     print(
-            //         "Selected end Date: ${selectedEndDateTime!.toIso8601String()}");
-            //   } else {
-            //     print("No date selected");
-            //   }
+//   //   // Add fields and files...
+//   //   formData.forEach((key, value) {
+//   //     if (value != null) {
+//   //       if (value is List) {
+//   //         for (var item in value) {
+//   //           request.fields['$key[]'] = item.toString();
+//   //         }
+//   //       } else {
+//   //         request.fields[key] = value.toString();
+//   //       }
+//   //     }
+//   //   });
 
-            //   if (selectedAvailableDateTime != null) {
-            //     print(
-            //         "Selected vailable Date: ${selectedAvailableDateTime!.toIso8601String()}");
-            //   } else {
-            //     print("No date selected");
-            //   }
-               
-            //     final TokenService _tokenService = TokenService();
-            //    print('token ============>${_tokenService.token}}');
+//   //   for (int i = 0; i < _imageFiles.length; i++) {
+//   //     final imageFile = File(_imageFiles[i].path);
+//   //     request.files.add(await http.MultipartFile.fromPath(
+//   //       'bluck_image[]',
+//   //       imageFile.path,
+//   //     ));
+//   //   }
 
-            //   // Collect form data
-            //   final formData = {
-            //     "product_id":
-            //         _selectedProduct, // Replace with actual product ID
-            //     "sku": _skuController.text,
-            //     "active": selectedStatus == "Active" ? 1 : 2,
-            //     'bsti_certification': isCertified,
-            //     'stock_quantity' : _quantityController,
-            //     'sale_price' : _priceController, 
-            //     'offer_price': _offerController,
-            //     'packing_qty' : _packingQuantity,
-                
-            //     "key_features":
-            //         _keyFeatureControllers.map((c) => c.text).toList(),
-            //     "description": _disController.text,
-            //     "tag_list": _selectedTags,
-            //     "offer_start": selectedStartDateTime?.toIso8601String(),
-            //     "offer_end":
-            //         selectedEndDateTime?.toIso8601String(),
-            //     "available_from": selectedAvailableDateTime?.toIso8601String(),
-            //     "purchase_price": _purchasePriceController,
-            //     "meta_title": _metaTitleController,
-            //     "meta_description": _metaDescriptionController,
-            //     "net_amount" : _netAmmountController,
-            //     "attribute[3]": 4,
-                
-            //     //'shop_id': 4,
-               
-            //   };
+//   //   final TokenService _tokenService = TokenService();
+//   //   request.headers.addAll({
+//   //     'Authorization': 'Bearer ${_tokenService.token}',
+//   //     'Content-Type': 'multipart/form-data',
+//   //   });
 
-            //   // Convert images to multipart files
-            //   var request = http.MultipartRequest(
-            //     'POST',
-            //     //https://e-commerce.isotopeit.com/api/auctions
-            //     Uri.parse(
-            //         'https://e-commerce.isotopeit.com/api/inventory/store'),
-            //   );
+//   //   request.followRedirects =
+//   //       false; // Prevent automatic redirection
+//   //   print('Request URL: ${request.url}');
+//   //   print('Request Headers: ${request.headers}');
+//   //   print('Request Fields: ${request.fields}');
 
-            //   // Add form fields
-            //   formData.forEach((key, value) {
-            //     if (value != null) {
-            //       if (value is List) {
-            //         for (var item in value) {
-            //           request.fields['$key[]'] = item.toString();
-            //         }
-            //       } else {
-            //         request.fields[key] = value.toString();
-            //       }
-            //     }
-            //   });
+//   //   var response = await request.send();
 
-            //   // Add images to the request
-            //   for (int i = 0; i < _imageFiles.length; i++) {
-            //     final imageFile = File(_imageFiles[i].path);
-            //     request.files.add(await http.MultipartFile.fromPath(
-            //       'bluck_image[]',
-            //       imageFile.path,
-            //     ));
-            //   } 
+//   //   if (response.statusCode == 200) {
+//   //     var responseBody = await response.stream.bytesToString();
+//   //     print("API Call Successful: $responseBody");
+//   //   } else {
+//   //     var errorResponse = await response.stream.bytesToString();
+//   //     print("API Call Failed: ${response.statusCode}");
+//   //     print("Error Response: $errorResponse");
+//   //   }
+//   // } catch (e) {
+//   //   print("API Call Error: $e");
+//   // }
 
-            //   // Add headers
-            //   request.headers.addAll({
-            //     'Authorization': 'Bearer ${_tokenService.token}',
-            //     'Content-Type': 'multipart/form-data',
-            //   });
+//   // try {
+//   //   request.followRedirects = false; // Prevent auto redirection
 
-            //   // try {
-            //   //   var request = http.MultipartRequest(
-            //   //     'POST',
-            //   //     Uri.parse(
-            //   //         'https://e-commerce.isotopeit.com/api/inventory/store'),
-            //   //   );
+//   //   // Log request details for debugging
+//   //   print('Request URL: ${request.url}');
+//   //   print('Request Headers: ${request.headers}');
+//   //   print('Request Fields: ${request.fields}');
+//   //   print('Number of Files: ${request.files.length}');
 
-            //   //   // Add fields and files...
-            //   //   formData.forEach((key, value) {
-            //   //     if (value != null) {
-            //   //       if (value is List) {
-            //   //         for (var item in value) {
-            //   //           request.fields['$key[]'] = item.toString();
-            //   //         }
-            //   //       } else {
-            //   //         request.fields[key] = value.toString();
-            //   //       }
-            //   //     }
-            //   //   });
+//   //   var response = await request.send();
 
-            //   //   for (int i = 0; i < _imageFiles.length; i++) {
-            //   //     final imageFile = File(_imageFiles[i].path);
-            //   //     request.files.add(await http.MultipartFile.fromPath(
-            //   //       'bluck_image[]',
-            //   //       imageFile.path,
-            //   //     ));
-            //   //   }
+//   //   if (response.statusCode == 200) {
+//   //     // Success
+//   //     var responseBody = await response.stream.bytesToString();
+//   //     print("API Call Successful: $responseBody");
+//   //   } else if (response.statusCode == 302) {
+//   //     // Handle redirect
+//   //     print("Redirect detected. Status: 302");
+//   //     print("Redirect Location: ${response.headers['location']}");
+//   //   } else {
+//   //     // Other errors
+//   //     var errorResponse = await response.stream.bytesToString();
+//   //     print("API Call Failed: ${response.statusCode}");
+//   //     print("Error Response: $errorResponse");
+//   //   }
+//   // } catch (e) {
+//   //   // Catch any other errors
+//   //   print("API Call Error: $e");
+//   // }
 
-            //   //   final TokenService _tokenService = TokenService();
-            //   //   request.headers.addAll({
-            //   //     'Authorization': 'Bearer ${_tokenService.token}',
-            //   //     'Content-Type': 'multipart/form-data',
-            //   //   });
+//   try {
+//     request.followRedirects = false; // Prevent auto redirection
 
-            //   //   request.followRedirects =
-            //   //       false; // Prevent automatic redirection
-            //   //   print('Request URL: ${request.url}');
-            //   //   print('Request Headers: ${request.headers}');
-            //   //   print('Request Fields: ${request.fields}');
+//     var response = await request.send();
 
-            //   //   var response = await request.send();
+//     if (response.statusCode == 200) {
+//       var responseBody = await response.stream.bytesToString();
+//       print("API Call Successful: $responseBody");
+//     } else if (response.statusCode == 302) {
+//       var redirectUrl = response.headers['location'];
+//       print("Redirect detected. Redirect Location: $redirectUrl");
 
-            //   //   if (response.statusCode == 200) {
-            //   //     var responseBody = await response.stream.bytesToString();
-            //   //     print("API Call Successful: $responseBody");
-            //   //   } else {
-            //   //     var errorResponse = await response.stream.bytesToString();
-            //   //     print("API Call Failed: ${response.statusCode}");
-            //   //     print("Error Response: $errorResponse");
-            //   //   }
-            //   // } catch (e) {
-            //   //   print("API Call Error: $e");
-            //   // }
+//       if (redirectUrl != null) {
+//         var newRequest =
+//             http.MultipartRequest('POST', Uri.parse(redirectUrl));
+//         newRequest.headers.addAll(request.headers);
+//         newRequest.fields.addAll(request.fields);
+//         newRequest.files.addAll(request.files);
 
-
-            //   // try {
-            //   //   request.followRedirects = false; // Prevent auto redirection
-
-            //   //   // Log request details for debugging
-            //   //   print('Request URL: ${request.url}');
-            //   //   print('Request Headers: ${request.headers}');
-            //   //   print('Request Fields: ${request.fields}');
-            //   //   print('Number of Files: ${request.files.length}');
-
-            //   //   var response = await request.send();
-
-            //   //   if (response.statusCode == 200) {
-            //   //     // Success
-            //   //     var responseBody = await response.stream.bytesToString();
-            //   //     print("API Call Successful: $responseBody");
-            //   //   } else if (response.statusCode == 302) {
-            //   //     // Handle redirect
-            //   //     print("Redirect detected. Status: 302");
-            //   //     print("Redirect Location: ${response.headers['location']}");
-            //   //   } else {
-            //   //     // Other errors
-            //   //     var errorResponse = await response.stream.bytesToString();
-            //   //     print("API Call Failed: ${response.statusCode}");
-            //   //     print("Error Response: $errorResponse");
-            //   //   }
-            //   // } catch (e) {
-            //   //   // Catch any other errors
-            //   //   print("API Call Error: $e");
-            //   // }
-
-
-            //   try {
-            //     request.followRedirects = false; // Prevent auto redirection
-
-            //     var response = await request.send();
-
-            //     if (response.statusCode == 200) {
-            //       var responseBody = await response.stream.bytesToString();
-            //       print("API Call Successful: $responseBody");
-            //     } else if (response.statusCode == 302) {
-            //       var redirectUrl = response.headers['location'];
-            //       print("Redirect detected. Redirect Location: $redirectUrl");
-
-            //       if (redirectUrl != null) {
-            //         var newRequest =
-            //             http.MultipartRequest('POST', Uri.parse(redirectUrl));
-            //         newRequest.headers.addAll(request.headers);
-            //         newRequest.fields.addAll(request.fields);
-            //         newRequest.files.addAll(request.files);
-
-            //         var newResponse = await newRequest.send();
-            //         var newResponseBody =
-            //             await newResponse.stream.bytesToString();
-            //         print(
-            //             "Retry Response: ${newResponse.statusCode} - $newResponseBody");
-            //       } else {
-            //         print("No redirect URL provided.");
-            //       }
-            //     } else {
-            //       var errorResponse = await response.stream.bytesToString();
-            //       print("API Call Failed: ${response.statusCode}");
-            //       print("Error Response: $errorResponse");
-            //     }
-            //   } catch (e) {
-            //     print("API Call Error: $e");
-            //   }
-            // } else {
-            //   // Form is invalid, show error
-            //   print("Form is invalid. Please check the inputs.");
-            // }
+//         var newResponse = await newRequest.send();
+//         var newResponseBody =
+//             await newResponse.stream.bytesToString();
+//         print(
+//             "Retry Response: ${newResponse.statusCode} - $newResponseBody");
+//       } else {
+//         print("No redirect URL provided.");
+//       }
+//     } else {
+//       var errorResponse = await response.stream.bytesToString();
+//       print("API Call Failed: ${response.statusCode}");
+//       print("Error Response: $errorResponse");
+//     }
+//   } catch (e) {
+//     print("API Call Error: $e");
+//   }
+// } else {
+//   // Form is invalid, show error
+//   print("Form is invalid. Please check the inputs.");
+// }

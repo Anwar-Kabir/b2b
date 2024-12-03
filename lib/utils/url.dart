@@ -1,6 +1,6 @@
 class AppURL {
-  static const String baseURL = 'https://beta.pykari.com/';
-  //  static const String baseURL = "https://pykari.com/";
+  // static const String baseURL = 'https://beta.pykari.com/';
+   static const String baseURL = "https://pykari.com/";
 
   //  static const String baseURL = "https://e-commerce.isotopeit.com/";
   
