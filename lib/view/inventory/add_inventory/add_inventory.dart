@@ -219,67 +219,7 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
 
                           ///attribute
 
-                          // Obx(() {
-                          //   if (attributeController.isLoading.value) {
-                          //     return const Center(
-                          //         child: CircularProgressIndicator());
-                          //   }
-
-                          //   if (attributeController.attributes.isEmpty) {
-                          //     return const Center(
-                          //         child: Text("No attributes found."));
-                          //   }
-
-                          //   return ListView.builder(
-                          //     shrinkWrap:
-                          //         true, // Ensure it works inside a scrollable view
-                          //     physics: const NeverScrollableScrollPhysics(),
-                          //     itemCount: attributeController.attributes.length,
-                          //     itemBuilder: (context, index) {
-                          //       final attribute =
-                          //           attributeController.attributes[index];
-                          //       String? selectedValue;
-
-                          //       return Padding(
-                          //         padding: const EdgeInsets.all(8.0),
-                          //         child: Column(
-                          //           crossAxisAlignment:
-                          //               CrossAxisAlignment.start,
-                          //           children: [
-                          //             Text(
-                          //               attribute.name,
-                          //               style: const TextStyle(
-                          //                 fontSize: 16,
-                          //                 fontWeight: FontWeight.bold,
-                          //               ),
-                          //             ),
-                          //             const SizedBox(height: 8),
-                          //             DropdownButtonFormField<String>(
-                          //               decoration: InputDecoration(
-                          //                 border: OutlineInputBorder(),
-                          //                 labelText: 'Select ${attribute.name}',
-                          //               ),
-                          //               value: selectedValue,
-                          //               items: attribute.values.map((value) {
-                          //                 return DropdownMenuItem<String>(
-                          //                   value: value.text,
-                          //                   child: Text(value.text),
-                          //                 );
-                          //               }).toList(),
-                          //               onChanged: (value) {
-                          //                 selectedValue = value;
-                          //                 print(
-                          //                     "Selected ${attribute.name}: $selectedValue");
-                          //               },
-                          //             ),
-                          //             const SizedBox(height: 16),
-                          //           ],
-                          //         ),
-                          //       );
-                          //     },
-                          //   );
-                          // }),
-
+                          
 
 
                            Obx(() {
@@ -358,16 +298,10 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                             );
                           }),
 
+                          // Attribute Values (UOM, MOQ, Commission)
+                           
 
-
-
-
-
-
-
-
-
-
+ 
 
 
                           const LabelWithAsterisk(
@@ -422,7 +356,7 @@ class _AddInventoryPageState extends State<AddInventoryPage> {
                           const LabelWithAsterisk(
                             labelText: "Commission (%)",
                           ),
-                          _buildTextField("2",
+                          _buildTextField("Commission",
                               isRequired: true,
                               controller: _commissionController,
                               readOnly: true),

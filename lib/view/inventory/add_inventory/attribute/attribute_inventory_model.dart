@@ -1,3 +1,32 @@
+ 
+
+
+
+class AttributeResponse {
+  final List<AttributeModel> formattedAttributes;
+  final int commission;
+  final int moq;
+  final String uom;
+
+  AttributeResponse({
+    required this.formattedAttributes,
+    required this.commission,
+    required this.moq,
+    required this.uom,
+  });
+
+  factory AttributeResponse.fromJson(Map<String, dynamic> json) {
+    return AttributeResponse(
+      formattedAttributes: (json['formattedAttributes'] as List)
+          .map((attribute) => AttributeModel.fromJson(attribute))
+          .toList(),
+      commission: json['commission'],
+      moq: json['moq'],
+      uom: json['uom'],
+    );
+  }
+}
+
 class AttributeModel {
   final int id;
   final String name;
@@ -22,11 +51,12 @@ class AttributeValue {
   final String color;
   final bool selected;
 
-  AttributeValue(
-      {required this.id,
-      required this.text,
-      required this.color,
-      required this.selected});
+  AttributeValue({
+    required this.id,
+    required this.text,
+    required this.color,
+    required this.selected,
+  });
 
   factory AttributeValue.fromJson(Map<String, dynamic> json) {
     return AttributeValue(
