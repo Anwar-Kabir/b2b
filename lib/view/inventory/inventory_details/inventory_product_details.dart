@@ -7,6 +7,7 @@ import 'package:isotopeit_b2b/utils/image.dart';
 import 'package:isotopeit_b2b/view/inventory/inventory_details/inventory_details_controller.dart';
 import 'package:isotopeit_b2b/view/inventory/inventory_details/inventory_product_details_model.dart';
 import 'package:isotopeit_b2b/view/inventory/inventrory/inventory_controller.dart';
+import 'package:isotopeit_b2b/view/inventory/update_inventory/update_inventory.dart';
 
 class InvenProductDetails extends StatelessWidget {
   final int inventoryId;
@@ -18,6 +19,7 @@ class InvenProductDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     controller.fetchInventoryDetail(inventoryId);
+     int? productid;
 
     return Scaffold(
       appBar: AppBar(
@@ -130,7 +132,10 @@ class InvenProductDetails extends StatelessWidget {
           children: [
             Expanded(
               child: OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  //  Get.to(UpdateInventory(productID: productid),
+                  //     transition: Transition.rightToLeftWithFade);
+                },
                 child: const Text('Edit'),
               ),
             ),

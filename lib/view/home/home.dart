@@ -4,6 +4,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:isotopeit_b2b/helper/language_controller.dart';
 import 'package:isotopeit_b2b/view/home/home_controller.dart';
+import 'package:isotopeit_b2b/view/home/summary/summary_controller.dart';
 
 class HomePage extends StatelessWidget {
       HomePage({Key? key}) : super(key: key);
@@ -11,6 +12,8 @@ class HomePage extends StatelessWidget {
   final WalletController walletController = Get.put(WalletController());
 
    final LanguageController languageController = Get.find();
+
+    final SummaryController controller = Get.put(SummaryController());
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +46,8 @@ class HomePage extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              _buildSummaryGrid(context),
+              // _buildSummaryGrid(context),
+               Obx(() => _buildSummaryGrid(context)),
 
               const SizedBox(height: 20),
 
@@ -168,19 +172,20 @@ class HomePage extends StatelessWidget {
   }
 
   // Summary Grid Section (Orders, Couriers, Products)
-  Widget _buildSummaryGrid(BuildContext context) {
+   Widget _buildSummaryGrid(BuildContext context) {
     return Column(
       children: [
-        _buildSummaryRow(
-            'Total Orders', '50', Icons.shopping_cart, Colors.orange),
-        const SizedBox(height: 10), // Add space between rows
-        _buildSummaryRow(
-            'Total Couriers', '10', Icons.local_shipping, Colors.purple),
+        _buildSummaryRow('Total Orders', '${controller.totalOrders.value}',
+            Icons.shopping_cart, Colors.orange),
         const SizedBox(height: 10),
-        _buildSummaryRow(
-            'Total Products', '120', Icons.inventory, Colors.green),
+        _buildSummaryRow('Total Couriers', '${controller.totalCouriers.value}',
+            Icons.local_shipping, Colors.purple),
         const SizedBox(height: 10),
-        _buildSummaryRow('Total Inventory', '200', Icons.store, Colors.blue),
+        _buildSummaryRow('Total Products', '${controller.totalProducts.value}',
+            Icons.inventory, Colors.green),
+        const SizedBox(height: 10),
+        _buildSummaryRow('Total Inventory',
+            '${controller.totalInventory.value}', Icons.store, Colors.blue),
       ],
     );
   }

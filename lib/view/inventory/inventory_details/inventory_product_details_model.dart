@@ -11,6 +11,8 @@ class InventoryDetailModel {
   final String? description;
   final List<Attribute> attributes;
   final List<ImageData> images;
+  final String? purchaseprice;
+  final String? packing_qty;
 
   InventoryDetailModel({
     required this.id,
@@ -23,6 +25,8 @@ class InventoryDetailModel {
     this.description,
     required this.attributes,
     required this.images,
+    this.purchaseprice,
+    this.packing_qty,
   });
 
   factory InventoryDetailModel.fromJson(Map<String, dynamic> json) {

@@ -36,15 +36,27 @@ class _InventoryState extends State<Inventory> {
         ),
         backgroundColor: AppColor.primaryColor.withOpacity(0.7),
         iconTheme: const IconThemeData(color: Colors.white),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Get.to(const AddInventoryPage(),
-                  transition: Transition.rightToLeftWithFade);
-            },
-            icon: const Icon(Icons.add, color: Colors.white),
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     onPressed: () {
+        //       Get.to(const AddInventoryPage(),
+        //           transition: Transition.rightToLeftWithFade);
+        //     },
+        //     icon: const Icon(Icons.add, color: Colors.white),
+        //   ),
+        // ],
+      ),
+        floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColor.primaryColor,
+        foregroundColor: Colors.white,
+        onPressed: () {
+          Get.to(const AddInventoryPage(),
+              transition: Transition.rightToLeftWithFade);
+        },
+        child: const Icon(
+          Icons.add,
+          size: 30,
+        ),
       ),
       body: Column(
         children: [

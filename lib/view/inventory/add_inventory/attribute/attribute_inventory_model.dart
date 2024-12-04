@@ -1,7 +1,3 @@
- 
-
-
-
 class AttributeResponse {
   final List<AttributeModel> formattedAttributes;
   final int commission;
