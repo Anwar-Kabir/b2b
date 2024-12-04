@@ -15,11 +15,12 @@ class InvenProductDetails extends StatelessWidget {
       Get.put(InventoryDetailController());
 
   InvenProductDetails({super.key, required this.inventoryId});
+  
 
   @override
   Widget build(BuildContext context) {
     controller.fetchInventoryDetail(inventoryId);
-     int? productid;
+    int? productid;
 
     return Scaffold(
       appBar: AppBar(
@@ -38,8 +39,10 @@ class InvenProductDetails extends StatelessWidget {
             controller.inventoryDetail.value == null) {
           return const Center(child: Text('Failed to load inventory details'));
         }
-
+         
         final InventoryDetailModel product = controller.inventoryDetail.value!;
+        productid = product.productId;
+        
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -133,8 +136,8 @@ class InvenProductDetails extends StatelessWidget {
             Expanded(
               child: OutlinedButton(
                 onPressed: () {
-                  //  Get.to(UpdateInventory(productID: productid),
-                  //     transition: Transition.rightToLeftWithFade);
+                  Get.to(UpdateInventory(productID: productid),
+                      transition: Transition.rightToLeftWithFade);
                 },
                 child: const Text('Edit'),
               ),

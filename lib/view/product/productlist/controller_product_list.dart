@@ -22,9 +22,10 @@ class ProductController extends GetxController {
 
     final url = Uri.parse(AppURL.productList);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    
+
     // Ensure that we retrieve a non-null token
-    final token = prefs.getString('token') ?? ''; // Assign an empty string if the token is null
+    final token = prefs.getString('token') ??
+        ''; // Assign an empty string if the token is null
 
     // If the token is still empty, handle it appropriately
     if (token.isEmpty) {
@@ -78,7 +79,8 @@ class ProductController extends GetxController {
         final errorData = jsonDecode(response.body);
         Get.snackbar(
           'Error',
-          errorData['message'] ?? 'Failed to load products. Status: ${response.statusCode}',
+          errorData['message'] ??
+              'Failed to load products. Status: ${response.statusCode}',
           backgroundColor: Colors.red,
           colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM,
