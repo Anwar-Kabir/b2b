@@ -79,10 +79,10 @@ class Wallet extends StatelessWidget {
                       return Card(
                         margin: EdgeInsets.all(8),
                         child: ListTile(
-                          title: Text(
-                            "Requested By: ${request.requestedBy}",
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
+                          // title: Text(
+                          //   "Requested By: ${request.requestedBy}",
+                          //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          // ),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

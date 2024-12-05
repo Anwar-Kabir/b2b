@@ -12,7 +12,8 @@ class InventoryDetailModel {
   final List<Attribute> attributes;
   final List<ImageData> images;
   final String? purchaseprice;
-  final String? packing_qty;
+  final int? packing_qty;
+  final String? availabledateTime;
 
   InventoryDetailModel({
     required this.id,
@@ -27,6 +28,7 @@ class InventoryDetailModel {
     required this.images,
     this.purchaseprice,
     this.packing_qty,
+    this.availabledateTime,
   });
 
   factory InventoryDetailModel.fromJson(Map<String, dynamic> json) {
@@ -38,6 +40,12 @@ class InventoryDetailModel {
       active: json['active'],
       salePrice: double.parse(json['sale_price']),
       stockQuantity: json['stock_quantity'],
+      purchaseprice: json['purchase_price'],
+      packing_qty: json['packing_qty'],
+      availabledateTime: json['available_from'],
+      
+
+      
       description: json['description'],
       attributes: (json['attributes'] as List)
           .map((attr) => Attribute.fromJson(attr))

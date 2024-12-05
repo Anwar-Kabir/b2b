@@ -1,6 +1,7 @@
 // inven_product_details.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/utils/image.dart';
@@ -21,6 +22,7 @@ class InvenProductDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     controller.fetchInventoryDetail(inventoryId);
     int? productid;
+    String? productName;
 
     return Scaffold(
       appBar: AppBar(
@@ -42,7 +44,8 @@ class InvenProductDetails extends StatelessWidget {
          
         final InventoryDetailModel product = controller.inventoryDetail.value!;
         productid = product.productId;
-        
+        productName = product.productName;
+
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -122,8 +125,17 @@ class InvenProductDetails extends StatelessWidget {
               const Text('Description',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
-              Text(product.description ?? 'No description available.',
-                  style: const TextStyle(fontSize: 16)),
+              // Text(product.description ?? 'No description available.',
+              //     style: const TextStyle(fontSize: 16)),
+
+               Html(
+                data: product.description ?? '<p>No description available.</p>',
+                style: {
+                  "p": Style(
+                    fontSize: FontSize(16), // Set font size for <p> tags
+                  ),
+                },
+              ),    
             ],
           ),
         );
@@ -136,7 +148,7 @@ class InvenProductDetails extends StatelessWidget {
             Expanded(
               child: OutlinedButton(
                 onPressed: () {
-                  Get.to(UpdateInventory(productID: productid),
+                  Get.to(UpdateInventory(productID: productid, productName: productName,),
                       transition: Transition.rightToLeftWithFade);
                 },
                 child: const Text('Edit'),

@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:isotopeit_b2b/helper/token_service.dart';
 import 'package:isotopeit_b2b/utils/color.dart';
 import 'package:isotopeit_b2b/utils/url.dart';
@@ -20,8 +20,10 @@ import 'package:http/http.dart' as http;
 
 class UpdateInventory extends StatefulWidget {
   final int? productID;
+  final String? productName;
   final int? inventoryid;
-  const UpdateInventory({super.key, this.productID, this.inventoryid});
+  const UpdateInventory(
+      {super.key, this.productID, this.inventoryid, this.productName});
 
   @override
   State<UpdateInventory> createState() => _AddInventoryPageState();
@@ -30,12 +32,13 @@ class UpdateInventory extends StatefulWidget {
 class _AddInventoryPageState extends State<UpdateInventory> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _availabledateTimeController =
-      TextEditingController();
+  
   //final _formKey = GlobalKey<FormState>();
   final TextEditingController _skuController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
+  //stock quantity
   final TextEditingController _quantityController = TextEditingController();
+  //packing qut
   final TextEditingController _packingQuantity = TextEditingController();
   final List<TextEditingController> _keyFeatureControllers = [
     TextEditingController()
@@ -49,10 +52,14 @@ class _AddInventoryPageState extends State<UpdateInventory> {
   final List<String> _selectedTags = [];
 
   //product
-  String? _selectedProduct;
+  String _selectedProduct = 'Select a Product';
+  String _selectedProductId = '';
 
   DateTime? selectedStartDateTime;
   DateTime? selectedEndDateTime;
+
+  final TextEditingController _availabledateTimeController =
+      TextEditingController();
   DateTime? selectedAvailableDateTime;
 
   // //status
@@ -110,20 +117,50 @@ class _AddInventoryPageState extends State<UpdateInventory> {
   final InventoryDetailController controller =
       Get.put(InventoryDetailController());
   final TagController tagController = Get.put(TagController());
+
+  // @override
+  // void initState() {
+  //   Future.delayed(Duration(microseconds: 200), () {
+  //     controller.fetchInventoryDetail(widget.productID!);
+
+  //     setState(() {
+  //       _selectedProductId = widget.productID.toString();
+  //       _selectedProduct = widget.productName.toString();
+
+  //       debugPrint(_selectedProduct.toString());
+  //       debugPrint(_selectedProductId.toString());
+  //     });
+  //   });
+
+  //   super.initState();
+  // }
+
   @override
   void initState() {
-    Future.delayed(Duration(microseconds: 200), () {
-      controller.fetchInventoryDetail(widget.productID!);
-    });
     super.initState();
+
+    // Fetch inventory details and attributes after widget initialization
+    Future.delayed(Duration(milliseconds: 200), () {
+      controller.fetchInventoryDetail(widget.productID!);
+      setState(() {
+        _selectedProductId = widget.productID.toString();
+        _selectedProduct = widget.productName.toString();
+        debugPrint(_selectedProduct.toString());
+        debugPrint(_selectedProductId.toString());
+      });
+
+      // Fetch attributes for the product
+      attributeController.fetchAttributes(widget.productID!);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "update Inventory",
+          "Update Inventory",
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: AppColor.primaryColor.withOpacity(0.7),
@@ -138,14 +175,22 @@ class _AddInventoryPageState extends State<UpdateInventory> {
               _skuController.text = controller.inventoryDetail.value!.sku;
               _priceController.text =
                   controller.inventoryDetail.value!.salePrice.toString();
-              _purchasePriceController.text =
-                  controller.inventoryDetail.value!.purchaseprice.toString();
+
+              _purchasePriceController.text = double.parse(
+                controller.inventoryDetail.value!.purchaseprice.toString(),
+              ).toStringAsFixed(1);
               _quantityController.text =
                   controller.inventoryDetail.value!.stockQuantity.toString();
               _packingQuantity.text =
                   controller.inventoryDetail.value!.packing_qty.toString();
               _disController.text =
                   controller.inventoryDetail.value!.description.toString();
+
+              _availabledateTimeController.text = DateFormat("MMMM d, yyyy")
+                  .format(DateTime.parse(controller
+                      .inventoryDetail.value!.availabledateTime
+                      .toString()));
+              ;
             });
           }
           return controller.isLoading.value == true
@@ -190,13 +235,16 @@ class _AddInventoryPageState extends State<UpdateInventory> {
                                       isRequired: true,
                                     ),
 
-                                    ////product
+
+                                   
+
                                     Obx(() {
                                       if (productController.isLoading.value) {
                                         return const Center(
                                           child: CircularProgressIndicator(),
                                         );
                                       }
+
                                       if (productController
                                           .productList.isEmpty) {
                                         return const Text(
@@ -205,61 +253,82 @@ class _AddInventoryPageState extends State<UpdateInventory> {
                                         );
                                       }
 
-                                      return DropdownButtonFormField<String>(
-                                        value:
-                                            _selectedProduct, // Selected product
-                                        decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
+                                      return Container(
+                                        height: 43,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          border: Border.all(
+                                            color: Colors
+                                                .grey,  
+                                            width: 1, 
                                           ),
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 10),
+                                          //color: Colors.white,
                                         ),
-                                        hint: const Text("Select a product"),
-                                        items: productController.productList
-                                            .map((product) {
-                                          return DropdownMenuItem<String>(
-                                            value: product.id
-                                                .toString(), // Assuming `id` is a string or convertible
-                                            child: Text(product.name ??
-                                                "Unnamed Product"),
-                                          );
-                                        }).toList(),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _selectedProduct =
-                                                value; // Update selected product
-                                          });
-                                          if (value != null) {
-                                            // Fetch attributes based on the selected product
-                                            attributeController.fetchAttributes(
-                                                int.parse(value));
-                                          }
-                                        },
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return "Please select a product";
-                                          }
-                                          return null;
-                                        },
+                                        child: DropdownButtonHideUnderline(
+                                          child: DropdownButton(
+                                            hint: Text(_selectedProduct,
+                                                style: const TextStyle(
+                                                    color: Colors.black)),
+                                            iconEnabledColor: Colors.grey,
+                                            iconDisabledColor: Colors.grey,
+                                            isExpanded: true,
+                                            items: productController.productList
+                                                .map((items) {
+                                              return DropdownMenuItem(
+                                                value: items,
+                                                child: Text(
+                                                  items.name.toString(),
+                                                  style: const TextStyle(
+                                                      fontSize: 12),
+                                                ),
+                                              );
+                                            }).toList(),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _selectedProduct =
+                                                    value!.name.toString();
+                                                _selectedProductId =
+                                                    value.id.toString();
+                                                // Clear previously selected attributes when product changes
+                                                attributeController
+                                                    .selectedAttr!
+                                                    .clear();
+                                              });
+
+                                              debugPrint(
+                                                  _selectedProduct.toString());
+                                              debugPrint(_selectedProductId
+                                                  .toString());
+
+                                              // Fetch attributes for the newly selected product
+                                              attributeController
+                                                  .fetchAttributes(value!.id);
+                                            },
+                                          ),
+                                        ),
                                       );
                                     }),
 
-                                    ///attribute
 
+
+                                 
+
+                                    // Attributes Section
                                     Obx(() {
                                       if (attributeController.isLoading.value) {
                                         return const Center(
-                                            child: CircularProgressIndicator());
+                                          child: CircularProgressIndicator(),
+                                        );
                                       }
 
                                       if (attributeController
                                           .attributes.isEmpty) {
                                         return const Center(
-                                            child:
-                                                Text("No attributes found."));
+                                          child: Text("No attributes found."),
+                                        );
                                       }
 
                                       return ListView.builder(
@@ -311,9 +380,8 @@ class _AddInventoryPageState extends State<UpdateInventory> {
                                                           oldAttr =
                                                           attributeController
                                                               .selectedAttr;
-                                                      oldAttr![
-                                                              "${attribute.id}"] =
-                                                          value;
+                                                      oldAttr![attribute.id
+                                                          .toString()] = value;
                                                       attributeController
                                                               .selectedAttr =
                                                           oldAttr;
@@ -327,6 +395,10 @@ class _AddInventoryPageState extends State<UpdateInventory> {
                                         },
                                       );
                                     }),
+
+                                    ///attribute
+
+                                   
 
                                     const LabelWithAsterisk(
                                       labelText: "SKU",
@@ -514,6 +586,7 @@ class _AddInventoryPageState extends State<UpdateInventory> {
                                         ),
                                       ],
                                     ),
+                                    //stock quantity
                                     SizedBox(height: 10.h),
                                     const LabelWithAsterisk(
                                       labelText: "Stock Quantity",
@@ -522,6 +595,8 @@ class _AddInventoryPageState extends State<UpdateInventory> {
                                     _buildTextField("Enter Stock Quantity",
                                         isRequired: true,
                                         controller: _quantityController),
+
+                                    //packing quantity
                                     const LabelWithAsterisk(
                                       labelText: "Packing Quantity",
                                       isRequired: true,
@@ -541,7 +616,7 @@ class _AddInventoryPageState extends State<UpdateInventory> {
                                         controller: _disController),
                                     // _buildFilePicker("Images", "Choose Files"),
 
-                                    ///Available
+                                    //Available
                                     const LabelWithAsterisk(
                                       labelText: "Available From",
                                     ),
@@ -553,7 +628,7 @@ class _AddInventoryPageState extends State<UpdateInventory> {
                                             selectedDate;
                                       });
                                     }),
-
+ 
                                     //tag
                                     const LabelWithAsterisk(
                                       labelText: "Enter Tags",
@@ -608,7 +683,7 @@ class _AddInventoryPageState extends State<UpdateInventory> {
                       }
 
                       final formData = {
-                        "product_id": _selectedProduct,
+                        "product_id": _selectedProductId,
                         "sku": _skuController.text,
                         "active": selectedStatus == "Active" ? true : false,
                         'stock_quantity': _quantityController.text,
@@ -621,7 +696,8 @@ class _AddInventoryPageState extends State<UpdateInventory> {
                         "available_from":
                             selectedAvailableDateTime?.toIso8601String(),
                         "purchase_price": _purchasePriceController.text,
-                        "net_amount": _netAmmountController.text,
+                        //"net_amount": _netAmmountController.text,
+                        "net_amount": _calcNetPrice.text,
                         "attribute": arr
                       };
 
@@ -687,10 +763,7 @@ class _AddInventoryPageState extends State<UpdateInventory> {
                           _controller.fetchInactiveProducts();
                           _controller.fetchOutOfStockProducts();
                           _controller.fetchOutOfStockProducts();
-                          // Get.offAll(Inventory(), transition: Transition.leftToRightWithFade);
-                          // Get.snackbar(
-                          //     "Success", 'Inventory Create Successful',
-                          //     backgroundColor: Colors.green, colorText: Colors.white);
+                        
 
                           Get.snackbar("Success", 'Inventory Update Successful',
                               backgroundColor: Colors.green,
@@ -699,10 +772,7 @@ class _AddInventoryPageState extends State<UpdateInventory> {
                           Get.to(Inventory(),
                               transition: Transition.leftToRightWithFade);
 
-                          // Navigate after a short delay
-                          // Future.delayed(Duration(seconds: 2), () {
-
-                          // });
+                          
                         } else if (response.statusCode == 302) {
                           // Handle Redirect
                           final redirectUrl = response.headers['location'];
@@ -1140,6 +1210,10 @@ class _AddInventoryPageState extends State<UpdateInventory> {
   }
 }
 
+
+ 
+
+
 // Function to build file picker fields
 Widget _buildFilePicker(String label, String buttonText) {
   return Padding(
@@ -1160,4 +1234,203 @@ Widget _buildFilePicker(String label, String buttonText) {
   );
 }
 
- 
+///////////////////////////////////////////////////////////////////////
+////product
+// Obx(() {
+//   if (productController.isLoading.value) {
+//     return const Center(
+//       child: CircularProgressIndicator(),
+//     );
+//   }
+//   if (productController
+//       .productList.isEmpty) {
+//     return const Text(
+//       "No products available.",
+//       style: TextStyle(color: Colors.red),
+//     );
+//   }
+
+//   return DropdownButtonFormField<String>(
+//     value:
+//         _selectedProduct, // Selected product
+//     decoration: InputDecoration(
+//       border: OutlineInputBorder(
+//         borderRadius:
+//             BorderRadius.circular(8.0),
+//       ),
+//       contentPadding:
+//           const EdgeInsets.symmetric(
+//               horizontal: 10),
+//     ),
+//     hint: const Text("Select a product"),
+//     items: productController.productList
+//         .map((product) {
+//       return DropdownMenuItem<String>(
+//         value: product.id
+//             .toString(), // Assuming `id` is a string or convertible
+//         child: Text(product.name ??
+//             "Unnamed Product"),
+//       );
+//     }).toList(),
+//     onChanged: (value) {
+//       setState(() {
+//         _selectedProduct =
+//             value; // Update selected product
+//       });
+//       if (value != null) {
+//         // Fetch attributes based on the selected product
+//         attributeController.fetchAttributes(
+//             int.parse(value));
+//       }
+//     },
+//     validator: (value) {
+//       if (value == null || value.isEmpty) {
+//         return "Please select a product";
+//       }
+//       return null;
+//     },
+//   );
+// }),
+
+
+///////////////////////////////////////////////////////////////////////
+                                    ////product ==>
+                                    // Obx(() {
+                                    //   if (productController.isLoading.value) {
+                                    //     return const Center(
+                                    //       child: CircularProgressIndicator(),
+                                    //     );
+                                    //   }
+                                    //   if (productController
+                                    //       .productList.isEmpty) {
+                                    //     return const Text(
+                                    //       "No products available.",
+                                    //       style: TextStyle(color: Colors.red),
+                                    //     );
+                                    //   }
+
+                                    //   return Container(
+                                    //     height: 43,
+                                    //     padding: const EdgeInsets.symmetric(
+                                    //         horizontal: 12),
+                                    //     decoration: BoxDecoration(
+                                    //       borderRadius:
+                                    //           BorderRadius.circular(5),
+                                    //       color: Colors.white,
+                                    //     ),
+                                    //     child: DropdownButtonHideUnderline(
+                                    //       child: DropdownButton(
+                                    //         hint: Text(_selectedProduct,
+                                    //             style: const TextStyle(
+                                    //                 color: Colors.black)),
+                                    //         icon: const Icon(
+                                    //             Icons
+                                    //                 .keyboard_double_arrow_down,
+                                    //             size: 25),
+                                    //         iconEnabledColor: Colors.red,
+                                    //         iconDisabledColor: Colors.grey,
+                                    //         isExpanded: true,
+                                    //         items: productController.productList
+                                    //             .map((items) {
+                                    //           return DropdownMenuItem(
+                                    //             value: items,
+                                    //             child: Text(
+                                    //                 items.name.toString(),
+                                    //                 style: const TextStyle(
+                                    //                     fontSize: 12)),
+                                    //           );
+                                    //         }).toList(),
+                                    //         onChanged: (value) {
+                                    //           setState(() {
+                                    //             _selectedProduct =
+                                    //                 value!.name.toString();
+                                    //             _selectedProductId =
+                                    //                 value.id.toString();
+                                    //           });
+                                    //           debugPrint(
+                                    //               _selectedProduct.toString());
+                                    //           debugPrint(_selectedProductId
+                                    //               .toString());
+                                    //         },
+                                    //       ),
+                                    //     ),
+                                    //   );
+                                    // }),
+     // Obx(() {
+                                    //   if (attributeController.isLoading.value) {
+                                    //     return const Center(
+                                    //         child: CircularProgressIndicator());
+                                    //   }
+
+                                    //   if (attributeController
+                                    //       .attributes.isEmpty) {
+                                    //     return const Center(
+                                    //         child:
+                                    //             Text("No attributes found."));
+                                    //   }
+
+                                    //   return ListView.builder(
+                                    //     shrinkWrap: true,
+                                    //     physics:
+                                    //         const NeverScrollableScrollPhysics(),
+                                    //     itemCount: attributeController
+                                    //         .attributes.length,
+                                    //     itemBuilder: (context, attributeIndex) {
+                                    //       final attribute = attributeController
+                                    //           .attributes[attributeIndex];
+                                    //       return Padding(
+                                    //         padding: const EdgeInsets.all(8.0),
+                                    //         child: Column(
+                                    //           crossAxisAlignment:
+                                    //               CrossAxisAlignment.start,
+                                    //           children: [
+                                    //             Text(
+                                    //               attribute.name,
+                                    //               style: const TextStyle(
+                                    //                 fontSize: 16,
+                                    //                 fontWeight: FontWeight.bold,
+                                    //               ),
+                                    //             ),
+                                    //             const SizedBox(height: 8),
+                                    //             DropdownButtonFormField<String>(
+                                    //               decoration: InputDecoration(
+                                    //                 border:
+                                    //                     OutlineInputBorder(),
+                                    //                 labelText:
+                                    //                     'Select ${attribute.name}',
+                                    //               ),
+                                    //               items: List.generate(
+                                    //                 attribute.values.length,
+                                    //                 (valueIndex) {
+                                    //                   final attvalue = attribute
+                                    //                       .values[valueIndex];
+                                    //                   return DropdownMenuItem<
+                                    //                       String>(
+                                    //                     value: "${attvalue.id}",
+                                    //                     child:
+                                    //                         Text(attvalue.text),
+                                    //                   );
+                                    //                 },
+                                    //               ),
+                                    //               onChanged: (value) {
+                                    //                 if (value != null) {
+                                    //                   Map<String, dynamic>?
+                                    //                       oldAttr =
+                                    //                       attributeController
+                                    //                           .selectedAttr;
+                                    //                   oldAttr![
+                                    //                           "${attribute.id}"] =
+                                    //                       value;
+                                    //                   attributeController
+                                    //                           .selectedAttr =
+                                    //                       oldAttr;
+                                    //                 }
+                                    //               },
+                                    //             ),
+                                    //             const SizedBox(height: 16),
+                                    //           ],
+                                    //         ),
+                                    //       );
+                                    //     },
+                                    //   );
+                                    // }),
